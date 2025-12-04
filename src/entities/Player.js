@@ -241,10 +241,8 @@ class Player extends Entity {
         
         this.health.current = Math.max(0, this.health.current - actualDamage);
         
-        // Death logic will be handled in health system task
-        if (this.health.current === 0) {
-            // Player death
-        }
+        // Death is handled by RespawnSystem
+        // No need to handle death here - system will detect health === 0
     }
 
     /**

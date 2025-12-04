@@ -162,24 +162,24 @@
     - Test enemy defeat
     - _Requirements: 2.1, 2.2, 2.3, 2.4_
 
-- [ ] 8. Implement health and damage system
-  - [ ] 8.1 Create health management
+- [x] 8. Implement health and damage system
+  - [x] 8.1 Create health management
     - Implement current and max health tracking
     - Add health modification methods
     - _Requirements: 3.1, 3.2, 3.3_
 
-  - [ ] 8.2 Implement damage application
+  - [x] 8.2 Implement damage application
     - Detect enemy collision with player
     - Apply damage and reduce health
     - Trigger health meter pulse
     - _Requirements: 3.2, 9.1_
 
-  - [ ] 8.3 Implement healing system
+  - [x] 8.3 Implement healing system
     - Create health power-up collectible
     - Implement healing that respects max health
     - _Requirements: 3.3_
 
-  - [ ] 8.4 Implement death and respawn
+  - [x] 8.4 Implement death and respawn
     - Detect health reaching zero
     - Respawn player at starting position
     - Preserve collectibles and coins
