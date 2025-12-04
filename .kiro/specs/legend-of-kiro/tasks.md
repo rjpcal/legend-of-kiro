@@ -7,14 +7,14 @@
   - Create directory structure for assets, scenes, entities, and systems
   - _Requirements: All_
 
-- [ ] 2. Create world configuration system
-  - [ ] 2.1 Design and create world configuration JSON schema
+- [x] 2. Create world configuration system
+  - [x] 2.1 Design and create world configuration JSON schema
     - Define overworld 6x6 grid structure
     - Define dungeon room structures with 4 dungeons
     - Define enemy types, collectibles, and store inventories
     - _Requirements: 11.5_
 
-  - [ ] 2.2 Implement configuration loader
+  - [x] 2.2 Implement configuration loader
     - Write JSON parser to load world configuration
     - Create validation for configuration structure
     - Implement error handling for malformed JSON

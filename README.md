@@ -15,6 +15,14 @@ A 2D top-down adventure game inspired by the original Legend of Zelda, built wit
    ```
 3. Navigate to `http://localhost:8000` in your browser
 
+## Testing
+
+Run the test suite:
+```bash
+npm install
+npm test
+```
+
 ## Project Structure
 
 ```

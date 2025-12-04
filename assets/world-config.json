@@ -1,0 +1,452 @@
+{
+  "overworld": {
+    "size": {
+      "width": 6,
+      "height": 6
+    },
+    "screens": [
+      {
+        "x": 0,
+        "y": 0,
+        "terrain": "grass",
+        "obstacles": [
+          {"x": 100, "y": 100, "width": 50, "height": 50, "type": "rock"},
+          {"x": 300, "y": 200, "width": 80, "height": 40, "type": "tree"}
+        ],
+        "enemies": [
+          {"type": "zombie", "x": 400, "y": 300, "xp": 10}
+        ],
+        "collectibles": [
+          {"type": "coin", "x": 200, "y": 150, "value": 5}
+        ],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 1,
+        "y": 0,
+        "terrain": "grass",
+        "obstacles": [],
+        "enemies": [],
+        "collectibles": [
+          {"type": "coin", "x": 400, "y": 300, "value": 5},
+          {"type": "health", "x": 500, "y": 400, "value": 20}
+        ],
+        "dungeonEntrance": null,
+        "storeEntrance": {"id": 1, "x": 400, "y": 300}
+      },
+      {
+        "x": 2,
+        "y": 1,
+        "terrain": "grass",
+        "obstacles": [
+          {"x": 200, "y": 200, "width": 100, "height": 100, "type": "rock"}
+        ],
+        "enemies": [
+          {"type": "skeleton", "x": 500, "y": 400, "xp": 15}
+        ],
+        "collectibles": [],
+        "dungeonEntrance": {"id": 1, "x": 400, "y": 500},
+        "storeEntrance": null
+      },
+      {
+        "x": 3,
+        "y": 2,
+        "terrain": "grass",
+        "obstacles": [],
+        "enemies": [
+          {"type": "ghoul", "x": 300, "y": 300, "xp": 20}
+        ],
+        "collectibles": [
+          {"type": "coin", "x": 600, "y": 200, "value": 10}
+        ],
+        "dungeonEntrance": {"id": 2, "x": 100, "y": 100},
+        "storeEntrance": null
+      },
+      {
+        "x": 4,
+        "y": 3,
+        "terrain": "grass",
+        "obstacles": [
+          {"x": 150, "y": 150, "width": 60, "height": 60, "type": "tree"}
+        ],
+        "enemies": [],
+        "collectibles": [
+          {"type": "health", "x": 400, "y": 400, "value": 30}
+        ],
+        "dungeonEntrance": {"id": 3, "x": 700, "y": 300},
+        "storeEntrance": null
+      },
+      {
+        "x": 5,
+        "y": 4,
+        "terrain": "grass",
+        "obstacles": [],
+        "enemies": [
+          {"type": "spirit", "x": 400, "y": 300, "xp": 25}
+        ],
+        "collectibles": [],
+        "dungeonEntrance": {"id": 4, "x": 400, "y": 100},
+        "storeEntrance": null
+      }
+    ]
+  },
+  "dungeons": [
+    {
+      "id": 1,
+      "name": "Haunted Manor",
+      "entranceScreen": {"x": 2, "y": 1},
+      "rooms": [
+        {
+          "id": 1,
+          "type": "combat",
+          "width": 800,
+          "height": 600,
+          "enemies": [
+            {"type": "zombie", "x": 400, "y": 300, "xp": 10},
+            {"type": "skeleton", "x": 600, "y": 400, "xp": 15}
+          ],
+          "obstacles": [
+            {"x": 200, "y": 200, "width": 50, "height": 50, "type": "wall"}
+          ],
+          "collectibles": [
+            {"type": "coin", "x": 100, "y": 100, "value": 10}
+          ],
+          "doors": [
+            {"direction": "north", "locked": false, "leadsTo": 2},
+            {"direction": "east", "locked": true, "leadsTo": 3}
+          ],
+          "isBossRoom": false,
+          "completionObjective": "defeat_all_enemies"
+        },
+        {
+          "id": 2,
+          "type": "puzzle",
+          "width": 800,
+          "height": 600,
+          "enemies": [],
+          "obstacles": [
+            {"x": 300, "y": 300, "width": 50, "height": 50, "type": "wall"}
+          ],
+          "collectibles": [],
+          "pushableBlocks": [
+            {"x": 400, "y": 400, "width": 50, "height": 50}
+          ],
+          "switches": [
+            {"x": 500, "y": 500, "activates": "door_east"}
+          ],
+          "doors": [
+            {"direction": "south", "locked": false, "leadsTo": 1},
+            {"direction": "east", "locked": true, "leadsTo": 4, "id": "door_east"}
+          ],
+          "isBossRoom": false,
+          "completionObjective": "activate_all_switches"
+        },
+        {
+          "id": 3,
+          "type": "combat",
+          "width": 800,
+          "height": 600,
+          "enemies": [
+            {"type": "ghoul", "x": 300, "y": 300, "xp": 20},
+            {"type": "ghoul", "x": 500, "y": 300, "xp": 20}
+          ],
+          "obstacles": [],
+          "collectibles": [
+            {"type": "health", "x": 400, "y": 100, "value": 30}
+          ],
+          "doors": [
+            {"direction": "west", "locked": false, "leadsTo": 1},
+            {"direction": "north", "locked": true, "leadsTo": 4}
+          ],
+          "isBossRoom": false,
+          "completionObjective": "defeat_all_enemies"
+        },
+        {
+          "id": 4,
+          "type": "boss",
+          "width": 800,
+          "height": 600,
+          "enemies": [],
+          "boss": {
+            "type": "manor_lord",
+            "x": 400,
+            "y": 300,
+            "health": 100,
+            "damage": 15,
+            "xp": 100,
+            "attackPattern": "charge_and_swing"
+          },
+          "obstacles": [],
+          "collectibles": [],
+          "doors": [
+            {"direction": "south", "locked": false, "leadsTo": 3}
+          ],
+          "isBossRoom": true,
+          "completionObjective": "defeat_boss"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Cursed Catacombs",
+      "entranceScreen": {"x": 3, "y": 2},
+      "rooms": [
+        {
+          "id": 1,
+          "type": "combat",
+          "width": 800,
+          "height": 600,
+          "enemies": [
+            {"type": "skeleton", "x": 300, "y": 300, "xp": 15},
+            {"type": "skeleton", "x": 500, "y": 300, "xp": 15}
+          ],
+          "obstacles": [],
+          "collectibles": [],
+          "doors": [
+            {"direction": "north", "locked": true, "leadsTo": 2}
+          ],
+          "isBossRoom": false,
+          "completionObjective": "defeat_all_enemies"
+        },
+        {
+          "id": 2,
+          "type": "boss",
+          "width": 800,
+          "height": 600,
+          "enemies": [],
+          "boss": {
+            "type": "bone_king",
+            "x": 400,
+            "y": 300,
+            "health": 120,
+            "damage": 18,
+            "xp": 120,
+            "attackPattern": "summon_minions"
+          },
+          "obstacles": [],
+          "collectibles": [],
+          "doors": [
+            {"direction": "south", "locked": false, "leadsTo": 1}
+          ],
+          "isBossRoom": true,
+          "completionObjective": "defeat_boss"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Phantom Fortress",
+      "entranceScreen": {"x": 4, "y": 3},
+      "rooms": [
+        {
+          "id": 1,
+          "type": "combat",
+          "width": 800,
+          "height": 600,
+          "enemies": [
+            {"type": "spirit", "x": 400, "y": 300, "xp": 25}
+          ],
+          "obstacles": [
+            {"x": 200, "y": 200, "width": 50, "height": 50, "type": "wall"},
+            {"x": 600, "y": 400, "width": 50, "height": 50, "type": "wall"}
+          ],
+          "collectibles": [
+            {"type": "coin", "x": 400, "y": 100, "value": 15}
+          ],
+          "doors": [
+            {"direction": "east", "locked": true, "leadsTo": 2}
+          ],
+          "isBossRoom": false,
+          "completionObjective": "defeat_all_enemies"
+        },
+        {
+          "id": 2,
+          "type": "boss",
+          "width": 800,
+          "height": 600,
+          "enemies": [],
+          "boss": {
+            "type": "phantom_general",
+            "x": 400,
+            "y": 300,
+            "health": 140,
+            "damage": 20,
+            "xp": 140,
+            "attackPattern": "teleport_strike"
+          },
+          "obstacles": [],
+          "collectibles": [],
+          "doors": [
+            {"direction": "west", "locked": false, "leadsTo": 1}
+          ],
+          "isBossRoom": true,
+          "completionObjective": "defeat_boss"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Shadow Sanctum",
+      "entranceScreen": {"x": 5, "y": 4},
+      "rooms": [
+        {
+          "id": 1,
+          "type": "puzzle",
+          "width": 800,
+          "height": 600,
+          "enemies": [],
+          "obstacles": [],
+          "collectibles": [],
+          "pushableBlocks": [
+            {"x": 300, "y": 300, "width": 50, "height": 50},
+            {"x": 500, "y": 300, "width": 50, "height": 50}
+          ],
+          "switches": [
+            {"x": 300, "y": 500, "activates": "door_north"},
+            {"x": 500, "y": 500, "activates": "door_north"}
+          ],
+          "doors": [
+            {"direction": "north", "locked": true, "leadsTo": 2, "id": "door_north"}
+          ],
+          "isBossRoom": false,
+          "completionObjective": "activate_all_switches"
+        },
+        {
+          "id": 2,
+          "type": "combat",
+          "width": 800,
+          "height": 600,
+          "enemies": [
+            {"type": "ghoul", "x": 300, "y": 300, "xp": 20},
+            {"type": "spirit", "x": 500, "y": 300, "xp": 25}
+          ],
+          "obstacles": [],
+          "collectibles": [
+            {"type": "health", "x": 400, "y": 100, "value": 40}
+          ],
+          "doors": [
+            {"direction": "south", "locked": false, "leadsTo": 1},
+            {"direction": "north", "locked": true, "leadsTo": 3}
+          ],
+          "isBossRoom": false,
+          "completionObjective": "defeat_all_enemies"
+        },
+        {
+          "id": 3,
+          "type": "boss",
+          "width": 800,
+          "height": 600,
+          "enemies": [],
+          "boss": {
+            "type": "shadow_overlord",
+            "x": 400,
+            "y": 300,
+            "health": 160,
+            "damage": 25,
+            "xp": 160,
+            "attackPattern": "shadow_wave"
+          },
+          "obstacles": [],
+          "collectibles": [],
+          "doors": [
+            {"direction": "south", "locked": false, "leadsTo": 2}
+          ],
+          "isBossRoom": true,
+          "completionObjective": "defeat_boss"
+        }
+      ]
+    }
+  ],
+  "stores": [
+    {
+      "id": 1,
+      "location": {"x": 1, "y": 0},
+      "name": "Spirit Shop",
+      "inventory": [
+        {
+          "type": "weapon",
+          "id": "wooden_sword",
+          "name": "Wooden Sword",
+          "cost": 50,
+          "damage": 10,
+          "description": "A basic wooden sword"
+        },
+        {
+          "type": "weapon",
+          "id": "iron_sword",
+          "name": "Iron Sword",
+          "cost": 150,
+          "damage": 20,
+          "description": "A sturdy iron blade"
+        },
+        {
+          "type": "weapon",
+          "id": "silver_sword",
+          "name": "Silver Sword",
+          "cost": 300,
+          "damage": 35,
+          "description": "Effective against spirits"
+        },
+        {
+          "type": "armor",
+          "id": "leather_armor",
+          "name": "Leather Armor",
+          "cost": 75,
+          "defense": 5,
+          "description": "Basic protection"
+        },
+        {
+          "type": "armor",
+          "id": "chain_armor",
+          "name": "Chain Armor",
+          "cost": 200,
+          "defense": 12,
+          "description": "Solid metal protection"
+        },
+        {
+          "type": "armor",
+          "id": "spirit_armor",
+          "name": "Spirit Armor",
+          "cost": 400,
+          "defense": 20,
+          "description": "Enchanted ghostly armor"
+        }
+      ]
+    }
+  ],
+  "enemyTypes": {
+    "zombie": {
+      "name": "Zombie",
+      "health": 30,
+      "damage": 5,
+      "speed": 50,
+      "xp": 10,
+      "sprite": "zombie"
+    },
+    "skeleton": {
+      "name": "Skeleton",
+      "health": 40,
+      "damage": 8,
+      "speed": 70,
+      "xp": 15,
+      "sprite": "skeleton"
+    },
+    "ghoul": {
+      "name": "Ghoul",
+      "health": 50,
+      "damage": 12,
+      "speed": 60,
+      "xp": 20,
+      "sprite": "ghoul"
+    },
+    "spirit": {
+      "name": "Spirit",
+      "health": 60,
+      "damage": 15,
+      "speed": 90,
+      "xp": 25,
+      "sprite": "spirit"
+    }
+  }
+}
