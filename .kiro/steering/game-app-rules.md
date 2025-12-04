@@ -17,3 +17,14 @@ You must:
 - Take user's input and create a user-context.md steering file to store user preferences as you help the user build a game
 - If the Kiro-logo.png image is present in the project, the use it as a game sprite
 -- Ask clarifying questions and do not move forward with assumptions unless user confirms
+
+## Testing Commands
+
+This project uses Jest for testing. Use these commands:
+
+- Run all tests: `npm test`
+- Run specific test file: `npm test -- path/to/test.js`
+- Run tests in watch mode: `npm test:watch`
+- Run with coverage: `npm test:coverage`
+
+**IMPORTANT**: Jest does NOT support the `--run` flag. Do NOT use `npm test -- file.test.js --run`
