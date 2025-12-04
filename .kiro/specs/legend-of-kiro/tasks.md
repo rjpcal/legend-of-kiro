@@ -236,7 +236,7 @@
     - **Property 34: Damage feedback**
     - **Validates: Requirements 10.3**
 
-- [ ] 10. Checkpoint - Ensure all tests pass
+- [x] 10. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 11. Implement collection and progression system
