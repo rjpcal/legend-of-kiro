@@ -114,27 +114,27 @@
 - [x] 6. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 7. Implement combat system
-  - [ ] 7.1 Create Weapon class
+- [x] 7. Implement combat system
+  - [x] 7.1 Create Weapon class
     - Define weapon properties (damage, range, attack speed)
     - Implement melee attack hitbox generation
     - Implement ranged attack projectile
     - _Requirements: 2.1, 2.3_
 
-  - [ ] 7.2 Implement melee attack
+  - [x] 7.2 Implement melee attack
     - Add attack button input handling
     - Create attack hitbox in facing direction
     - Implement attack animation
     - _Requirements: 2.1, 2.5_
 
-  - [ ] 7.3 Implement ranged attack
+  - [x] 7.3 Implement ranged attack
     - Check health is at maximum before allowing throw
     - Create projectile entity
     - Implement projectile movement and collision
     - Return weapon to player after hit
     - _Requirements: 2.3, 2.4_
 
-  - [ ] 7.4 Implement enemy defeat logic
+  - [x] 7.4 Implement enemy defeat logic
     - Detect attack hitbox collision with enemy
     - Convert enemy to friendly and remove from game
     - Play defeat animation

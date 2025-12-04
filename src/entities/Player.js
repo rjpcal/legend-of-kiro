@@ -140,38 +140,95 @@ class Player extends Entity {
 
     /**
      * Perform a melee attack
+     * @returns {object|null} Attack hitbox if attack was performed, null otherwise
      */
     attack() {
         if (!this.canAttack || this.isAttacking) {
-            return;
+            return null;
         }
         
         this.isAttacking = true;
         this.canAttack = false;
         
-        // Attack logic will be implemented in combat system task
+        // Get equipped weapon or use default
+        const weapon = this.inventory.equippedWeapon || this.getDefaultWeapon();
+        
+        // Create attack hitbox in facing direction
+        const attackHitbox = weapon.attack(this.x, this.y, this.facing);
+        
+        // Trigger attack animation
+        if (this.scene.animationManager) {
+            this.scene.animationManager.setState(this, 'attack');
+        }
         
         // Reset attack state after cooldown
         setTimeout(() => {
             this.isAttacking = false;
             this.canAttack = true;
         }, this.attackCooldown);
+        
+        return attackHitbox;
+    }
+    
+    /**
+     * Get default weapon if none equipped
+     * @returns {Weapon} Default weapon
+     */
+    getDefaultWeapon() {
+        // Create default weapon if not cached
+        if (!this._defaultWeapon) {
+            // Weapon class will be loaded via script tag in HTML
+            this._defaultWeapon = new Weapon({
+                name: 'Fists',
+                damage: 1,
+                range: 35,
+                attackSpeed: 500,
+                canThrow: false
+            });
+        }
+        return this._defaultWeapon;
     }
 
     /**
      * Perform a ranged attack (throw weapon)
      * Only available when health is at maximum
+     * @returns {Projectile|null} Projectile if thrown, null otherwise
      */
     rangedAttack() {
+        // Check health requirement
         if (this.health.current < this.health.max) {
-            return; // Can only throw at max health
+            return null; // Can only throw at max health
         }
         
         if (!this.canAttack || this.isAttacking) {
-            return;
+            return null;
         }
         
-        // Ranged attack logic will be implemented in combat system task
+        // Get equipped weapon or use default
+        const weapon = this.inventory.equippedWeapon || this.getDefaultWeapon();
+        
+        // Check if weapon can be thrown
+        if (!weapon.canThrow) {
+            return null;
+        }
+        
+        this.isAttacking = true;
+        this.canAttack = false;
+        
+        // Create projectile
+        const projectile = weapon.throw(this.scene, this.x, this.y, this.facing, this);
+        
+        if (projectile) {
+            projectile.createSprite();
+        }
+        
+        // Reset attack state after cooldown
+        setTimeout(() => {
+            this.isAttacking = false;
+            this.canAttack = true;
+        }, this.attackCooldown);
+        
+        return projectile;
     }
 
     /**

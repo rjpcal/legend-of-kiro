@@ -6,10 +6,15 @@ class OverworldScene extends Phaser.Scene {
         this.player = null;
         this.cursors = null;
         this.wasd = null;
+        this.attackKey = null;
+        this.rangedAttackKey = null;
         this.collisionSystem = null;
         this.rippleEffect = null;
         this.animationManager = null;
         this.obstacles = [];
+        this.enemies = [];
+        this.projectiles = [];
+        this.attackHitboxes = [];
     }
 
     create() {
@@ -42,12 +47,39 @@ class OverworldScene extends Phaser.Scene {
             S: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
             D: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
         };
+        
+        // Set up attack keys
+        this.attackKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        this.rangedAttackKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+        
+        // Handle attack key press
+        this.attackKey.on('down', () => {
+            if (this.player) {
+                const attackHitbox = this.player.attack();
+                if (attackHitbox) {
+                    this.handleMeleeAttack(attackHitbox);
+                }
+            }
+        });
+        
+        // Handle ranged attack key press
+        this.rangedAttackKey.on('down', () => {
+            if (this.player) {
+                const projectile = this.player.rangedAttack();
+                if (projectile) {
+                    this.projectiles.push(projectile);
+                }
+            }
+        });
+
+        // Create some test enemies
+        this.createTestEnemies();
 
         // Placeholder text
         const text = this.add.text(
             16,
             16,
-            'Use Arrow Keys or WASD to move\nCollision detection active!',
+            'Use Arrow Keys or WASD to move\nSPACE to attack, SHIFT for ranged attack\nCollision detection active!',
             {
                 fontSize: '16px',
                 fill: '#ffffff',
@@ -78,6 +110,125 @@ class OverworldScene extends Phaser.Scene {
         }
     }
 
+    /**
+     * Create test enemies for combat testing
+     */
+    createTestEnemies() {
+        const { width, height } = this.cameras.main;
+
+        // Create a few test enemies
+        const enemyPositions = [
+            { x: width / 2 + 100, y: height / 2 - 50 },
+            { x: width / 2 - 100, y: height / 2 + 50 }
+        ];
+
+        for (let pos of enemyPositions) {
+            const enemy = new Enemy(this, pos.x, pos.y, 'zombie', {
+                health: 3,
+                damage: 1,
+                speed: 30
+            });
+            enemy.createSprite();
+            enemy.setTarget(this.player);
+            this.enemies.push(enemy);
+        }
+    }
+
+    /**
+     * Handle melee attack
+     * @param {object} attackHitbox - Attack hitbox with x, y, width, height, damage
+     */
+    handleMeleeAttack(attackHitbox) {
+        // Store attack hitbox temporarily for collision detection
+        attackHitbox.lifetime = 100; // milliseconds
+        attackHitbox.createdAt = Date.now();
+        this.attackHitboxes.push(attackHitbox);
+        
+        // Visual feedback for attack (optional - can be replaced with animation)
+        if (this.add && this.tweens) {
+            const attackVisual = this.add.rectangle(
+                attackHitbox.x + attackHitbox.width / 2,
+                attackHitbox.y + attackHitbox.height / 2,
+                attackHitbox.width,
+                attackHitbox.height,
+                0x790ECB,
+                0.3
+            );
+            attackVisual.setDepth(20);
+            
+            // Fade out attack visual
+            this.tweens.add({
+                targets: attackVisual,
+                alpha: 0,
+                duration: 100,
+                onComplete: () => {
+                    attackVisual.destroy();
+                }
+            });
+        }
+        
+        // Check for hits on enemies
+        this.checkAttackHits(attackHitbox);
+    }
+
+    /**
+     * Check if attack hitbox hits any enemies
+     * @param {object} attackHitbox - Attack hitbox
+     */
+    checkAttackHits(attackHitbox) {
+        for (let enemy of this.enemies) {
+            if (!enemy.active || enemy.isFriendly) {
+                continue;
+            }
+            
+            const enemyHitbox = enemy.getHitbox();
+            
+            // Check AABB collision
+            if (this.collisionSystem.checkAABB(attackHitbox, enemyHitbox)) {
+                // Hit detected - apply damage
+                enemy.takeDamage(attackHitbox.damage);
+                
+                // Award XP if enemy was defeated
+                if (enemy.health.current === 0) {
+                    this.player.stats.xp += enemy.getXPReward();
+                }
+            }
+        }
+    }
+
+    /**
+     * Check if projectile hits any enemies
+     * @param {Projectile} projectile - Projectile to check
+     */
+    checkProjectileHits(projectile) {
+        const projectileHitbox = projectile.getHitbox();
+        
+        for (let enemy of this.enemies) {
+            if (!enemy.active || enemy.isFriendly) {
+                continue;
+            }
+            
+            const enemyHitbox = enemy.getHitbox();
+            
+            // Check AABB collision
+            if (this.collisionSystem.checkAABB(projectileHitbox, enemyHitbox)) {
+                // Hit detected - apply damage
+                enemy.takeDamage(projectile.damage);
+                
+                // Award XP if enemy was defeated
+                if (enemy.health.current === 0) {
+                    this.player.stats.xp += enemy.getXPReward();
+                }
+                
+                // Projectile starts returning after hit
+                projectile.onHitEnemy();
+                
+                // Only hit one enemy per frame
+                break;
+            }
+        }
+    }
+
     update(time, delta) {
         if (this.player) {
             // Handle player input
@@ -98,6 +249,37 @@ class OverworldScene extends Phaser.Scene {
             // Update player
             this.player.update(delta);
         }
+
+        // Update enemies
+        for (let enemy of this.enemies) {
+            if (enemy.active) {
+                enemy.update(delta);
+            }
+        }
+
+        // Update projectiles
+        for (let projectile of this.projectiles) {
+            if (projectile.active) {
+                projectile.update(delta);
+                
+                // Check projectile collision with enemies
+                if (!projectile.returning) {
+                    this.checkProjectileHits(projectile);
+                }
+            }
+        }
+
+        // Clean up old attack hitboxes
+        const now = Date.now();
+        this.attackHitboxes = this.attackHitboxes.filter(hitbox => {
+            return (now - hitbox.createdAt) < hitbox.lifetime;
+        });
+
+        // Clean up inactive enemies
+        this.enemies = this.enemies.filter(enemy => enemy.active);
+
+        // Clean up inactive projectiles
+        this.projectiles = this.projectiles.filter(projectile => projectile.active);
 
         // Update systems
         if (this.collisionSystem) {
