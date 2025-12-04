@@ -1,6 +1,12 @@
 // Collectible - Base class for collectible items
 // Includes coins, health power-ups, weapons, and armor
 
+// Sprite configuration constants
+const SPRITE_CONFIG = {
+    TEXTURE_SIZE: 24,
+    get CENTER() { return this.TEXTURE_SIZE / 2; }
+};
+
 class Collectible {
     constructor(scene, x, y, type, config = {}) {
         this.scene = scene;
@@ -15,8 +21,8 @@ class Collectible {
         
         // Hitbox for collection detection
         this.hitbox = {
-            width: 24,
-            height: 24,
+            width: SPRITE_CONFIG.TEXTURE_SIZE,
+            height: SPRITE_CONFIG.TEXTURE_SIZE,
             offsetX: 0,
             offsetY: 0
         };
@@ -29,14 +35,29 @@ class Collectible {
      * Create the sprite for this collectible
      */
     createSprite() {
-        if (this.scene) {
-            // Use appropriate sprite based on type
-            let spriteKey = this.type;
-            
-            // For now, use placeholder sprites
-            // These will be replaced with actual game assets
-            this.sprite = this.scene.add.sprite(this.x, this.y, spriteKey);
-            this.sprite.setOrigin(0.5, 0.5);
+        if (!this.scene || !this.scene.add) {
+            return;
+        }
+
+        // Create visual representation based on type
+        switch (this.type) {
+            case 'coin':
+                this.createCoinSprite();
+                break;
+            case 'health':
+                this.createHealthSprite();
+                break;
+            case 'weapon':
+                this.createWeaponSprite();
+                break;
+            case 'armor':
+                this.createArmorSprite();
+                break;
+            default:
+                this.createDefaultSprite();
+        }
+
+        if (this.sprite) {
             this.sprite.setDepth(1);
             
             // Add a subtle floating animation
@@ -54,6 +75,161 @@ class Collectible {
     }
 
     /**
+     * Create coin sprite (gold circle)
+     */
+    createCoinSprite() {
+        const graphics = this.scene.add.graphics();
+        const center = SPRITE_CONFIG.CENTER;
+        const size = SPRITE_CONFIG.TEXTURE_SIZE;
+        
+        // Draw gold coin
+        const radius = size * 0.42; // 42% of texture size
+        graphics.fillStyle(0xFFD700, 1); // Gold
+        graphics.fillCircle(center, center, radius);
+        graphics.lineStyle(2, 0xFFA500, 1); // Orange border
+        graphics.strokeCircle(center, center, radius);
+        
+        // Add shine effect
+        graphics.fillStyle(0xFFFFFF, 0.5);
+        graphics.fillCircle(center - 3, center - 3, 3);
+        
+        graphics.generateTexture('coin_texture', size, size);
+        graphics.destroy();
+        
+        this.sprite = this.scene.add.sprite(this.x, this.y, 'coin_texture');
+        this.sprite.setOrigin(0.5, 0.5);
+    }
+
+    /**
+     * Create health sprite (red heart)
+     */
+    createHealthSprite() {
+        const graphics = this.scene.add.graphics();
+        const center = SPRITE_CONFIG.CENTER;
+        const size = SPRITE_CONFIG.TEXTURE_SIZE;
+        
+        // Draw heart shape (proportional to texture size)
+        const heartRadius = size * 0.25; // 25% of texture size
+        const heartWidth = size * 0.42; // 42% of texture size
+        
+        graphics.fillStyle(0xFF0000, 1); // Red
+        graphics.fillCircle(center - heartRadius, center - 2, heartRadius);
+        graphics.fillCircle(center + heartRadius, center - 2, heartRadius);
+        graphics.beginPath();
+        graphics.moveTo(center - heartWidth, center);
+        graphics.lineTo(center, center + heartWidth);
+        graphics.lineTo(center + heartWidth, center);
+        graphics.closePath();
+        graphics.fillPath();
+        
+        // Add highlight
+        graphics.fillStyle(0xFF6666, 1);
+        graphics.fillCircle(center - 3, center - 4, 2);
+        
+        graphics.generateTexture('health_texture', size, size);
+        graphics.destroy();
+        
+        this.sprite = this.scene.add.sprite(this.x, this.y, 'health_texture');
+        this.sprite.setOrigin(0.5, 0.5);
+    }
+
+    /**
+     * Create weapon sprite (sword)
+     */
+    createWeaponSprite() {
+        const graphics = this.scene.add.graphics();
+        const center = SPRITE_CONFIG.CENTER;
+        const size = SPRITE_CONFIG.TEXTURE_SIZE;
+        
+        // Proportional dimensions
+        const bladeWidth = size * 0.17;
+        const bladeHeight = size * 0.5;
+        const guardWidth = size * 0.5;
+        const guardHeight = size * 0.08;
+        const handleWidth = size * 0.125;
+        const handleHeight = size * 0.25;
+        
+        // Draw sword blade
+        graphics.fillStyle(0xC0C0C0, 1); // Silver blade
+        graphics.fillRect(center - bladeWidth / 2, center - bladeHeight * 0.67, bladeWidth, bladeHeight);
+        
+        // Crossguard
+        graphics.fillStyle(0x8B4513, 1); // Brown
+        graphics.fillRect(center - guardWidth / 2, center + bladeHeight * 0.33, guardWidth, guardHeight);
+        
+        // Handle
+        graphics.fillStyle(0x654321, 1); // Dark brown
+        graphics.fillRect(center - handleWidth / 2, center + bladeHeight * 0.5, handleWidth, handleHeight);
+        
+        // Pommel
+        graphics.fillStyle(0xFFD700, 1); // Gold
+        graphics.fillCircle(center, center + size * 0.5, 2);
+        
+        graphics.generateTexture('weapon_texture', size, size);
+        graphics.destroy();
+        
+        this.sprite = this.scene.add.sprite(this.x, this.y, 'weapon_texture');
+        this.sprite.setOrigin(0.5, 0.5);
+    }
+
+    /**
+     * Create armor sprite (shield)
+     */
+    createArmorSprite() {
+        const graphics = this.scene.add.graphics();
+        const center = SPRITE_CONFIG.CENTER;
+        const size = SPRITE_CONFIG.TEXTURE_SIZE;
+        
+        // Proportional dimensions
+        const shieldWidth = size * 0.67;
+        const shieldHeight = size * 0.92;
+        
+        // Draw shield
+        graphics.fillStyle(0x4169E1, 1); // Royal blue
+        graphics.beginPath();
+        graphics.moveTo(center, center - shieldHeight * 0.45);
+        graphics.lineTo(center + shieldWidth * 0.4, center - shieldHeight * 0.27);
+        graphics.lineTo(center + shieldWidth * 0.4, center + shieldHeight * 0.27);
+        graphics.lineTo(center, center + shieldHeight * 0.55);
+        graphics.lineTo(center - shieldWidth * 0.4, center + shieldHeight * 0.27);
+        graphics.lineTo(center - shieldWidth * 0.4, center - shieldHeight * 0.27);
+        graphics.closePath();
+        graphics.fillPath();
+        
+        // Border
+        graphics.lineStyle(2, 0xC0C0C0, 1); // Silver
+        graphics.strokePath();
+        
+        // Emblem
+        graphics.fillStyle(0xFFD700, 1); // Gold
+        graphics.fillCircle(center, center, 3);
+        
+        graphics.generateTexture('armor_texture', size, size);
+        graphics.destroy();
+        
+        this.sprite = this.scene.add.sprite(this.x, this.y, 'armor_texture');
+        this.sprite.setOrigin(0.5, 0.5);
+    }
+
+    /**
+     * Create default sprite (fallback)
+     */
+    createDefaultSprite() {
+        const graphics = this.scene.add.graphics();
+        const center = SPRITE_CONFIG.CENTER;
+        const size = SPRITE_CONFIG.TEXTURE_SIZE;
+        
+        const boxSize = size * 0.83; // 83% of texture size
+        graphics.fillStyle(0x00FF00, 1); // Green
+        graphics.fillRect(center - boxSize / 2, center - boxSize / 2, boxSize, boxSize);
+        graphics.generateTexture('default_collectible', size, size);
+        graphics.destroy();
+        
+        this.sprite = this.scene.add.sprite(this.x, this.y, 'default_collectible');
+        this.sprite.setOrigin(0.5, 0.5);
+    }
+
+    /**
      * Get the collision hitbox for this collectible
      */
     getHitbox() {
@@ -68,6 +244,7 @@ class Collectible {
     /**
      * Collect this item
      * @param {Player} player - Player collecting the item
+     * @returns {boolean} True if collection was successful
      */
     collect(player) {
         if (!this.active) {
@@ -82,8 +259,7 @@ class Collectible {
                 player.inventory.coins += this.value;
                 break;
             case 'health':
-                // Heal player, respecting max health
-                const oldHealth = player.health.current;
+                // Heal player, respecting max health (Property 9)
                 player.health.current = Math.min(
                     player.health.max,
                     player.health.current + this.value
@@ -92,23 +268,32 @@ class Collectible {
             case 'weapon':
                 player.inventory.items.push({
                     type: 'weapon',
+                    name: this.config.name || 'Weapon',
+                    damage: this.config.damage || 1,
                     ...this.config
                 });
                 break;
             case 'armor':
                 player.inventory.items.push({
                     type: 'armor',
+                    name: this.config.name || 'Armor',
+                    defense: this.config.defense || 1,
                     ...this.config
                 });
                 break;
         }
 
         // Play collection sound effect
-        if (this.scene.sound) {
+        if (this.scene && this.scene.sound) {
             const soundKey = this.type === 'coin' ? 'coin_collect' : 
                            this.type === 'health' ? 'health_pickup' : 'item_collect';
-            if (this.scene.sound.get(soundKey)) {
-                this.scene.sound.play(soundKey);
+            // Only play if sound exists
+            try {
+                if (this.scene.sound.get && this.scene.sound.get(soundKey)) {
+                    this.scene.sound.play(soundKey);
+                }
+            } catch (e) {
+                // Sound not loaded yet, skip
             }
         }
 

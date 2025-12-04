@@ -239,20 +239,20 @@
 - [x] 10. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 11. Implement collection and progression system
-  - [ ] 11.1 Create collectible entities
+- [x] 11. Implement collection and progression system
+  - [x] 11.1 Create collectible entities
     - Implement coin collectible
     - Implement health power-up collectible
     - Implement weapon and armor collectibles
     - _Requirements: 4.1, 3.3_
 
-  - [ ] 11.2 Implement collection detection
+  - [x] 11.2 Implement collection detection
     - Detect player collision with collectibles
     - Add collectible to inventory/counters
     - Remove collectible from world
     - _Requirements: 4.1, 9.3_
 
-  - [ ] 11.3 Implement XP and leveling system
+  - [x] 11.3 Implement XP and leveling system
     - Award XP on enemy defeat
     - Calculate level thresholds
     - Trigger level up when threshold reached

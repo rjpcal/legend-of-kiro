@@ -9,11 +9,13 @@ class OverworldScene extends Phaser.Scene {
         this.attackKey = null;
         this.rangedAttackKey = null;
         this.collisionSystem = null;
+        this.collectionSystem = null;
         this.rippleEffect = null;
         this.animationManager = null;
         this.hud = null;
         this.obstacles = [];
         this.enemies = [];
+        this.collectibles = [];
         this.projectiles = [];
         this.attackHitboxes = [];
     }
@@ -23,6 +25,7 @@ class OverworldScene extends Phaser.Scene {
 
         // Initialize systems
         this.collisionSystem = new CollisionSystem(this);
+        this.collectionSystem = new CollectionSystem(this, this.collisionSystem);
         this.rippleEffect = new RippleEffect(this);
         this.animationManager = new AnimationManager(this);
 
@@ -76,12 +79,38 @@ class OverworldScene extends Phaser.Scene {
         // Create some test enemies
         this.createTestEnemies();
 
+        // Create some test collectibles
+        this.createTestCollectibles();
+
         // Create HUD
         this.hud = new HUD(this);
         this.hud.create(this.player);
         
         // Mark starting position as visited on minimap
         this.hud.markMinimapVisited(0, 0);
+    }
+
+    /**
+     * Create test collectibles for collection testing
+     */
+    createTestCollectibles() {
+        const { width, height } = this.cameras.main;
+
+        // Create some test collectibles
+        const collectibleData = [
+            { x: width / 2 + 50, y: height / 2 - 100, type: 'coin', value: 5 },
+            { x: width / 2 - 50, y: height / 2 - 100, type: 'coin', value: 10 },
+            { x: width / 2, y: height / 2 + 150, type: 'health', value: 2 },
+            { x: width / 2 + 200, y: height / 2, type: 'weapon', config: { name: 'Iron Sword', damage: 3 } },
+            { x: width / 2 - 200, y: height / 2, type: 'armor', config: { name: 'Leather Armor', defense: 2 } }
+        ];
+
+        for (let data of collectibleData) {
+            const collectible = new Collectible(this, data.x, data.y, data.type, data.config || { value: data.value });
+            collectible.createSprite();
+            this.collectibles.push(collectible);
+            this.collectionSystem.addCollectible(collectible);
+        }
     }
 
     /**
@@ -184,11 +213,14 @@ class OverworldScene extends Phaser.Scene {
                 // Hit detected - apply damage
                 enemy.takeDamage(attackHitbox.damage);
                 
-                // Award XP if enemy was defeated
+                // Award XP if enemy was defeated (Property 13, Requirements 4.3)
                 if (enemy.health.current === 0) {
-                    this.player.stats.xp += enemy.getXPReward();
-                    // Check for level up
-                    this.player.checkLevelUp();
+                    const leveledUp = this.player.addXP(enemy.getXPReward());
+                    
+                    // Update HUD to reflect XP and potential level up
+                    if (this.hud) {
+                        this.hud.update(this.player);
+                    }
                 }
             }
         }
@@ -213,11 +245,14 @@ class OverworldScene extends Phaser.Scene {
                 // Hit detected - apply damage
                 enemy.takeDamage(projectile.damage);
                 
-                // Award XP if enemy was defeated
+                // Award XP if enemy was defeated (Property 13, Requirements 4.3)
                 if (enemy.health.current === 0) {
-                    this.player.stats.xp += enemy.getXPReward();
-                    // Check for level up
-                    this.player.checkLevelUp();
+                    const leveledUp = this.player.addXP(enemy.getXPReward());
+                    
+                    // Update HUD to reflect XP and potential level up
+                    if (this.hud) {
+                        this.hud.update(this.player);
+                    }
                 }
                 
                 // Projectile starts returning after hit
@@ -289,6 +324,10 @@ class OverworldScene extends Phaser.Scene {
         // Update systems
         if (this.collisionSystem) {
             this.collisionSystem.update();
+        }
+        
+        if (this.collectionSystem) {
+            this.collectionSystem.update(this.player);
         }
         
         if (this.rippleEffect) {

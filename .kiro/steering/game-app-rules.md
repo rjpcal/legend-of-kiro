@@ -28,3 +28,45 @@ This project uses Jest for testing. Use these commands:
 - Run with coverage: `npm test:coverage`
 
 **IMPORTANT**: Jest does NOT support the `--run` flag. Do NOT use `npm test -- file.test.js --run`
+
+## Code Configuration Best Practices
+
+### Avoid Hard-Coded Values
+
+**DO NOT** hard-code magic numbers for sizes, positions, dimensions, or any values that might need adjustment later.
+
+**Instead:**
+- Define configuration constants at the top of files or in dedicated config objects
+- Calculate derived values (like center points, offsets) from base constants
+- Use proportional/percentage-based calculations for scalability
+
+**Example - BAD:**
+```javascript
+graphics.fillCircle(12, 12, 10);  // Hard-coded center and radius
+graphics.fillRect(2, 4, 20, 20);  // Hard-coded positions and sizes
+```
+
+**Example - GOOD:**
+```javascript
+const CONFIG = {
+    TEXTURE_SIZE: 24,
+    get CENTER() { return this.TEXTURE_SIZE / 2; }
+};
+
+const radius = CONFIG.TEXTURE_SIZE * 0.42;  // 42% of texture size
+graphics.fillCircle(CONFIG.CENTER, CONFIG.CENTER, radius);
+```
+
+**Benefits:**
+- Single source of truth for configuration values
+- Easy to adjust sizes/dimensions without hunting through code
+- Proportional calculations ensure everything scales together
+- Self-documenting code (percentages show intent)
+
+**Apply this to:**
+- Sprite dimensions and texture sizes
+- UI element positions and sizes
+- Hitbox dimensions
+- Animation timings and durations
+- Game balance values (damage, health, XP thresholds)
+- Grid sizes and spacing

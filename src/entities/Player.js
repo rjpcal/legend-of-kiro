@@ -274,11 +274,23 @@ class Player extends Entity {
      */
     calculateLevelThreshold(level) {
         // Simple formula: level * 10
+        // This creates thresholds: 10, 20, 30, 40, etc.
         return level * 10;
     }
 
     /**
+     * Add XP to the player
+     * @param {number} amount - XP amount to add
+     * @returns {boolean} True if leveled up
+     */
+    addXP(amount) {
+        this.stats.xp += amount;
+        return this.checkLevelUp();
+    }
+
+    /**
      * Check if player should level up and handle it
+     * @returns {boolean} True if leveled up
      */
     checkLevelUp() {
         const threshold = this.calculateLevelThreshold(this.stats.level);
@@ -291,12 +303,26 @@ class Player extends Entity {
 
     /**
      * Level up the player
+     * Increases level and max health (Property 11)
      */
     levelUp() {
         this.stats.level++;
-        // Increase max health on level up
-        this.health.max += 2;
+        
+        // Increase max health on level up (Property 11, Requirements 3.5, 7.2)
+        const healthIncrease = 2;
+        this.health.max += healthIncrease;
         this.health.current = this.health.max; // Fully heal on level up
+        
+        // Play level up sound if available
+        if (this.scene && this.scene.sound) {
+            try {
+                if (this.scene.sound.get && this.scene.sound.get('level_up')) {
+                    this.scene.sound.play('level_up');
+                }
+            } catch (e) {
+                // Sound not loaded yet, skip
+            }
+        }
     }
 
     /**
