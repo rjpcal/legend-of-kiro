@@ -3,27 +3,96 @@
 class OverworldScene extends Phaser.Scene {
     constructor() {
         super({ key: 'OverworldScene' });
+        this.player = null;
+        this.cursors = null;
+        this.wasd = null;
+        this.collisionSystem = null;
+        this.obstacles = [];
     }
 
     create() {
         const { width, height } = this.cameras.main;
 
+        // Initialize collision system
+        this.collisionSystem = new CollisionSystem(this);
+
+        // Create player at center of screen
+        this.player = new Player(this, width / 2, height / 2);
+        this.player.createSprite();
+
+        // Create some test obstacles
+        this.createTestObstacles();
+
+        // Set up keyboard input
+        this.cursors = this.input.keyboard.createCursorKeys();
+        
+        // Set up WASD keys
+        this.wasd = {
+            W: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+            A: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+            S: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+            D: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
+        };
+
         // Placeholder text
         const text = this.add.text(
-            width / 2,
-            height / 2,
-            'Overworld Scene\n(To be implemented)',
+            16,
+            16,
+            'Use Arrow Keys or WASD to move\nCollision detection active!',
             {
-                fontSize: '24px',
+                fontSize: '16px',
                 fill: '#ffffff',
-                fontFamily: 'Arial',
-                align: 'center'
+                fontFamily: 'Arial'
             }
         );
-        text.setOrigin(0.5);
     }
 
-    update() {
-        // Game loop will be implemented in future tasks
+    /**
+     * Create test obstacles for collision testing
+     */
+    createTestObstacles() {
+        const { width, height } = this.cameras.main;
+
+        // Create a few obstacles around the screen
+        const obstaclePositions = [
+            { x: width / 2, y: height / 2 - 100, w: 64, h: 64 },
+            { x: width / 2 - 150, y: height / 2, w: 48, h: 48 },
+            { x: width / 2 + 150, y: height / 2, w: 48, h: 48 },
+            { x: width / 2, y: height / 2 + 100, w: 80, h: 32 }
+        ];
+
+        for (let pos of obstaclePositions) {
+            const obstacle = new Obstacle(this, pos.x, pos.y, pos.w, pos.h);
+            obstacle.createSprite();
+            this.obstacles.push(obstacle);
+            this.collisionSystem.addObstacle(obstacle);
+        }
+    }
+
+    update(time, delta) {
+        if (this.player) {
+            // Handle player input
+            this.player.handleInput(this.cursors, this.wasd, delta);
+            
+            // Check collision before applying movement
+            if (this.player.isMoving) {
+                // Check if intended movement would cause collision
+                if (this.collisionSystem.checkIntendedCollision(this.player)) {
+                    // Cancel movement if collision detected
+                    this.player.cancelMovement();
+                } else {
+                    // Apply movement if no collision
+                    this.player.applyMovement();
+                }
+            }
+            
+            // Update player
+            this.player.update(delta);
+        }
+
+        // Update collision system
+        if (this.collisionSystem) {
+            this.collisionSystem.update();
+        }
     }
 }

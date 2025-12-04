@@ -60,11 +60,68 @@ class Player extends Entity {
     /**
      * Move the player in a direction
      * @param {string} direction - 'up', 'down', 'left', or 'right'
+     * @param {number} delta - Time elapsed since last frame in milliseconds
      */
-    move(direction) {
+    move(direction, delta) {
         this.facing = direction;
         this.isMoving = true;
-        // Actual movement logic will be implemented in movement system task
+        
+        // Calculate movement distance based on speed and delta time
+        // Convert delta from milliseconds to seconds, then multiply by speed (pixels per second)
+        const distance = (this.stats.speed * delta) / 1000;
+        
+        // Store intended new position
+        this.intendedX = this.x;
+        this.intendedY = this.y;
+        
+        // Calculate new position based on direction
+        switch(direction) {
+            case 'up':
+                this.intendedY -= distance;
+                break;
+            case 'down':
+                this.intendedY += distance;
+                break;
+            case 'left':
+                this.intendedX -= distance;
+                break;
+            case 'right':
+                this.intendedX += distance;
+                break;
+        }
+    }
+    
+    /**
+     * Apply the intended movement (called after collision check)
+     */
+    applyMovement() {
+        if (this.intendedX !== undefined) {
+            this.x = this.intendedX;
+        }
+        if (this.intendedY !== undefined) {
+            this.y = this.intendedY;
+        }
+        this.intendedX = undefined;
+        this.intendedY = undefined;
+    }
+    
+    /**
+     * Cancel the intended movement (called when collision detected)
+     */
+    cancelMovement() {
+        this.intendedX = undefined;
+        this.intendedY = undefined;
+        this.isMoving = false;
+    }
+    
+    /**
+     * Get the intended position after movement
+     */
+    getIntendedPosition() {
+        return {
+            x: this.intendedX !== undefined ? this.intendedX : this.x,
+            y: this.intendedY !== undefined ? this.intendedY : this.y
+        };
     }
 
     /**
@@ -183,6 +240,27 @@ class Player extends Entity {
         this.health.current = Math.max(0, Math.min(this.health.max, value));
     }
 
+    /**
+     * Handle keyboard input for movement
+     * @param {object} cursors - Phaser cursor keys object
+     * @param {object} wasd - WASD keys object
+     * @param {number} delta - Time elapsed since last frame
+     */
+    handleInput(cursors, wasd, delta) {
+        this.isMoving = false;
+        
+        // Check for movement input (arrow keys or WASD)
+        if (cursors.up.isDown || wasd.W.isDown) {
+            this.move('up', delta);
+        } else if (cursors.down.isDown || wasd.S.isDown) {
+            this.move('down', delta);
+        } else if (cursors.left.isDown || wasd.A.isDown) {
+            this.move('left', delta);
+        } else if (cursors.right.isDown || wasd.D.isDown) {
+            this.move('right', delta);
+        }
+    }
+    
     /**
      * Update player state
      * @param {number} delta - Time elapsed since last frame

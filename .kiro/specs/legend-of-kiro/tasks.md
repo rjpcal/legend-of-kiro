@@ -53,20 +53,20 @@
     - Test property getters and setters
     - _Requirements: 9.1, 9.2, 9.3_
 
-- [ ] 4. Implement movement and collision system
-  - [ ] 4.1 Create movement controller
+- [x] 4. Implement movement and collision system
+  - [x] 4.1 Create movement controller
     - Implement keyboard input handling (arrow keys, WASD)
     - Add movement logic for four directions
     - Implement movement speed and delta time
     - _Requirements: 1.1_
 
-  - [ ] 4.2 Implement collision detection
+  - [x] 4.2 Implement collision detection
     - Create hitbox system for entities
     - Implement AABB collision detection
     - Add obstacle collision prevention
     - _Requirements: 1.3, 9.4_
 
-  - [ ] 4.3 Integrate movement with collision
+  - [x] 4.3 Integrate movement with collision
     - Check collisions before applying movement
     - Prevent movement through obstacles
     - _Requirements: 1.3, 9.4_

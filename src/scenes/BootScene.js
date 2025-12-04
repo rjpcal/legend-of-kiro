@@ -19,8 +19,10 @@ class BootScene extends Phaser.Scene {
         );
         loadingText.setOrigin(0.5);
 
-        // Load assets here in future tasks
-        // For now, just proceed to main menu
+        // Load Kiro sprite
+        this.load.image('kiro', 'kiro-logo.png');
+        
+        // Additional assets will be loaded in future tasks
     }
 
     async create() {
