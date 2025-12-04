@@ -51,6 +51,11 @@ class Enemy extends Entity {
         if (this.sprite) {
             // Set depth for rendering order
             this.sprite.setDepth(5);
+            
+            // Initialize animation state
+            if (this.scene.animationManager) {
+                this.scene.animationManager.initializeEntity(this, 'idle');
+            }
         }
     }
 
@@ -117,7 +122,21 @@ class Enemy extends Entity {
         this.isFriendly = true;
         this.active = false;
         
-        // Play defeat animation (will be implemented in animation task)
+        // Play defeat animation
+        if (this.scene.animationManager) {
+            this.scene.animationManager.setState(this, 'defeat');
+        }
+        
+        // Fade out sprite
+        if (this.sprite && this.scene.tweens) {
+            this.scene.tweens.add({
+                targets: this.sprite,
+                alpha: 0,
+                scale: 1.5,
+                duration: 500,
+                ease: 'Power2'
+            });
+        }
         
         // Remove from game after a short delay
         setTimeout(() => {
@@ -164,7 +183,31 @@ class Enemy extends Entity {
         
         if (!this.isFriendly && this.active) {
             this.ai();
+            this.updateAnimationState();
         }
+    }
+    
+    /**
+     * Update animation state based on enemy state
+     */
+    updateAnimationState() {
+        if (!this.scene.animationManager) {
+            return;
+        }
+        
+        // Determine animation state based on AI state
+        let animState = 'idle';
+        
+        if (this.aiState === 'attack') {
+            animState = 'attack';
+        } else if (this.aiState === 'chase') {
+            animState = 'move';
+        } else if (this.aiState === 'defeated') {
+            animState = 'defeat';
+        }
+        
+        // Update animation state
+        this.scene.animationManager.setState(this, animState);
     }
 }
 

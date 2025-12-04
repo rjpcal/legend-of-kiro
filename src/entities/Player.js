@@ -54,6 +54,20 @@ class Player extends Entity {
         if (this.sprite) {
             // Set depth for rendering order
             this.sprite.setDepth(10);
+            
+            // Apply ripple effect to Kiro sprite
+            if (this.scene.rippleEffect) {
+                this.scene.rippleEffect.applyRipple(this.sprite, {
+                    amplitude: 0.02,
+                    frequency: 3,
+                    speed: 1.5
+                });
+            }
+            
+            // Initialize animation state
+            if (this.scene.animationManager) {
+                this.scene.animationManager.initializeEntity(this, 'idle');
+            }
         }
     }
 
@@ -268,7 +282,38 @@ class Player extends Entity {
     update(delta) {
         super.update(delta);
         
-        // Additional player-specific update logic will be added in future tasks
+        // Update animation state based on current state
+        this.updateAnimationState();
+    }
+    
+    /**
+     * Update animation state based on player state
+     */
+    updateAnimationState() {
+        if (!this.scene.animationManager) {
+            return;
+        }
+        
+        // Determine animation state based on player state
+        let animState = 'idle';
+        
+        if (this.isAttacking) {
+            animState = 'attack';
+        } else if (this.isMoving) {
+            animState = 'move';
+        }
+        
+        // Update animation state
+        this.scene.animationManager.setState(this, animState);
+        
+        // Update sprite facing direction (flip sprite for left/right)
+        if (this.sprite) {
+            if (this.facing === 'left') {
+                this.sprite.setFlipX(true);
+            } else if (this.facing === 'right') {
+                this.sprite.setFlipX(false);
+            }
+        }
     }
 }
 

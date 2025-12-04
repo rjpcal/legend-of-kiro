@@ -85,19 +85,19 @@
     - Test collision blocking
     - _Requirements: 1.1, 1.3, 1.5_
 
-- [ ] 5. Implement animation system
-  - [ ] 5.1 Create sprite animation manager
+- [x] 5. Implement animation system
+  - [x] 5.1 Create sprite animation manager
     - Load sprite sheets for Kiro and enemies
     - Define animation frames for idle, move, attack, defeat
     - Implement animation state machine
     - _Requirements: 12.1, 12.2, 12.3, 12.4_
 
-  - [ ] 5.2 Add ripple effect for Kiro sprite
+  - [x] 5.2 Add ripple effect for Kiro sprite
     - Implement shader or animation for rippling effect
     - Apply to kiro-logo.png sprite
     - _Requirements: 12.1_
 
-  - [ ] 5.3 Integrate animations with entity states
+  - [x] 5.3 Integrate animations with entity states
     - Play movement animation when moving
     - Play idle animation when stopped
     - Play attack animation when attacking

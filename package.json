@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A 2D top-down adventure game inspired by the original Legend of Zelda",
   "scripts": {
+    "start": "npx http-server -p 8080 -o",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"

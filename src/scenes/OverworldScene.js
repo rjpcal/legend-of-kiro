@@ -7,18 +7,27 @@ class OverworldScene extends Phaser.Scene {
         this.cursors = null;
         this.wasd = null;
         this.collisionSystem = null;
+        this.rippleEffect = null;
+        this.animationManager = null;
         this.obstacles = [];
     }
 
     create() {
         const { width, height } = this.cameras.main;
 
-        // Initialize collision system
+        // Initialize systems
         this.collisionSystem = new CollisionSystem(this);
+        this.rippleEffect = new RippleEffect(this);
+        this.animationManager = new AnimationManager(this);
 
         // Create player at center of screen
         this.player = new Player(this, width / 2, height / 2);
         this.player.createSprite();
+        
+        // Initialize player in animation manager
+        if (this.animationManager) {
+            this.animationManager.initializeEntity(this.player, 'idle');
+        }
 
         // Create some test obstacles
         this.createTestObstacles();
@@ -90,9 +99,17 @@ class OverworldScene extends Phaser.Scene {
             this.player.update(delta);
         }
 
-        // Update collision system
+        // Update systems
         if (this.collisionSystem) {
             this.collisionSystem.update();
+        }
+        
+        if (this.rippleEffect) {
+            this.rippleEffect.update(delta);
+        }
+        
+        if (this.animationManager) {
+            this.animationManager.update();
         }
     }
 }

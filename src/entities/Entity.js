@@ -31,6 +31,13 @@ class Entity {
             // Create sprite at entity position
             this.sprite = this.scene.add.sprite(this.x, this.y, this.spriteKey);
             this.sprite.setOrigin(0.5, 0.5);
+            
+            // Scale sprite to reasonable game size (32x32 pixels default)
+            // This can be overridden in subclasses
+            if (this.sprite.width > 64 || this.sprite.height > 64) {
+                const scale = 32 / Math.max(this.sprite.width, this.sprite.height);
+                this.sprite.setScale(scale);
+            }
         }
     }
 
