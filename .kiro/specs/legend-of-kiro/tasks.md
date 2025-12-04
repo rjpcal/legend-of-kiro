@@ -111,7 +111,7 @@
     - **Property 35: Sprite animation states**
     - **Validates: Requirements 12.1, 12.3, 12.4**
 
-- [ ] 6. Checkpoint - Ensure all tests pass
+- [x] 6. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 7. Implement combat system
