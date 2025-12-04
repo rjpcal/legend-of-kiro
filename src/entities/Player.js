@@ -268,6 +268,28 @@ class Player extends Entity {
     }
 
     /**
+     * Calculate XP threshold for a given level
+     * @param {number} level - Level to calculate threshold for
+     * @returns {number} XP required for next level
+     */
+    calculateLevelThreshold(level) {
+        // Simple formula: level * 10
+        return level * 10;
+    }
+
+    /**
+     * Check if player should level up and handle it
+     */
+    checkLevelUp() {
+        const threshold = this.calculateLevelThreshold(this.stats.level);
+        if (this.stats.xp >= threshold) {
+            this.levelUp();
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Level up the player
      */
     levelUp() {

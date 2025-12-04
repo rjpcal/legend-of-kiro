@@ -11,6 +11,7 @@ class OverworldScene extends Phaser.Scene {
         this.collisionSystem = null;
         this.rippleEffect = null;
         this.animationManager = null;
+        this.hud = null;
         this.obstacles = [];
         this.enemies = [];
         this.projectiles = [];
@@ -75,17 +76,12 @@ class OverworldScene extends Phaser.Scene {
         // Create some test enemies
         this.createTestEnemies();
 
-        // Placeholder text
-        const text = this.add.text(
-            16,
-            16,
-            'Use Arrow Keys or WASD to move\nSPACE to attack, SHIFT for ranged attack\nCollision detection active!',
-            {
-                fontSize: '16px',
-                fill: '#ffffff',
-                fontFamily: 'Arial'
-            }
-        );
+        // Create HUD
+        this.hud = new HUD(this);
+        this.hud.create(this.player);
+        
+        // Mark starting position as visited on minimap
+        this.hud.markMinimapVisited(0, 0);
     }
 
     /**
@@ -191,6 +187,8 @@ class OverworldScene extends Phaser.Scene {
                 // Award XP if enemy was defeated
                 if (enemy.health.current === 0) {
                     this.player.stats.xp += enemy.getXPReward();
+                    // Check for level up
+                    this.player.checkLevelUp();
                 }
             }
         }
@@ -218,6 +216,8 @@ class OverworldScene extends Phaser.Scene {
                 // Award XP if enemy was defeated
                 if (enemy.health.current === 0) {
                     this.player.stats.xp += enemy.getXPReward();
+                    // Check for level up
+                    this.player.checkLevelUp();
                 }
                 
                 // Projectile starts returning after hit
@@ -248,6 +248,11 @@ class OverworldScene extends Phaser.Scene {
             
             // Update player
             this.player.update(delta);
+            
+            // Update HUD
+            if (this.hud) {
+                this.hud.update(this.player);
+            }
         }
 
         // Update enemies

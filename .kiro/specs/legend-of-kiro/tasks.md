@@ -203,23 +203,23 @@
     - Test death and respawn
     - _Requirements: 3.2, 3.3, 3.4_
 
-- [ ] 9. Implement HUD and UI
-  - [ ] 9.1 Create Health Meter component
+- [x] 9. Implement HUD and UI
+  - [x] 9.1 Create Health Meter component
     - Display current and max health visually
     - Implement pulse animation on damage
     - _Requirements: 3.1, 3.2, 10.3_
 
-  - [ ] 9.2 Create Coin Counter component
+  - [x] 9.2 Create Coin Counter component
     - Display current coin count
     - Update on coin collection
     - _Requirements: 4.1, 4.5_
 
-  - [ ] 9.3 Create XP Bar component
+  - [x] 9.3 Create XP Bar component
     - Display current XP and progress to next level
     - Update on XP gain
     - _Requirements: 4.3, 4.4, 4.5_
 
-  - [ ] 9.4 Create Minimap component
+  - [x] 9.4 Create Minimap component
     - Display 6x6 grid representation
     - Highlight current screen position
     - _Requirements: 5.3_
