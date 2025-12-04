@@ -15,7 +15,9 @@ class WorldConfig {
      */
     async loadFromJSON(filepath) {
         try {
-            const response = await fetch(filepath);
+            // Add cache busting parameter to prevent browser caching issues
+            const cacheBuster = `?v=${Date.now()}`;
+            const response = await fetch(filepath + cacheBuster);
             
             if (!response.ok) {
                 throw new Error(`Failed to load configuration: ${response.status} ${response.statusText}`);

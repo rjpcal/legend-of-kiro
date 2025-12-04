@@ -281,20 +281,20 @@
     - Test level up trigger
     - _Requirements: 4.3, 4.4_
 
-- [ ] 12. Implement overworld and screen transitions
-  - [ ] 12.1 Create overworld scene
+- [x] 12. Implement overworld and screen transitions
+  - [x] 12.1 Create overworld scene
     - Load overworld screens from configuration
     - Render current screen with terrain and obstacles
     - Place enemies and collectibles
     - _Requirements: 5.5, 11.2_
 
-  - [ ] 12.2 Implement screen transition system
+  - [x] 12.2 Implement screen transition system
     - Detect player reaching screen edge
     - Transition to adjacent screen
     - Implement smooth scrolling transition
     - _Requirements: 5.1, 5.2_
 
-  - [ ] 12.3 Add dungeon entrances
+  - [x] 12.3 Add dungeon entrances
     - Place dungeon entrance markers on overworld
     - Detect player collision with entrance
     - Transition to dungeon scene

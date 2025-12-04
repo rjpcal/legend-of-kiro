@@ -23,6 +23,22 @@
         "storeEntrance": null
       },
       {
+        "x": 0,
+        "y": 1,
+        "terrain": "grass",
+        "obstacles": [
+          {"x": 150, "y": 250, "width": 60, "height": 60, "type": "rock"}
+        ],
+        "enemies": [
+          {"type": "zombie", "x": 500, "y": 200, "xp": 10}
+        ],
+        "collectibles": [
+          {"type": "coin", "x": 300, "y": 400, "value": 5}
+        ],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
         "x": 1,
         "y": 0,
         "terrain": "grass",
@@ -36,6 +52,32 @@
         "storeEntrance": {"id": 1, "x": 400, "y": 300}
       },
       {
+        "x": 1,
+        "y": 1,
+        "terrain": "grass",
+        "obstacles": [],
+        "enemies": [
+          {"type": "skeleton", "x": 350, "y": 300, "xp": 15}
+        ],
+        "collectibles": [],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 2,
+        "y": 0,
+        "terrain": "grass",
+        "obstacles": [
+          {"x": 400, "y": 300, "width": 70, "height": 70, "type": "tree"}
+        ],
+        "enemies": [],
+        "collectibles": [
+          {"type": "coin", "x": 200, "y": 200, "value": 10}
+        ],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
         "x": 2,
         "y": 1,
         "terrain": "grass",
@@ -47,6 +89,46 @@
         ],
         "collectibles": [],
         "dungeonEntrance": {"id": 1, "x": 400, "y": 500},
+        "storeEntrance": null
+      },
+      {
+        "x": 0,
+        "y": 2,
+        "terrain": "grass",
+        "obstacles": [],
+        "enemies": [],
+        "collectibles": [
+          {"type": "coin", "x": 400, "y": 300, "value": 5}
+        ],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 1,
+        "y": 2,
+        "terrain": "grass",
+        "obstacles": [
+          {"x": 250, "y": 350, "width": 50, "height": 50, "type": "rock"}
+        ],
+        "enemies": [
+          {"type": "zombie", "x": 450, "y": 250, "xp": 10}
+        ],
+        "collectibles": [],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 2,
+        "y": 2,
+        "terrain": "grass",
+        "obstacles": [],
+        "enemies": [
+          {"type": "skeleton", "x": 400, "y": 300, "xp": 15}
+        ],
+        "collectibles": [
+          {"type": "health", "x": 300, "y": 200, "value": 20}
+        ],
+        "dungeonEntrance": null,
         "storeEntrance": null
       },
       {
@@ -64,6 +146,58 @@
         "storeEntrance": null
       },
       {
+        "x": 0,
+        "y": 3,
+        "terrain": "grass",
+        "obstacles": [
+          {"x": 350, "y": 250, "width": 60, "height": 60, "type": "tree"}
+        ],
+        "enemies": [],
+        "collectibles": [
+          {"type": "coin", "x": 500, "y": 400, "value": 5}
+        ],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "terrain": "grass",
+        "obstacles": [],
+        "enemies": [
+          {"type": "ghoul", "x": 350, "y": 350, "xp": 20}
+        ],
+        "collectibles": [],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 2,
+        "y": 3,
+        "terrain": "grass",
+        "obstacles": [
+          {"x": 200, "y": 300, "width": 80, "height": 40, "type": "rock"}
+        ],
+        "enemies": [],
+        "collectibles": [
+          {"type": "coin", "x": 450, "y": 250, "value": 10}
+        ],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "terrain": "grass",
+        "obstacles": [],
+        "enemies": [
+          {"type": "skeleton", "x": 400, "y": 300, "xp": 15}
+        ],
+        "collectibles": [],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
         "x": 4,
         "y": 3,
         "terrain": "grass",
@@ -78,6 +212,75 @@
         "storeEntrance": null
       },
       {
+        "x": 0,
+        "y": 4,
+        "terrain": "grass",
+        "obstacles": [],
+        "enemies": [
+          {"type": "zombie", "x": 300, "y": 300, "xp": 10}
+        ],
+        "collectibles": [
+          {"type": "coin", "x": 500, "y": 250, "value": 5}
+        ],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 1,
+        "y": 4,
+        "terrain": "grass",
+        "obstacles": [
+          {"x": 400, "y": 200, "width": 50, "height": 50, "type": "rock"}
+        ],
+        "enemies": [],
+        "collectibles": [
+          {"type": "health", "x": 300, "y": 400, "value": 20}
+        ],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 2,
+        "y": 4,
+        "terrain": "grass",
+        "obstacles": [],
+        "enemies": [
+          {"type": "skeleton", "x": 350, "y": 300, "xp": 15},
+          {"type": "zombie", "x": 450, "y": 350, "xp": 10}
+        ],
+        "collectibles": [],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 3,
+        "y": 4,
+        "terrain": "grass",
+        "obstacles": [
+          {"x": 250, "y": 250, "width": 70, "height": 70, "type": "tree"}
+        ],
+        "enemies": [
+          {"type": "ghoul", "x": 500, "y": 400, "xp": 20}
+        ],
+        "collectibles": [
+          {"type": "coin", "x": 600, "y": 200, "value": 10}
+        ],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 4,
+        "y": 4,
+        "terrain": "grass",
+        "obstacles": [],
+        "enemies": [
+          {"type": "spirit", "x": 400, "y": 300, "xp": 25}
+        ],
+        "collectibles": [],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
         "x": 5,
         "y": 4,
         "terrain": "grass",
@@ -87,6 +290,216 @@
         ],
         "collectibles": [],
         "dungeonEntrance": {"id": 4, "x": 400, "y": 100},
+        "storeEntrance": null
+      },
+      {
+        "x": 0,
+        "y": 5,
+        "terrain": "grass",
+        "obstacles": [
+          {"x": 300, "y": 300, "width": 60, "height": 60, "type": "rock"}
+        ],
+        "enemies": [],
+        "collectibles": [
+          {"type": "coin", "x": 450, "y": 250, "value": 5}
+        ],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "terrain": "grass",
+        "obstacles": [],
+        "enemies": [
+          {"type": "zombie", "x": 350, "y": 300, "xp": 10}
+        ],
+        "collectibles": [],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 2,
+        "y": 5,
+        "terrain": "grass",
+        "obstacles": [
+          {"x": 200, "y": 200, "width": 50, "height": 50, "type": "tree"}
+        ],
+        "enemies": [
+          {"type": "skeleton", "x": 500, "y": 350, "xp": 15}
+        ],
+        "collectibles": [
+          {"type": "health", "x": 400, "y": 450, "value": 20}
+        ],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "terrain": "grass",
+        "obstacles": [],
+        "enemies": [
+          {"type": "ghoul", "x": 400, "y": 300, "xp": 20}
+        ],
+        "collectibles": [
+          {"type": "coin", "x": 300, "y": 200, "value": 10}
+        ],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 4,
+        "y": 5,
+        "terrain": "grass",
+        "obstacles": [
+          {"x": 350, "y": 250, "width": 70, "height": 70, "type": "rock"}
+        ],
+        "enemies": [
+          {"type": "spirit", "x": 500, "y": 400, "xp": 25}
+        ],
+        "collectibles": [],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "terrain": "grass",
+        "obstacles": [],
+        "enemies": [
+          {"type": "spirit", "x": 350, "y": 300, "xp": 25},
+          {"type": "ghoul", "x": 450, "y": 350, "xp": 20}
+        ],
+        "collectibles": [
+          {"type": "coin", "x": 400, "y": 200, "value": 15}
+        ],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 3,
+        "y": 0,
+        "terrain": "grass",
+        "obstacles": [],
+        "enemies": [],
+        "collectibles": [
+          {"type": "coin", "x": 400, "y": 300, "value": 5}
+        ],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 4,
+        "y": 0,
+        "terrain": "grass",
+        "obstacles": [
+          {"x": 300, "y": 250, "width": 60, "height": 60, "type": "tree"}
+        ],
+        "enemies": [
+          {"type": "zombie", "x": 500, "y": 350, "xp": 10}
+        ],
+        "collectibles": [],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 5,
+        "y": 0,
+        "terrain": "grass",
+        "obstacles": [],
+        "enemies": [
+          {"type": "skeleton", "x": 400, "y": 300, "xp": 15}
+        ],
+        "collectibles": [
+          {"type": "health", "x": 300, "y": 400, "value": 20}
+        ],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "terrain": "grass",
+        "obstacles": [
+          {"x": 250, "y": 300, "width": 50, "height": 50, "type": "rock"}
+        ],
+        "enemies": [
+          {"type": "ghoul", "x": 450, "y": 350, "xp": 20}
+        ],
+        "collectibles": [],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 4,
+        "y": 1,
+        "terrain": "grass",
+        "obstacles": [],
+        "enemies": [
+          {"type": "skeleton", "x": 350, "y": 300, "xp": 15}
+        ],
+        "collectibles": [
+          {"type": "coin", "x": 500, "y": 250, "value": 10}
+        ],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "terrain": "grass",
+        "obstacles": [
+          {"x": 400, "y": 350, "width": 70, "height": 70, "type": "tree"}
+        ],
+        "enemies": [],
+        "collectibles": [
+          {"type": "coin", "x": 300, "y": 200, "value": 5}
+        ],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 4,
+        "y": 2,
+        "terrain": "grass",
+        "obstacles": [],
+        "enemies": [
+          {"type": "spirit", "x": 400, "y": 300, "xp": 25}
+        ],
+        "collectibles": [
+          {"type": "health", "x": 350, "y": 450, "value": 30}
+        ],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 5,
+        "y": 2,
+        "terrain": "grass",
+        "obstacles": [
+          {"x": 300, "y": 250, "width": 60, "height": 60, "type": "rock"}
+        ],
+        "enemies": [
+          {"type": "ghoul", "x": 500, "y": 350, "xp": 20}
+        ],
+        "collectibles": [],
+        "dungeonEntrance": null,
+        "storeEntrance": null
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "terrain": "grass",
+        "obstacles": [],
+        "enemies": [
+          {"type": "skeleton", "x": 350, "y": 300, "xp": 15},
+          {"type": "zombie", "x": 450, "y": 350, "xp": 10}
+        ],
+        "collectibles": [
+          {"type": "coin", "x": 400, "y": 200, "value": 10}
+        ],
+        "dungeonEntrance": null,
         "storeEntrance": null
       }
     ]
