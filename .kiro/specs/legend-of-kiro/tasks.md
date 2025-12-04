@@ -30,19 +30,19 @@
     - Test missing file handling
     - _Requirements: 11.1, 11.2, 11.3_
 
-- [ ] 3. Implement base entity system
-  - [ ] 3.1 Create Entity base class
+- [x] 3. Implement base entity system
+  - [x] 3.1 Create Entity base class
     - Implement position, sprite, and collision properties
     - Add update and destroy methods
     - _Requirements: 9.1, 9.2, 9.3, 9.4_
 
-  - [ ] 3.2 Create Player (Kiro) class
+  - [x] 3.2 Create Player (Kiro) class
     - Extend Entity with player-specific properties
     - Implement health, inventory, and stats
     - Add sprite loading for kiro-logo.png
     - _Requirements: 1.1, 3.1_
 
-  - [ ] 3.3 Create Enemy base class
+  - [x] 3.3 Create Enemy base class
     - Extend Entity with enemy-specific properties
     - Implement health and attack properties
     - Add enemy sprite loading
