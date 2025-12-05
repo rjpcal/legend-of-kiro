@@ -509,15 +509,15 @@
 - [x]   19. Checkpoint - Ensure all tests pass
     - Ensure all tests pass, ask the user if questions arise.
 
-- [ ]   20. Create initial world configuration
-    - [ ] 20.1 Design overworld layout
+- [x]   20. Create initial world configuration
+    - [x] 20.1 Design overworld layout
         - Create 6x6 screen grid with varied terrain
         - Place 4 dungeon entrances
         - Place stores
         - Distribute enemies and collectibles
         - _Requirements: 5.5, 11.2_
 
-    - [ ] 20.2 Design 4 dungeons
+    - [x] 20.2 Design 4 dungeons
         - Create dungeon 1 with 5-10 rooms and puzzles
         - Create dungeon 2 with 5-10 rooms and puzzles
         - Create dungeon 3 with 5-10 rooms and puzzles
@@ -525,7 +525,7 @@
         - Place boss in final room of each dungeon
         - _Requirements: 6.1, 6.5, 11.3_
 
-    - [ ] 20.3 Define enemy types and stats
+    - [x] 20.3 Define enemy types and stats
         - Create zombie enemy configuration
         - Create skeleton enemy configuration
         - Create ghoul enemy configuration
@@ -533,7 +533,7 @@
         - Create boss configurations for each dungeon
         - _Requirements: 2.2, 7.1_
 
-    - [ ] 20.4 Define store inventories
+    - [x] 20.4 Define store inventories
         - Create weapon progression (starter → advanced)
         - Create armor progression (starter → advanced)
         - Set appropriate coin costs

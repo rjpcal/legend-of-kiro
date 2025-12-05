@@ -482,14 +482,105 @@
                         { "type": "skeleton", "x": 300, "y": 300, "xp": 15 },
                         { "type": "skeleton", "x": 500, "y": 300, "xp": 15 }
                     ],
-                    "obstacles": [],
+                    "obstacles": [
+                        { "x": 150, "y": 150, "width": 50, "height": 50, "type": "wall" },
+                        { "x": 650, "y": 450, "width": 50, "height": 50, "type": "wall" }
+                    ],
                     "collectibles": [],
-                    "doors": [{ "direction": "north", "locked": true, "leadsTo": 2 }],
+                    "doors": [
+                        { "direction": "north", "locked": true, "leadsTo": 2 },
+                        { "direction": "east", "locked": true, "leadsTo": 3 }
+                    ],
                     "isBossRoom": false,
                     "completionObjective": "defeat_all_enemies"
                 },
                 {
                     "id": 2,
+                    "type": "puzzle",
+                    "width": 800,
+                    "height": 600,
+                    "enemies": [],
+                    "obstacles": [
+                        { "x": 200, "y": 250, "width": 50, "height": 50, "type": "wall" },
+                        { "x": 600, "y": 250, "width": 50, "height": 50, "type": "wall" }
+                    ],
+                    "collectibles": [{ "type": "coin", "x": 400, "y": 100, "value": 15 }],
+                    "pushableBlocks": [{ "x": 400, "y": 350, "width": 50, "height": 50 }],
+                    "switches": [{ "x": 400, "y": 500, "activates": "door_north" }],
+                    "doors": [
+                        { "direction": "south", "locked": false, "leadsTo": 1 },
+                        { "direction": "north", "locked": true, "leadsTo": 4, "id": "door_north" }
+                    ],
+                    "isBossRoom": false,
+                    "completionObjective": "activate_all_switches"
+                },
+                {
+                    "id": 3,
+                    "type": "combat",
+                    "width": 800,
+                    "height": 600,
+                    "enemies": [
+                        { "type": "zombie", "x": 250, "y": 250, "xp": 10 },
+                        { "type": "skeleton", "x": 400, "y": 300, "xp": 15 },
+                        { "type": "zombie", "x": 550, "y": 350, "xp": 10 }
+                    ],
+                    "obstacles": [],
+                    "collectibles": [{ "type": "health", "x": 400, "y": 500, "value": 30 }],
+                    "doors": [
+                        { "direction": "west", "locked": false, "leadsTo": 1 },
+                        { "direction": "north", "locked": true, "leadsTo": 5 }
+                    ],
+                    "isBossRoom": false,
+                    "completionObjective": "defeat_all_enemies"
+                },
+                {
+                    "id": 4,
+                    "type": "combat",
+                    "width": 800,
+                    "height": 600,
+                    "enemies": [
+                        { "type": "skeleton", "x": 300, "y": 300, "xp": 15 },
+                        { "type": "skeleton", "x": 500, "y": 300, "xp": 15 }
+                    ],
+                    "obstacles": [
+                        { "x": 400, "y": 200, "width": 50, "height": 50, "type": "wall" }
+                    ],
+                    "collectibles": [],
+                    "doors": [
+                        { "direction": "south", "locked": false, "leadsTo": 2 },
+                        { "direction": "east", "locked": true, "leadsTo": 6 }
+                    ],
+                    "isBossRoom": false,
+                    "completionObjective": "defeat_all_enemies"
+                },
+                {
+                    "id": 5,
+                    "type": "puzzle",
+                    "width": 800,
+                    "height": 600,
+                    "enemies": [],
+                    "obstacles": [
+                        { "x": 250, "y": 300, "width": 50, "height": 50, "type": "wall" },
+                        { "x": 550, "y": 300, "width": 50, "height": 50, "type": "wall" }
+                    ],
+                    "collectibles": [{ "type": "coin", "x": 100, "y": 100, "value": 20 }],
+                    "pushableBlocks": [
+                        { "x": 350, "y": 400, "width": 50, "height": 50 },
+                        { "x": 450, "y": 400, "width": 50, "height": 50 }
+                    ],
+                    "switches": [
+                        { "x": 350, "y": 500, "activates": "door_east" },
+                        { "x": 450, "y": 500, "activates": "door_east" }
+                    ],
+                    "doors": [
+                        { "direction": "south", "locked": false, "leadsTo": 3 },
+                        { "direction": "east", "locked": true, "leadsTo": 6, "id": "door_east" }
+                    ],
+                    "isBossRoom": false,
+                    "completionObjective": "activate_all_switches"
+                },
+                {
+                    "id": 6,
                     "type": "boss",
                     "width": 800,
                     "height": 600,
@@ -498,14 +589,17 @@
                         "type": "bone_king",
                         "x": 400,
                         "y": 300,
-                        "health": 20,
+                        "health": 25,
                         "damage": 18,
                         "xp": 120,
                         "attackPattern": "summon_minions"
                     },
                     "obstacles": [],
                     "collectibles": [],
-                    "doors": [{ "direction": "south", "locked": false, "leadsTo": 1 }],
+                    "doors": [
+                        { "direction": "west", "locked": false, "leadsTo": 4 },
+                        { "direction": "south", "locked": false, "leadsTo": 5 }
+                    ],
                     "isBossRoom": true,
                     "completionObjective": "defeat_boss"
                 }
@@ -521,18 +615,111 @@
                     "type": "combat",
                     "width": 800,
                     "height": 600,
-                    "enemies": [{ "type": "spirit", "x": 400, "y": 300, "xp": 25 }],
+                    "enemies": [
+                        { "type": "ghoul", "x": 300, "y": 300, "xp": 20 },
+                        { "type": "spirit", "x": 500, "y": 300, "xp": 25 }
+                    ],
                     "obstacles": [
                         { "x": 200, "y": 200, "width": 50, "height": 50, "type": "wall" },
                         { "x": 600, "y": 400, "width": 50, "height": 50, "type": "wall" }
                     ],
                     "collectibles": [{ "type": "coin", "x": 400, "y": 100, "value": 15 }],
-                    "doors": [{ "direction": "east", "locked": true, "leadsTo": 2 }],
+                    "doors": [
+                        { "direction": "north", "locked": true, "leadsTo": 2 },
+                        { "direction": "east", "locked": true, "leadsTo": 3 }
+                    ],
                     "isBossRoom": false,
                     "completionObjective": "defeat_all_enemies"
                 },
                 {
                     "id": 2,
+                    "type": "puzzle",
+                    "width": 800,
+                    "height": 600,
+                    "enemies": [],
+                    "obstacles": [
+                        { "x": 300, "y": 200, "width": 50, "height": 50, "type": "wall" },
+                        { "x": 500, "y": 200, "width": 50, "height": 50, "type": "wall" }
+                    ],
+                    "collectibles": [],
+                    "pushableBlocks": [
+                        { "x": 300, "y": 350, "width": 50, "height": 50 },
+                        { "x": 500, "y": 350, "width": 50, "height": 50 }
+                    ],
+                    "switches": [
+                        { "x": 300, "y": 500, "activates": "door_north" },
+                        { "x": 500, "y": 500, "activates": "door_north" }
+                    ],
+                    "doors": [
+                        { "direction": "south", "locked": false, "leadsTo": 1 },
+                        { "direction": "north", "locked": true, "leadsTo": 5, "id": "door_north" }
+                    ],
+                    "isBossRoom": false,
+                    "completionObjective": "activate_all_switches"
+                },
+                {
+                    "id": 3,
+                    "type": "combat",
+                    "width": 800,
+                    "height": 600,
+                    "enemies": [
+                        { "type": "spirit", "x": 350, "y": 250, "xp": 25 },
+                        { "type": "ghoul", "x": 450, "y": 350, "xp": 20 }
+                    ],
+                    "obstacles": [
+                        { "x": 400, "y": 300, "width": 50, "height": 50, "type": "wall" }
+                    ],
+                    "collectibles": [{ "type": "health", "x": 400, "y": 500, "value": 35 }],
+                    "doors": [
+                        { "direction": "west", "locked": false, "leadsTo": 1 },
+                        { "direction": "north", "locked": true, "leadsTo": 4 }
+                    ],
+                    "isBossRoom": false,
+                    "completionObjective": "defeat_all_enemies"
+                },
+                {
+                    "id": 4,
+                    "type": "combat",
+                    "width": 800,
+                    "height": 600,
+                    "enemies": [
+                        { "type": "spirit", "x": 300, "y": 300, "xp": 25 },
+                        { "type": "spirit", "x": 500, "y": 300, "xp": 25 }
+                    ],
+                    "obstacles": [],
+                    "collectibles": [{ "type": "coin", "x": 400, "y": 100, "value": 20 }],
+                    "doors": [
+                        { "direction": "south", "locked": false, "leadsTo": 3 },
+                        { "direction": "west", "locked": true, "leadsTo": 5 }
+                    ],
+                    "isBossRoom": false,
+                    "completionObjective": "defeat_all_enemies"
+                },
+                {
+                    "id": 5,
+                    "type": "combat",
+                    "width": 800,
+                    "height": 600,
+                    "enemies": [
+                        { "type": "ghoul", "x": 250, "y": 250, "xp": 20 },
+                        { "type": "spirit", "x": 400, "y": 300, "xp": 25 },
+                        { "type": "ghoul", "x": 550, "y": 350, "xp": 20 }
+                    ],
+                    "obstacles": [
+                        { "x": 200, "y": 400, "width": 50, "height": 50, "type": "wall" },
+                        { "x": 600, "y": 400, "width": 50, "height": 50, "type": "wall" }
+                    ],
+                    "collectibles": [],
+                    "doors": [
+                        { "direction": "south", "locked": false, "leadsTo": 2 },
+                        { "direction": "east", "locked": false, "leadsTo": 4 },
+                        { "direction": "north", "locked": true, "leadsTo": 6 }
+                    ],
+                    "isBossRoom": false,
+                    "completionObjective": "defeat_all_enemies"
+                },
+                {
+                    "id": 6,
                     "type": "boss",
                     "width": 800,
                     "height": 600,
@@ -541,14 +728,14 @@
                         "type": "phantom_general",
                         "x": 400,
                         "y": 300,
-                        "health": 20,
+                        "health": 30,
                         "damage": 20,
                         "xp": 140,
                         "attackPattern": "teleport_strike"
                     },
                     "obstacles": [],
                     "collectibles": [],
-                    "doors": [{ "direction": "west", "locked": false, "leadsTo": 1 }],
+                    "doors": [{ "direction": "south", "locked": false, "leadsTo": 5 }],
                     "isBossRoom": true,
                     "completionObjective": "defeat_boss"
                 }
@@ -565,7 +752,10 @@
                     "width": 800,
                     "height": 600,
                     "enemies": [],
-                    "obstacles": [],
+                    "obstacles": [
+                        { "x": 200, "y": 200, "width": 50, "height": 50, "type": "wall" },
+                        { "x": 600, "y": 200, "width": 50, "height": 50, "type": "wall" }
+                    ],
                     "collectibles": [],
                     "pushableBlocks": [
                         { "x": 300, "y": 300, "width": 50, "height": 50 },
@@ -576,7 +766,8 @@
                         { "x": 500, "y": 500, "activates": "door_north" }
                     ],
                     "doors": [
-                        { "direction": "north", "locked": true, "leadsTo": 2, "id": "door_north" }
+                        { "direction": "north", "locked": true, "leadsTo": 2, "id": "door_north" },
+                        { "direction": "east", "locked": true, "leadsTo": 3, "id": "door_east" }
                     ],
                     "isBossRoom": false,
                     "completionObjective": "activate_all_switches"
@@ -590,17 +781,105 @@
                         { "type": "ghoul", "x": 300, "y": 300, "xp": 20 },
                         { "type": "spirit", "x": 500, "y": 300, "xp": 25 }
                     ],
-                    "obstacles": [],
-                    "collectibles": [{ "type": "health", "x": 400, "y": 100, "value": 40 }],
+                    "obstacles": [
+                        { "x": 400, "y": 200, "width": 50, "height": 50, "type": "wall" }
+                    ],
+                    "collectibles": [{ "type": "health", "x": 400, "y": 500, "value": 40 }],
                     "doors": [
                         { "direction": "south", "locked": false, "leadsTo": 1 },
-                        { "direction": "north", "locked": true, "leadsTo": 3 }
+                        { "direction": "north", "locked": true, "leadsTo": 4 }
                     ],
                     "isBossRoom": false,
                     "completionObjective": "defeat_all_enemies"
                 },
                 {
                     "id": 3,
+                    "type": "combat",
+                    "width": 800,
+                    "height": 600,
+                    "enemies": [
+                        { "type": "spirit", "x": 350, "y": 300, "xp": 25 },
+                        { "type": "ghoul", "x": 450, "y": 300, "xp": 20 }
+                    ],
+                    "obstacles": [],
+                    "collectibles": [{ "type": "coin", "x": 400, "y": 100, "value": 25 }],
+                    "doors": [
+                        { "direction": "west", "locked": false, "leadsTo": 1 },
+                        { "direction": "north", "locked": true, "leadsTo": 5 }
+                    ],
+                    "isBossRoom": false,
+                    "completionObjective": "defeat_all_enemies"
+                },
+                {
+                    "id": 4,
+                    "type": "puzzle",
+                    "width": 800,
+                    "height": 600,
+                    "enemies": [],
+                    "obstacles": [
+                        { "x": 250, "y": 250, "width": 50, "height": 50, "type": "wall" },
+                        { "x": 550, "y": 250, "width": 50, "height": 50, "type": "wall" }
+                    ],
+                    "collectibles": [],
+                    "pushableBlocks": [
+                        { "x": 350, "y": 350, "width": 50, "height": 50 },
+                        { "x": 450, "y": 350, "width": 50, "height": 50 }
+                    ],
+                    "switches": [
+                        { "x": 350, "y": 500, "activates": "door_east" },
+                        { "x": 450, "y": 500, "activates": "door_east" }
+                    ],
+                    "doors": [
+                        { "direction": "south", "locked": false, "leadsTo": 2 },
+                        { "direction": "east", "locked": true, "leadsTo": 6, "id": "door_east" }
+                    ],
+                    "isBossRoom": false,
+                    "completionObjective": "activate_all_switches"
+                },
+                {
+                    "id": 5,
+                    "type": "combat",
+                    "width": 800,
+                    "height": 600,
+                    "enemies": [
+                        { "type": "spirit", "x": 300, "y": 250, "xp": 25 },
+                        { "type": "spirit", "x": 500, "y": 250, "xp": 25 },
+                        { "type": "ghoul", "x": 400, "y": 400, "xp": 20 }
+                    ],
+                    "obstacles": [
+                        { "x": 200, "y": 350, "width": 50, "height": 50, "type": "wall" },
+                        { "x": 600, "y": 350, "width": 50, "height": 50, "type": "wall" }
+                    ],
+                    "collectibles": [{ "type": "health", "x": 400, "y": 100, "value": 40 }],
+                    "doors": [
+                        { "direction": "south", "locked": false, "leadsTo": 3 },
+                        { "direction": "west", "locked": true, "leadsTo": 6 }
+                    ],
+                    "isBossRoom": false,
+                    "completionObjective": "defeat_all_enemies"
+                },
+                {
+                    "id": 6,
+                    "type": "combat",
+                    "width": 800,
+                    "height": 600,
+                    "enemies": [
+                        { "type": "spirit", "x": 250, "y": 250, "xp": 25 },
+                        { "type": "ghoul", "x": 400, "y": 300, "xp": 20 },
+                        { "type": "spirit", "x": 550, "y": 350, "xp": 25 }
+                    ],
+                    "obstacles": [],
+                    "collectibles": [],
+                    "doors": [
+                        { "direction": "west", "locked": false, "leadsTo": 4 },
+                        { "direction": "east", "locked": false, "leadsTo": 5 },
+                        { "direction": "north", "locked": true, "leadsTo": 7 }
+                    ],
+                    "isBossRoom": false,
+                    "completionObjective": "defeat_all_enemies"
+                },
+                {
+                    "id": 7,
                     "type": "boss",
                     "width": 800,
                     "height": 600,
@@ -609,14 +888,14 @@
                         "type": "shadow_overlord",
                         "x": 400,
                         "y": 300,
-                        "health": 20,
+                        "health": 35,
                         "damage": 25,
                         "xp": 160,
                         "attackPattern": "shadow_wave"
                     },
                     "obstacles": [],
                     "collectibles": [],
-                    "doors": [{ "direction": "south", "locked": false, "leadsTo": 2 }],
+                    "doors": [{ "direction": "south", "locked": false, "leadsTo": 6 }],
                     "isBossRoom": true,
                     "completionObjective": "defeat_boss"
                 }
@@ -687,7 +966,8 @@
             "damage": 5,
             "speed": 50,
             "xp": 10,
-            "sprite": "zombie"
+            "sprite": "zombie",
+            "description": "Slow but persistent undead"
         },
         "skeleton": {
             "name": "Skeleton",
@@ -695,7 +975,8 @@
             "damage": 8,
             "speed": 70,
             "xp": 15,
-            "sprite": "skeleton"
+            "sprite": "skeleton",
+            "description": "Fast-moving bone warrior"
         },
         "ghoul": {
             "name": "Ghoul",
@@ -703,7 +984,8 @@
             "damage": 12,
             "speed": 60,
             "xp": 20,
-            "sprite": "ghoul"
+            "sprite": "ghoul",
+            "description": "Tough flesh-eating creature"
         },
         "spirit": {
             "name": "Spirit",
@@ -711,7 +993,50 @@
             "damage": 15,
             "speed": 90,
             "xp": 25,
-            "sprite": "spirit"
+            "sprite": "spirit",
+            "description": "Swift ethereal entity"
+        }
+    },
+    "bossTypes": {
+        "manor_lord": {
+            "name": "Manor Lord",
+            "health": 20,
+            "damage": 15,
+            "speed": 60,
+            "xp": 100,
+            "sprite": "manor_lord",
+            "attackPattern": "charge_and_swing",
+            "description": "Master of the Haunted Manor, charges at enemies with devastating swings"
+        },
+        "bone_king": {
+            "name": "Bone King",
+            "health": 25,
+            "damage": 18,
+            "speed": 50,
+            "xp": 120,
+            "sprite": "bone_king",
+            "attackPattern": "summon_minions",
+            "description": "Ruler of the Cursed Catacombs, summons skeleton minions to aid in battle"
+        },
+        "phantom_general": {
+            "name": "Phantom General",
+            "health": 30,
+            "damage": 20,
+            "speed": 80,
+            "xp": 140,
+            "sprite": "phantom_general",
+            "attackPattern": "teleport_strike",
+            "description": "Commander of the Phantom Fortress, teleports around the battlefield for surprise attacks"
+        },
+        "shadow_overlord": {
+            "name": "Shadow Overlord",
+            "health": 35,
+            "damage": 25,
+            "speed": 70,
+            "xp": 160,
+            "sprite": "shadow_overlord",
+            "attackPattern": "shadow_wave",
+            "description": "Supreme ruler of the Shadow Sanctum, unleashes waves of dark energy"
         }
     }
 }
