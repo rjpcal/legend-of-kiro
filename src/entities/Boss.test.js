@@ -11,6 +11,9 @@ class MockScene {
         this.tweens = {
             add: jest.fn(),
         };
+        this.registry = {
+            get: jest.fn(() => null), // Mock registry that returns null for audioManager
+        };
     }
 }
 

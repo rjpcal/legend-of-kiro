@@ -32,6 +32,12 @@ export class StoreScene extends Phaser.Scene {
             return;
         }
 
+        // Start background music
+        const audioManager = this.registry.get('audioManager');
+        if (audioManager) {
+            audioManager.playMusic(true);
+        }
+
         // Get player state from registry
         const playerState = this.registry.get('playerState');
         if (!playerState) {

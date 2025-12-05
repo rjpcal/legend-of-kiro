@@ -61,6 +61,12 @@ export class OverworldScene extends Phaser.Scene {
             return;
         }
 
+        // Start background music
+        const audioManager = this.registry.get('audioManager');
+        if (audioManager) {
+            audioManager.playMusic(true);
+        }
+
         // Initialize systems
         this.collisionSystem = new CollisionSystem(this);
         this.collectionSystem = new CollectionSystem(this, this.collisionSystem);

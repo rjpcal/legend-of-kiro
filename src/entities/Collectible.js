@@ -300,21 +300,13 @@ export class Collectible {
                 break;
         }
 
-        // Play collection sound effect
-        if (this.scene && this.scene.sound) {
-            const soundKey =
-                this.type === 'coin'
-                    ? 'coin_collect'
-                    : this.type === 'health'
-                      ? 'health_pickup'
-                      : 'item_collect';
-            // Only play if sound exists
-            try {
-                if (this.scene.sound.get && this.scene.sound.get(soundKey)) {
-                    this.scene.sound.play(soundKey);
-                }
-            } catch (e) {
-                // Sound not loaded yet, skip
+        // Play collection sound effect using AudioManager
+        const audioManager = this.scene.registry.get('audioManager');
+        if (audioManager) {
+            if (this.type === 'coin') {
+                audioManager.playCoinCollect();
+            } else if (this.type === 'health') {
+                audioManager.playHealthPickup();
             }
         }
 

@@ -9,6 +9,9 @@ class MockScene {
     constructor() {
         this.sound = null;
         this.tweens = null;
+        this.registry = {
+            get: jest.fn(() => null), // Mock registry that returns null for audioManager
+        };
     }
 }
 

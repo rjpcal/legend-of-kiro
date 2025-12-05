@@ -1,6 +1,7 @@
 // BootScene - Initial loading and setup
 
 import { WorldConfig } from '../systems/WorldConfig.js';
+import { AudioManager } from '../systems/AudioManager.js';
 
 export class BootScene extends Phaser.Scene {
     constructor() {
@@ -27,6 +28,10 @@ export class BootScene extends Phaser.Scene {
         // Load placeholder enemy sprites (will be replaced with actual sprites later)
         // For now, we'll use colored rectangles generated in create()
 
+        // Initialize audio manager and preload audio
+        this.audioManager = new AudioManager(this);
+        this.audioManager.preloadAudio();
+
         // Additional assets will be loaded in future tasks
     }
 
@@ -36,6 +41,12 @@ export class BootScene extends Phaser.Scene {
 
         // Define animations for all entity types
         this.defineAnimations();
+
+        // Initialize audio manager
+        this.audioManager.initialize();
+
+        // Store audio manager in registry for access by other scenes
+        this.registry.set('audioManager', this.audioManager);
 
         // Initialize world configuration
         const worldConfig = new WorldConfig();

@@ -84,6 +84,13 @@ export class DungeonScene extends Phaser.Scene {
 
         console.log(`Loaded dungeon: ${this.dungeonData.name}`);
 
+        // Play dungeon enter sound and start background music
+        const audioManager = this.registry.get('audioManager');
+        if (audioManager) {
+            audioManager.playDungeonEnter();
+            audioManager.playMusic(true);
+        }
+
         // Initialize systems
         this.collisionSystem = new CollisionSystem(this);
         this.collectionSystem = new CollectionSystem(this, this.collisionSystem);
@@ -676,9 +683,10 @@ export class DungeonScene extends Phaser.Scene {
         this.player.health.max += healthIncrease;
         this.player.health.current = this.player.health.max;
 
-        // Play completion sound (Requirements 7.3)
-        if (this.sound && this.sound.get && this.sound.get('dungeon_complete')) {
-            this.sound.play('dungeon_complete');
+        // Play completion sound using AudioManager (Requirements 7.3)
+        const audioManager = this.registry.get('audioManager');
+        if (audioManager) {
+            audioManager.playDungeonComplete();
         }
 
         // Display completion message (Requirements 7.3)

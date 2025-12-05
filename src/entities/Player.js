@@ -322,15 +322,10 @@ export class Player extends Entity {
         this.health.max += healthIncrease;
         this.health.current = this.health.max; // Fully heal on level up
 
-        // Play level up sound if available
-        if (this.scene && this.scene.sound) {
-            try {
-                if (this.scene.sound.get && this.scene.sound.get('level_up')) {
-                    this.scene.sound.play('level_up');
-                }
-            } catch (e) {
-                // Sound not loaded yet, skip
-            }
+        // Play level up sound using AudioManager
+        const audioManager = this.scene.registry.get('audioManager');
+        if (audioManager) {
+            audioManager.playLevelUp();
         }
     }
 

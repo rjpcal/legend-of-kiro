@@ -186,6 +186,12 @@ export class Enemy extends Entity {
         this.isFriendly = true;
         this.active = false;
 
+        // Play enemy hit sound using AudioManager
+        const audioManager = this.scene.registry.get('audioManager');
+        if (audioManager) {
+            audioManager.playEnemyHit();
+        }
+
         // Play defeat animation
         if (this.scene.animationManager) {
             this.scene.animationManager.setState(this, 'defeat');

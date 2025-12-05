@@ -104,9 +104,10 @@ export class DamageSystem {
             this.onHealthMeterPulse();
         }
 
-        // Play damage sound effect (if available)
-        if (this.scene.sound && this.scene.sound.get('kiro_damage')) {
-            this.scene.sound.play('kiro_damage');
+        // Play damage sound effect using AudioManager
+        const audioManager = this.scene.registry.get('audioManager');
+        if (audioManager) {
+            audioManager.playKiroDamage();
         }
 
         return true;

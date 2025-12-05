@@ -477,15 +477,15 @@
         - Test particle lifecycle
         - _Requirements: 10.1, 10.2_
 
-- [ ]   18. Implement audio system
-    - [ ] 18.1 Create audio manager
+- [x]   18. Implement audio system
+    - [x] 18.1 Create audio manager
         - Load sound effects
         - Load background music
         - Implement play/stop methods
         - Add enable/disable toggle
         - _Requirements: 10.4, 10.5_
 
-    - [ ] 18.2 Integrate sound effects with game events
+    - [x] 18.2 Integrate sound effects with game events
         - Play coin collection sound
         - Play enemy hit sound
         - Play Kiro damage sound
@@ -495,7 +495,7 @@
         - Play level up sound
         - _Requirements: 4.2, 10.3, 10.5_
 
-    - [ ] 18.3 Implement background music
+    - [x] 18.3 Implement background music
         - Play looping background music during gameplay
         - Respect music enabled setting
         - _Requirements: 10.4_
