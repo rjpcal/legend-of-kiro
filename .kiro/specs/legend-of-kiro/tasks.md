@@ -362,7 +362,7 @@
         - Test switch activation
         - _Requirements: 6.2, 6.3, 6.4_
 
-- [ ]   14. Checkpoint - Ensure all tests pass
+- [x]   14. Checkpoint - Ensure all tests pass
     - Ensure all tests pass, ask the user if questions arise.
 
 - [ ]   15. Implement boss system
