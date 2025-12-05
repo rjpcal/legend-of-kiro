@@ -506,7 +506,7 @@
         - Test music enable/disable
         - _Requirements: 10.4, 10.5_
 
-- [ ]   19. Checkpoint - Ensure all tests pass
+- [x]   19. Checkpoint - Ensure all tests pass
     - Ensure all tests pass, ask the user if questions arise.
 
 - [ ]   20. Create initial world configuration
