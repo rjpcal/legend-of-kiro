@@ -2,6 +2,7 @@
 
 import { WorldConfig } from '../systems/WorldConfig.js';
 import { AudioManager } from '../systems/AudioManager.js';
+import { SaveSystem } from '../systems/SaveSystem.js';
 
 export class BootScene extends Phaser.Scene {
     constructor() {
@@ -50,6 +51,10 @@ export class BootScene extends Phaser.Scene {
 
         // Store audio manager in registry for access by other scenes
         this.registry.set('audioManager', this.audioManager);
+
+        // Initialize save system
+        const saveSystem = new SaveSystem();
+        this.registry.set('saveSystem', saveSystem);
 
         // Initialize world configuration
         const worldConfig = new WorldConfig();

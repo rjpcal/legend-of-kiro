@@ -705,6 +705,9 @@ export class DungeonScene extends Phaser.Scene {
             this.hud.update(this.player);
         }
 
+        // Auto-save after boss defeat
+        this.autoSaveGame();
+
         // Mark room objective as complete
         this.roomObjectiveComplete = true;
     }
@@ -744,10 +747,37 @@ export class DungeonScene extends Phaser.Scene {
             stats: this.player.stats,
         });
 
+        // Auto-save game on victory
+        this.autoSaveGame();
+
         // Transition to victory screen after a short delay
         this.time.delayedCall(3000, () => {
             this.scene.start('GameOverScene', { victory: true });
         });
+    }
+
+    /**
+     * Auto-save the current game state
+     */
+    autoSaveGame() {
+        const saveSystem = this.registry.get('saveSystem');
+        if (!saveSystem) {
+            return;
+        }
+
+        // Get current game state
+        const gameState = saveSystem.getCurrentGameState(this);
+
+        // Save game
+        const success = saveSystem.saveGame(
+            gameState.playerState,
+            gameState.worldState,
+            gameState.settings
+        );
+
+        if (success) {
+            console.log('Game auto-saved');
+        }
     }
 
     /**

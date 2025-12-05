@@ -20,8 +20,12 @@ export class MainMenuScene extends Phaser.Scene {
         });
         title.setOrigin(0.5);
 
+        // Check if save data exists
+        const saveSystem = this.registry.get('saveSystem');
+        const hasSave = saveSystem && saveSystem.hasSaveData();
+
         // Start button
-        const startButton = this.add.text(width / 2, height / 2, 'Start Game', {
+        const startButton = this.add.text(width / 2, height / 2 - 30, 'New Game', {
             fontSize: '32px',
             fill: '#ffffff',
             fontFamily: 'Arial',
@@ -38,14 +42,72 @@ export class MainMenuScene extends Phaser.Scene {
             startButton.setStyle({ fill: '#ffffff' });
         });
 
-        // Start game on click
+        // Start new game on click
         startButton.on('pointerdown', () => {
+            // Clear any existing save data from registry
+            this.registry.set('playerState', null);
+            this.registry.set('completedDungeons', []);
+            this.registry.set('collectedItems', []);
+            this.registry.set('defeatedEnemies', []);
+            this.registry.set('unlockedDoors', []);
+            this.registry.set('visitedScreens', []);
+
             this.scene.start('OverworldScene');
         });
 
+        // Load Game button (only show if save exists)
+        if (hasSave) {
+            const loadButton = this.add.text(width / 2, height / 2 + 30, 'Load Game', {
+                fontSize: '32px',
+                fill: '#ffffff',
+                fontFamily: 'Arial',
+            });
+            loadButton.setOrigin(0.5);
+            loadButton.setInteractive({ useHandCursor: true });
+
+            // Button hover effect
+            loadButton.on('pointerover', () => {
+                loadButton.setStyle({ fill: '#790ECB' });
+            });
+
+            loadButton.on('pointerout', () => {
+                loadButton.setStyle({ fill: '#ffffff' });
+            });
+
+            // Load game on click
+            loadButton.on('pointerdown', () => {
+                if (saveSystem) {
+                    const saveData = saveSystem.loadGame();
+                    if (saveData) {
+                        saveSystem.restoreGameState(this, saveData);
+                        this.scene.start('OverworldScene');
+                    } else {
+                        // Show error message
+                        const errorText = this.add.text(
+                            width / 2,
+                            height / 2 + 80,
+                            'Failed to load save data',
+                            {
+                                fontSize: '16px',
+                                fill: '#ff0000',
+                                fontFamily: 'Arial',
+                            }
+                        );
+                        errorText.setOrigin(0.5);
+
+                        // Remove error message after 2 seconds
+                        this.time.delayedCall(2000, () => {
+                            errorText.destroy();
+                        });
+                    }
+                }
+            });
+        }
+
         // Music toggle button
         const musicStatus = audioManager ? (audioManager.isMusicEnabled() ? 'ON' : 'OFF') : 'ON';
-        const musicButton = this.add.text(width / 2, height * 0.65, `Music: ${musicStatus}`, {
+        const musicYPos = hasSave ? height * 0.68 : height * 0.65;
+        const musicButton = this.add.text(width / 2, musicYPos, `Music: ${musicStatus}`, {
             fontSize: '20px',
             fill: '#ffffff',
             fontFamily: 'Arial',
@@ -73,7 +135,8 @@ export class MainMenuScene extends Phaser.Scene {
 
         // SFX toggle button
         const sfxStatus = audioManager ? (audioManager.isSfxEnabled() ? 'ON' : 'OFF') : 'ON';
-        const sfxButton = this.add.text(width / 2, height * 0.72, `Sound Effects: ${sfxStatus}`, {
+        const sfxYPos = hasSave ? height * 0.75 : height * 0.72;
+        const sfxButton = this.add.text(width / 2, sfxYPos, `Sound Effects: ${sfxStatus}`, {
             fontSize: '20px',
             fill: '#ffffff',
             fontFamily: 'Arial',

@@ -823,6 +823,9 @@ export class OverworldScene extends Phaser.Scene {
                     this.hud.markMinimapVisited(newX, newY);
                 }
 
+                // Auto-save game after screen transition
+                this.autoSaveGame();
+
                 // Re-enable player input
                 this.isTransitioning = false;
                 this.transitionDirection = null;
@@ -906,7 +909,12 @@ export class OverworldScene extends Phaser.Scene {
             stats: this.player.stats,
             returnScreen: { x: this.currentScreen.x, y: this.currentScreen.y },
             returnPosition: { x: this.player.x, y: this.player.y },
+            currentScreen: { x: this.currentScreen.x, y: this.currentScreen.y },
+            localPosition: { x: this.player.x, y: this.player.y },
         });
+
+        // Auto-save before entering dungeon
+        this.autoSaveGame();
 
         // Transition to dungeon scene
         this.scene.start('DungeonScene', { dungeonId: dungeonId });
@@ -949,10 +957,48 @@ export class OverworldScene extends Phaser.Scene {
             stats: this.player.stats,
             returnScreen: { x: this.currentScreen.x, y: this.currentScreen.y },
             returnPosition: { x: this.player.x, y: this.player.y },
+            currentScreen: { x: this.currentScreen.x, y: this.currentScreen.y },
+            localPosition: { x: this.player.x, y: this.player.y },
         });
+
+        // Auto-save before entering store
+        this.autoSaveGame();
 
         // Transition to store scene
         this.scene.start('StoreScene', { storeId: storeId });
+    }
+
+    /**
+     * Auto-save the current game state
+     */
+    autoSaveGame() {
+        const saveSystem = this.registry.get('saveSystem');
+        if (!saveSystem) {
+            return;
+        }
+
+        // Get current game state
+        const gameState = saveSystem.getCurrentGameState(this);
+
+        // Add current screen and position to player state
+        if (gameState.playerState) {
+            gameState.playerState.currentScreen = {
+                x: this.currentScreen.x,
+                y: this.currentScreen.y,
+            };
+            gameState.playerState.localPosition = { x: this.player.x, y: this.player.y };
+        }
+
+        // Save game
+        const success = saveSystem.saveGame(
+            gameState.playerState,
+            gameState.worldState,
+            gameState.settings
+        );
+
+        if (success) {
+            console.log('Game auto-saved');
+        }
     }
 
     /**
