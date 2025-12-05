@@ -38,6 +38,10 @@ export class OverworldScene extends Phaser.Scene {
         this.isTransitioning = false;
         this.transitionDirection = null;
 
+        // Entrance cooldown (prevents immediate re-entry after exiting store/dungeon)
+        this.entranceCooldown = 0;
+        this.ENTRANCE_COOLDOWN_TIME = 500; // milliseconds
+
         // Configuration
         this.SCREEN_WIDTH = 800;
         this.SCREEN_HEIGHT = 600;
@@ -61,7 +65,7 @@ export class OverworldScene extends Phaser.Scene {
         this.rippleEffect = new RippleEffect(this);
         this.animationManager = new AnimationManager(this);
 
-        // Create player at center of screen
+        // Create player at center of screen (default position)
         this.player = new Player(this, width / 2, height / 2);
 
         // Restore player state from registry if it exists
@@ -71,13 +75,23 @@ export class OverworldScene extends Phaser.Scene {
             this.player.inventory = playerState.inventory;
             this.player.stats = playerState.stats;
 
-            // Restore screen position if returning from dungeon
+            // Restore screen position if returning from dungeon or store
             if (playerState.returnScreen) {
                 this.currentScreen.x = playerState.returnScreen.x;
                 this.currentScreen.y = playerState.returnScreen.y;
                 console.log(
                     `Returning to screen (${this.currentScreen.x}, ${this.currentScreen.y})`
                 );
+            }
+
+            // Restore local position if returning from store or dungeon
+            if (playerState.returnPosition) {
+                this.player.x = playerState.returnPosition.x;
+                this.player.y = playerState.returnPosition.y;
+                console.log(`Restoring player position (${this.player.x}, ${this.player.y})`);
+
+                // Set entrance cooldown to prevent immediate re-entry
+                this.entranceCooldown = this.ENTRANCE_COOLDOWN_TIME;
             }
 
             console.log('Restored player state from registry');
@@ -794,6 +808,9 @@ export class OverworldScene extends Phaser.Scene {
     checkDungeonEntrance() {
         if (!this.dungeonEntranceMarker || !this.player) return;
 
+        // Don't check entrance collision during cooldown
+        if (this.entranceCooldown > 0) return;
+
         const playerHitbox = this.player.getHitbox();
         const entranceHitbox = {
             x: this.dungeonEntranceMarker.x - this.dungeonEntranceMarker.width / 2,
@@ -826,6 +843,7 @@ export class OverworldScene extends Phaser.Scene {
             inventory: this.player.inventory,
             stats: this.player.stats,
             returnScreen: { x: this.currentScreen.x, y: this.currentScreen.y },
+            returnPosition: { x: this.player.x, y: this.player.y },
         });
 
         // Transition to dungeon scene
@@ -837,6 +855,9 @@ export class OverworldScene extends Phaser.Scene {
      */
     checkStoreEntrance() {
         if (!this.storeEntranceMarker || !this.player) return;
+
+        // Don't check entrance collision during cooldown
+        if (this.entranceCooldown > 0) return;
 
         const playerHitbox = this.player.getHitbox();
         const entranceHitbox = {
@@ -859,12 +880,13 @@ export class OverworldScene extends Phaser.Scene {
     enterStore(storeId) {
         console.log(`Entering store ${storeId}`);
 
-        // Store current player state in registry
+        // Store current player state in registry including local position
         this.registry.set('playerState', {
             health: this.player.health,
             inventory: this.player.inventory,
             stats: this.player.stats,
             returnScreen: { x: this.currentScreen.x, y: this.currentScreen.y },
+            returnPosition: { x: this.player.x, y: this.player.y },
         });
 
         // Transition to store scene
@@ -910,6 +932,14 @@ export class OverworldScene extends Phaser.Scene {
     }
 
     update(time, delta) {
+        // Decrement entrance cooldown
+        if (this.entranceCooldown > 0) {
+            this.entranceCooldown -= delta;
+            if (this.entranceCooldown < 0) {
+                this.entranceCooldown = 0;
+            }
+        }
+
         if (this.player && !this.isTransitioning) {
             // Handle player input
             this.player.handleInput(this.cursors, this.wasd, delta);

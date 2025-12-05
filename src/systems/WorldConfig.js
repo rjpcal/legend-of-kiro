@@ -216,6 +216,27 @@ export class WorldConfig {
     }
 
     /**
+     * Get store data by store ID
+     * @param {number} storeId - Store ID
+     * @returns {Object|null} Store data or null if not found
+     */
+    getStoreData(storeId) {
+        if (!this.config || !this.config.stores) {
+            console.warn('Configuration not loaded');
+            return null;
+        }
+
+        const store = this.config.stores.find(s => s.id === storeId);
+
+        if (!store) {
+            console.warn(`Store not found with ID ${storeId}`);
+            return null;
+        }
+
+        return store;
+    }
+
+    /**
      * Get enemy type configuration
      * @param {string} enemyType - Enemy type name
      * @returns {Object|null} Enemy configuration or null if not found

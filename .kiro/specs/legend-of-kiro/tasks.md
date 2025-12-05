@@ -407,20 +407,20 @@
         - Test victory condition
         - _Requirements: 6.5, 7.1, 7.2, 7.3, 7.4_
 
-- [ ]   16. Implement store system
-    - [ ] 16.1 Create store scene
+- [x]   16. Implement store system
+    - [x] 16.1 Create store scene
         - Load store inventory from configuration
         - Display available items with costs
         - _Requirements: 8.1_
 
-    - [ ] 16.2 Implement purchase system
+    - [x] 16.2 Implement purchase system
         - Handle item selection
         - Validate sufficient coins
         - Deduct cost and add item to inventory
         - Display error for insufficient funds
         - _Requirements: 8.2, 8.3_
 
-    - [ ] 16.3 Implement equipment system
+    - [x] 16.3 Implement equipment system
         - Allow equipping weapons and armor
         - Update player stats when equipped
         - _Requirements: 8.4, 8.5_
