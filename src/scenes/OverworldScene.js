@@ -698,16 +698,16 @@ export class OverworldScene extends Phaser.Scene {
         // Check if new screen exists
         const worldSize = this.worldConfig.getOverworldSize();
         if (newX < 0 || newX >= worldSize.width || newY < 0 || newY >= worldSize.height) {
-            // Out of bounds - prevent movement
-            this.player.cancelMovement();
+            // Out of bounds - prevent movement by keeping player away from edge
+            this.constrainPlayerToWorldBounds(direction);
             return;
         }
 
         // Check if screen exists in configuration
         const newScreenData = this.worldConfig.getOverworldScreen(newX, newY);
         if (!newScreenData) {
-            // Screen doesn't exist - prevent movement
-            this.player.cancelMovement();
+            // Screen doesn't exist - prevent movement by keeping player away from edge
+            this.constrainPlayerToWorldBounds(direction);
             return;
         }
 
@@ -717,6 +717,53 @@ export class OverworldScene extends Phaser.Scene {
 
         // Perform smooth scrolling transition
         this.performScreenTransition(newX, newY, direction);
+    }
+
+    /**
+     * Constrain player to world bounds when at edge
+     * @param {string} direction - Direction player is trying to move
+     */
+    constrainPlayerToWorldBounds(direction) {
+        // Cancel the intended movement
+        this.player.cancelMovement();
+
+        // Push player slightly away from the edge to prevent getting stuck
+        const pushDistance = this.EDGE_THRESHOLD + 5;
+
+        switch (direction) {
+            case 'left':
+                if (this.player.x < pushDistance) {
+                    this.player.x = pushDistance;
+                    if (this.player.sprite) {
+                        this.player.sprite.x = this.player.x;
+                    }
+                }
+                break;
+            case 'right':
+                if (this.player.x > this.SCREEN_WIDTH - pushDistance) {
+                    this.player.x = this.SCREEN_WIDTH - pushDistance;
+                    if (this.player.sprite) {
+                        this.player.sprite.x = this.player.x;
+                    }
+                }
+                break;
+            case 'up':
+                if (this.player.y < pushDistance) {
+                    this.player.y = pushDistance;
+                    if (this.player.sprite) {
+                        this.player.sprite.y = this.player.y;
+                    }
+                }
+                break;
+            case 'down':
+                if (this.player.y > this.SCREEN_HEIGHT - pushDistance) {
+                    this.player.y = this.SCREEN_HEIGHT - pushDistance;
+                    if (this.player.sprite) {
+                        this.player.sprite.y = this.player.y;
+                    }
+                }
+                break;
+        }
     }
 
     /**
