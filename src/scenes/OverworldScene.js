@@ -8,6 +8,7 @@ import { CollisionSystem } from '../systems/CollisionSystem.js';
 import { CollectionSystem } from '../systems/CollectionSystem.js';
 import { AnimationManager } from '../systems/AnimationManager.js';
 import { RippleEffect } from '../systems/RippleEffect.js';
+import { ParticleSystem } from '../systems/ParticleSystem.js';
 import { HUD } from '../ui/HUD.js';
 
 export class OverworldScene extends Phaser.Scene {
@@ -22,6 +23,7 @@ export class OverworldScene extends Phaser.Scene {
         this.collectionSystem = null;
         this.rippleEffect = null;
         this.animationManager = null;
+        this.particleSystem = null;
         this.hud = null;
         this.obstacles = [];
         this.enemies = [];
@@ -64,6 +66,7 @@ export class OverworldScene extends Phaser.Scene {
         this.collectionSystem = new CollectionSystem(this, this.collisionSystem);
         this.rippleEffect = new RippleEffect(this);
         this.animationManager = new AnimationManager(this);
+        this.particleSystem = new ParticleSystem(this);
 
         // Create player at center of screen (default position)
         this.player = new Player(this, width / 2, height / 2);
@@ -620,6 +623,11 @@ export class OverworldScene extends Phaser.Scene {
                 // Hit detected - apply damage
                 enemy.takeDamage(attackHitbox.damage);
 
+                // Create attack impact particle effect (Property 32, Requirements 10.1)
+                if (this.particleSystem) {
+                    this.particleSystem.createAttackImpactEffect(enemy.x, enemy.y);
+                }
+
                 // Award XP if enemy was defeated (Property 13, Requirements 4.3)
                 if (enemy.health.current === 0) {
                     const leveledUp = this.player.addXP(enemy.getXPReward());
@@ -912,6 +920,11 @@ export class OverworldScene extends Phaser.Scene {
                 // Hit detected - apply damage
                 enemy.takeDamage(projectile.damage);
 
+                // Create attack impact particle effect (Property 32, Requirements 10.1)
+                if (this.particleSystem) {
+                    this.particleSystem.createAttackImpactEffect(enemy.x, enemy.y);
+                }
+
                 // Award XP if enemy was defeated (Property 13, Requirements 4.3)
                 if (enemy.health.current === 0) {
                     const leveledUp = this.player.addXP(enemy.getXPReward());
@@ -1012,6 +1025,10 @@ export class OverworldScene extends Phaser.Scene {
         // Update systems
         if (this.collisionSystem) {
             this.collisionSystem.update();
+        }
+
+        if (this.particleSystem) {
+            this.particleSystem.update(delta);
         }
 
         if (this.collectionSystem) {

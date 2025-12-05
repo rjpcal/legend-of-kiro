@@ -186,7 +186,7 @@ export class Player extends Entity {
                 damage: 1,
                 range: 35,
                 attackSpeed: 500,
-                canThrow: false,
+                canThrow: true, // Can throw weapon when at max health (Requirements 2.3)
             });
         }
         return this._defaultWeapon;
@@ -200,10 +200,14 @@ export class Player extends Entity {
     rangedAttack() {
         // Check health requirement
         if (this.health.current < this.health.max) {
+            console.log(
+                `Cannot throw: health ${this.health.current}/${this.health.max} (need max)`
+            );
             return null; // Can only throw at max health
         }
 
         if (!this.canAttack || this.isAttacking) {
+            console.log('Cannot throw: attack on cooldown or already attacking');
             return null;
         }
 
@@ -212,9 +216,11 @@ export class Player extends Entity {
 
         // Check if weapon can be thrown
         if (!weapon.canThrow) {
+            console.log(`Cannot throw: weapon ${weapon.name} is not throwable`);
             return null;
         }
 
+        console.log(`Throwing weapon: ${weapon.name}`);
         this.isAttacking = true;
         this.canAttack = false;
 

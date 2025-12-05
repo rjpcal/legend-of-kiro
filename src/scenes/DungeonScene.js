@@ -11,6 +11,7 @@ import { CollisionSystem } from '../systems/CollisionSystem.js';
 import { CollectionSystem } from '../systems/CollectionSystem.js';
 import { AnimationManager } from '../systems/AnimationManager.js';
 import { RippleEffect } from '../systems/RippleEffect.js';
+import { ParticleSystem } from '../systems/ParticleSystem.js';
 import { HUD } from '../ui/HUD.js';
 
 export class DungeonScene extends Phaser.Scene {
@@ -25,6 +26,7 @@ export class DungeonScene extends Phaser.Scene {
         this.collectionSystem = null;
         this.rippleEffect = null;
         this.animationManager = null;
+        this.particleSystem = null;
         this.hud = null;
         this.obstacles = [];
         this.enemies = [];
@@ -87,6 +89,7 @@ export class DungeonScene extends Phaser.Scene {
         this.collectionSystem = new CollectionSystem(this, this.collisionSystem);
         this.rippleEffect = new RippleEffect(this);
         this.animationManager = new AnimationManager(this);
+        this.particleSystem = new ParticleSystem(this);
 
         // Restore player state from registry or create new player
         const playerState = this.registry.get('playerState');
@@ -621,6 +624,11 @@ export class DungeonScene extends Phaser.Scene {
             if (this.collisionSystem.checkAABB(attackHitbox, enemyHitbox)) {
                 enemy.takeDamage(attackHitbox.damage);
 
+                // Create attack impact particle effect (Property 32, Requirements 10.1)
+                if (this.particleSystem) {
+                    this.particleSystem.createAttackImpactEffect(enemy.x, enemy.y);
+                }
+
                 if (enemy.health.current === 0) {
                     this.player.addXP(enemy.getXPReward());
 
@@ -637,6 +645,11 @@ export class DungeonScene extends Phaser.Scene {
 
             if (this.collisionSystem.checkAABB(attackHitbox, bossHitbox)) {
                 this.boss.takeDamage(attackHitbox.damage);
+
+                // Create attack impact particle effect (Property 32, Requirements 10.1)
+                if (this.particleSystem) {
+                    this.particleSystem.createAttackImpactEffect(this.boss.x, this.boss.y);
+                }
 
                 if (this.boss.health.current === 0) {
                     this.handleBossDefeat();
@@ -761,6 +774,11 @@ export class DungeonScene extends Phaser.Scene {
             if (this.collisionSystem.checkAABB(projectileHitbox, enemyHitbox)) {
                 enemy.takeDamage(projectile.damage);
 
+                // Create attack impact particle effect (Property 32, Requirements 10.1)
+                if (this.particleSystem) {
+                    this.particleSystem.createAttackImpactEffect(enemy.x, enemy.y);
+                }
+
                 if (enemy.health.current === 0) {
                     this.player.addXP(enemy.getXPReward());
 
@@ -780,6 +798,11 @@ export class DungeonScene extends Phaser.Scene {
 
             if (this.collisionSystem.checkAABB(projectileHitbox, bossHitbox)) {
                 this.boss.takeDamage(projectile.damage);
+
+                // Create attack impact particle effect (Property 32, Requirements 10.1)
+                if (this.particleSystem) {
+                    this.particleSystem.createAttackImpactEffect(this.boss.x, this.boss.y);
+                }
 
                 if (this.boss.health.current === 0) {
                     this.handleBossDefeat();
@@ -1195,6 +1218,11 @@ export class DungeonScene extends Phaser.Scene {
 
         // Check switch activation
         this.checkSwitchActivation();
+
+        // Update particle system
+        if (this.particleSystem) {
+            this.particleSystem.update(delta);
+        }
 
         // Check room completion
         this.checkRoomCompletion();

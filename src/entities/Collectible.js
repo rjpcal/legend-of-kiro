@@ -329,10 +329,28 @@ export class Collectible {
 
     /**
      * Create particle effects for collection
+     * Validates: Requirements 10.2 (Property 33)
      */
     createCollectionEffect() {
-        // Particle effects will be implemented in visual effects task
-        // For now, just fade out the sprite
+        // Create particle effects based on collectible type
+        if (this.scene.particleSystem) {
+            switch (this.type) {
+                case 'coin':
+                    this.scene.particleSystem.createCoinCollectionEffect(this.x, this.y);
+                    break;
+                case 'health':
+                    this.scene.particleSystem.createHealthCollectionEffect(this.x, this.y);
+                    break;
+                case 'weapon':
+                case 'armor':
+                    this.scene.particleSystem.createItemCollectionEffect(this.x, this.y);
+                    break;
+                default:
+                    this.scene.particleSystem.createItemCollectionEffect(this.x, this.y);
+            }
+        }
+
+        // Fade out the sprite
         if (this.sprite && this.scene.tweens) {
             this.scene.tweens.add({
                 targets: this.sprite,

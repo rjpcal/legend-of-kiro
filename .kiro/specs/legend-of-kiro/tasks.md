@@ -452,14 +452,14 @@
         - Test equipment stat updates
         - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5_
 
-- [ ]   17. Implement visual effects system
-    - [ ] 17.1 Create particle effect system
+- [x]   17. Implement visual effects system
+    - [x] 17.1 Create particle effect system
         - Implement particle emitter
         - Create particle effects for attacks
         - Create particle effects for collectibles
         - _Requirements: 10.1, 10.2_
 
-    - [ ] 17.2 Integrate particle effects with game events
+    - [x] 17.2 Integrate particle effects with game events
         - Trigger particles on attack hits
         - Trigger particles on item collection
         - _Requirements: 10.1, 10.2_
