@@ -1,6 +1,6 @@
 // DungeonScene - Dungeon gameplay
 
-class DungeonScene extends Phaser.Scene {
+export class DungeonScene extends Phaser.Scene {
     constructor() {
         super({ key: 'DungeonScene' });
     }
@@ -9,17 +9,12 @@ class DungeonScene extends Phaser.Scene {
         const { width, height } = this.cameras.main;
 
         // Placeholder text
-        const text = this.add.text(
-            width / 2,
-            height / 2,
-            'Dungeon Scene\n(To be implemented)',
-            {
-                fontSize: '24px',
-                fill: '#ffffff',
-                fontFamily: 'Arial',
-                align: 'center'
-            }
-        );
+        const text = this.add.text(width / 2, height / 2, 'Dungeon Scene\n(To be implemented)', {
+            fontSize: '24px',
+            fill: '#ffffff',
+            fontFamily: 'Arial',
+            align: 'center',
+        });
         text.setOrigin(0.5);
     }
 

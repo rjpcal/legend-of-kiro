@@ -1,6 +1,6 @@
 // MainMenuScene - Main menu with start game option
 
-class MainMenuScene extends Phaser.Scene {
+export class MainMenuScene extends Phaser.Scene {
     constructor() {
         super({ key: 'MainMenuScene' });
     }
@@ -9,30 +9,20 @@ class MainMenuScene extends Phaser.Scene {
         const { width, height } = this.cameras.main;
 
         // Title
-        const title = this.add.text(
-            width / 2,
-            height / 3,
-            'Legend of Kiro',
-            {
-                fontSize: '48px',
-                fill: '#790ECB',
-                fontFamily: 'Arial',
-                fontStyle: 'bold'
-            }
-        );
+        const title = this.add.text(width / 2, height / 3, 'Legend of Kiro', {
+            fontSize: '48px',
+            fill: '#790ECB',
+            fontFamily: 'Arial',
+            fontStyle: 'bold',
+        });
         title.setOrigin(0.5);
 
         // Start button
-        const startButton = this.add.text(
-            width / 2,
-            height / 2,
-            'Start Game',
-            {
-                fontSize: '32px',
-                fill: '#ffffff',
-                fontFamily: 'Arial'
-            }
-        );
+        const startButton = this.add.text(width / 2, height / 2, 'Start Game', {
+            fontSize: '32px',
+            fill: '#ffffff',
+            fontFamily: 'Arial',
+        });
         startButton.setOrigin(0.5);
         startButton.setInteractive({ useHandCursor: true });
 
@@ -58,7 +48,7 @@ class MainMenuScene extends Phaser.Scene {
             {
                 fontSize: '16px',
                 fill: '#cccccc',
-                fontFamily: 'Arial'
+                fontFamily: 'Arial',
             }
         );
         instructions.setOrigin(0.5);

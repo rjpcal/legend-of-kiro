@@ -19,14 +19,14 @@ Here's how to integrate these systems into a Phaser scene:
 class GameScene extends Phaser.Scene {
     constructor() {
         super({ key: 'GameScene' });
-        
+
         // Initialize system references
         this.collisionSystem = null;
         this.healthSystem = null;
         this.damageSystem = null;
         this.collectionSystem = null;
         this.respawnSystem = null;
-        
+
         this.player = null;
         this.enemies = [];
         this.collectibles = [];
@@ -35,81 +35,85 @@ class GameScene extends Phaser.Scene {
     create() {
         // 1. Initialize collision system first (required by other systems)
         this.collisionSystem = new CollisionSystem(this);
-        
+
         // 2. Initialize health system
         this.healthSystem = new HealthSystem();
-        
+
         // 3. Initialize damage system
         this.damageSystem = new DamageSystem(this, this.collisionSystem, this.healthSystem);
-        
+
         // 4. Initialize collection system
         this.collectionSystem = new CollectionSystem(this, this.collisionSystem);
-        
+
         // 5. Initialize respawn system
         this.respawnSystem = new RespawnSystem(this);
         this.respawnSystem.setSpawnPoint(400, 300); // Set starting position
-        
+
         // 6. Create player
         this.player = new Player(this, 400, 300);
         this.player.createSprite();
-        
+
         // 7. Register player with health system (optional - player has built-in health)
-        this.healthSystem.registerEntity(this.player, this.player.health.current, this.player.health.max);
-        
+        this.healthSystem.registerEntity(
+            this.player,
+            this.player.health.current,
+            this.player.health.max
+        );
+
         // 8. Create enemies and register them
         this.createEnemies();
-        
+
         // 9. Create collectibles
         this.createCollectibles();
-        
+
         // 10. Set up health meter pulse callback (for UI)
         this.damageSystem.setHealthMeterPulseCallback(() => {
             this.pulseHealthMeter();
         });
     }
-    
+
     createEnemies() {
         // Create some enemies
         const enemy1 = new Enemy(this, 500, 300, 'zombie', {
             health: 3,
             damage: 1,
-            speed: 30
+            speed: 30,
         });
         enemy1.createSprite();
         enemy1.setTarget(this.player);
-        
+
         // Register enemy with damage system
         this.damageSystem.registerEnemy(enemy1);
-        
+
         this.enemies.push(enemy1);
     }
-    
+
     createCollectibles() {
         // Create health power-up
         const healthPowerUp = new Collectible(this, 300, 200, 'health', {
-            value: 2 // Heals 2 health points
+            value: 2, // Heals 2 health points
         });
         healthPowerUp.createSprite();
-        
+
         // Register with collection system
         this.collectionSystem.addCollectible(healthPowerUp);
-        
+
         this.collectibles.push(healthPowerUp);
-        
+
         // Create coin
         const coin = new Collectible(this, 500, 200, 'coin', {
-            value: 5 // Worth 5 coins
+            value: 5, // Worth 5 coins
         });
         coin.createSprite();
         this.collectionSystem.addCollectible(coin);
         this.collectibles.push(coin);
     }
-    
+
     pulseHealthMeter() {
         // Implement health meter pulse animation
         // This will be called when player takes damage
         console.log('Health meter pulse!');
-        
+
         // Example: if you have a health meter sprite
         // this.tweens.add({
         //     targets: this.healthMeterSprite,
@@ -119,29 +123,29 @@ class GameScene extends Phaser.Scene {
         //     ease: 'Power2'
         // });
     }
-    
+
     update(time, delta) {
         // Update player
         if (this.player) {
             this.player.update(delta);
         }
-        
+
         // Update enemies
         for (let enemy of this.enemies) {
             if (enemy.active) {
                 enemy.update(delta);
             }
         }
-        
+
         // Update damage system (checks enemy collisions with player)
         this.damageSystem.update(this.player);
-        
+
         // Update collection system (checks collectible collisions)
         this.collectionSystem.update(this.player);
-        
+
         // Update respawn system (checks for death and handles respawn)
         this.respawnSystem.update(this.player);
-        
+
         // Clean up inactive enemies
         this.enemies = this.enemies.filter(enemy => {
             if (!enemy.active) {
@@ -159,16 +163,18 @@ class GameScene extends Phaser.Scene {
 ### Health Management
 
 The player has built-in health tracking:
+
 ```javascript
-player.health.current  // Current health
-player.health.max      // Maximum health
-player.takeDamage(amount)  // Apply damage
-player.heal(amount)    // Heal player
+player.health.current; // Current health
+player.health.max; // Maximum health
+player.takeDamage(amount); // Apply damage
+player.heal(amount); // Heal player
 ```
 
 ### Damage Application
 
 The DamageSystem automatically:
+
 - Detects enemy collision with player
 - Applies damage considering player's defense
 - Enforces damage cooldown (prevents rapid repeated damage)
@@ -178,13 +184,15 @@ The DamageSystem automatically:
 ### Health Power-ups
 
 Create health collectibles that respect max health:
+
 ```javascript
 const healthPowerUp = new Collectible(this, x, y, 'health', {
-    value: 2  // Heals 2 HP
+    value: 2, // Heals 2 HP
 });
 ```
 
 When collected, healing automatically respects max health:
+
 ```javascript
 // Player at 4/6 health collects +2 health power-up
 // Result: 6/6 health (capped at max)
@@ -193,6 +201,7 @@ When collected, healing automatically respects max health:
 ### Death and Respawn
 
 The RespawnSystem automatically:
+
 - Detects when health reaches zero
 - Plays death animation
 - Respawns player at spawn point after delay
@@ -202,6 +211,7 @@ The RespawnSystem automatically:
 ### Damage Cooldown
 
 Enemies can only damage the player once per second (configurable):
+
 ```javascript
 this.damageSystem.defaultCooldown = 1000; // milliseconds
 ```

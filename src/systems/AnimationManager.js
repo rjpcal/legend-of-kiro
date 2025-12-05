@@ -1,7 +1,7 @@
 // AnimationManager - Manages sprite animations and animation states
 // Handles loading sprite sheets, defining animation frames, and state machine logic
 
-class AnimationManager {
+export class AnimationManager {
     constructor(scene) {
         this.scene = scene;
         this.animations = new Map(); // Store animation definitions
@@ -16,7 +16,7 @@ class AnimationManager {
      */
     defineAnimation(entityType, animName, config) {
         const key = `${entityType}_${animName}`;
-        
+
         // Store animation definition
         this.animations.set(key, {
             entityType,
@@ -24,9 +24,9 @@ class AnimationManager {
             frames: config.frames || [],
             frameRate: config.frameRate || 10,
             repeat: config.repeat !== undefined ? config.repeat : -1, // -1 = loop forever
-            spriteKey: config.spriteKey || entityType
+            spriteKey: config.spriteKey || entityType,
         });
-        
+
         // Create Phaser animation if frames are provided
         if (config.frames && config.frames.length > 0 && this.scene.anims) {
             // Check if animation already exists
@@ -35,7 +35,7 @@ class AnimationManager {
                     key: key,
                     frames: config.frames,
                     frameRate: config.frameRate || 10,
-                    repeat: config.repeat !== undefined ? config.repeat : -1
+                    repeat: config.repeat !== undefined ? config.repeat : -1,
                 });
             }
         }
@@ -48,12 +48,12 @@ class AnimationManager {
      */
     initializeEntity(entity, initialState = 'idle') {
         const entityId = this.getEntityId(entity);
-        
+
         this.entityStates.set(entityId, {
             currentState: initialState,
             previousState: null,
             entity: entity,
-            isTransitioning: false
+            isTransitioning: false,
         });
     }
 
@@ -66,21 +66,21 @@ class AnimationManager {
     setState(entity, newState, force = false) {
         const entityId = this.getEntityId(entity);
         const state = this.entityStates.get(entityId);
-        
+
         if (!state) {
             console.warn('Entity not initialized in AnimationManager');
             return;
         }
-        
+
         // Don't change if already in this state (unless forced)
         if (!force && state.currentState === newState) {
             return;
         }
-        
+
         // Update state
         state.previousState = state.currentState;
         state.currentState = newState;
-        
+
         // Play the animation
         this.playAnimation(entity, newState);
     }
@@ -94,10 +94,10 @@ class AnimationManager {
         if (!entity.sprite) {
             return;
         }
-        
+
         const entityType = this.getEntityType(entity);
         const key = `${entityType}_${animName}`;
-        
+
         // Check if this animation exists in Phaser
         if (this.scene.anims && this.scene.anims.exists(key)) {
             entity.sprite.play(key, true);
@@ -125,12 +125,12 @@ class AnimationManager {
         if (entity.constructor.name === 'Player') {
             return 'kiro';
         }
-        
+
         // Check for enemy type
         if (entity.enemyType) {
             return entity.enemyType;
         }
-        
+
         // Fallback to sprite key
         return entity.spriteKey || 'unknown';
     }
@@ -172,9 +172,4 @@ class AnimationManager {
         this.animations.clear();
         this.entityStates.clear();
     }
-}
-
-// Export for use in other modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = AnimationManager;
 }

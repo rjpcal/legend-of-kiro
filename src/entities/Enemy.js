@@ -1,44 +1,46 @@
 // Enemy - Base enemy class
 // Extends Entity with enemy-specific properties including health and attack
 
-class Enemy extends Entity {
+import { Entity } from './Entity.js';
+
+export class Enemy extends Entity {
     constructor(scene, x, y, enemyType, config = {}) {
         super(scene, x, y, enemyType);
-        
+
         // Enemy type (zombie, skeleton, ghoul, spirit)
         this.enemyType = enemyType;
-        
+
         // Health system
         this.health = {
             current: config.health || 3,
-            max: config.health || 3
+            max: config.health || 3,
         };
-        
+
         // Attack properties
         this.attackDamage = config.damage || 1;
         this.attackRange = config.range || 32;
         this.attackCooldown = config.attackCooldown || 1000; // milliseconds
         this.canAttack = true;
-        
+
         // Movement properties
         this.speed = config.speed || 50; // pixels per second
         this.aggroRange = config.aggroRange || 150; // Distance to detect player
-        
+
         // AI state
         this.aiState = 'idle'; // idle, chase, attack, defeated
         this.target = null; // Reference to player
-        
+
         // Friendly state (after being defeated)
         this.isFriendly = false;
-        
+
         // Set enemy-specific hitbox
         this.hitbox = {
             width: 28,
             height: 28,
             offsetX: 0,
-            offsetY: 0
+            offsetY: 0,
         };
-        
+
         // XP reward for defeating this enemy
         this.xpReward = config.xpReward || 10;
     }
@@ -51,7 +53,7 @@ class Enemy extends Entity {
         if (this.sprite) {
             // Set depth for rendering order
             this.sprite.setDepth(5);
-            
+
             // Initialize animation state
             if (this.scene.animationManager) {
                 this.scene.animationManager.initializeEntity(this, 'idle');
@@ -67,7 +69,7 @@ class Enemy extends Entity {
         if (this.isFriendly || !this.active) {
             return;
         }
-        
+
         // AI logic will be implemented in combat system task
         // Basic states: idle, chase player, attack player
     }
@@ -79,11 +81,11 @@ class Enemy extends Entity {
         if (!this.canAttack || this.isFriendly) {
             return;
         }
-        
+
         this.canAttack = false;
-        
+
         // Attack logic will be implemented in combat system task
-        
+
         // Reset attack cooldown
         setTimeout(() => {
             this.canAttack = true;
@@ -98,9 +100,9 @@ class Enemy extends Entity {
         if (this.isFriendly) {
             return;
         }
-        
+
         this.health.current = Math.max(0, this.health.current - amount);
-        
+
         if (this.health.current === 0) {
             this.defeat();
         }
@@ -121,12 +123,12 @@ class Enemy extends Entity {
     convertToFriendly() {
         this.isFriendly = true;
         this.active = false;
-        
+
         // Play defeat animation
         if (this.scene.animationManager) {
             this.scene.animationManager.setState(this, 'defeat');
         }
-        
+
         // Fade out sprite
         if (this.sprite && this.scene.tweens) {
             this.scene.tweens.add({
@@ -134,10 +136,10 @@ class Enemy extends Entity {
                 alpha: 0,
                 scale: 1.5,
                 duration: 500,
-                ease: 'Power2'
+                ease: 'Power2',
             });
         }
-        
+
         // Remove from game after a short delay
         setTimeout(() => {
             this.destroy();
@@ -166,11 +168,11 @@ class Enemy extends Entity {
         if (!this.target) {
             return false;
         }
-        
+
         const dx = this.target.x - this.x;
         const dy = this.target.y - this.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
-        
+
         return distance <= this.aggroRange;
     }
 
@@ -180,13 +182,13 @@ class Enemy extends Entity {
      */
     update(delta) {
         super.update(delta);
-        
+
         if (!this.isFriendly && this.active) {
             this.ai();
             this.updateAnimationState();
         }
     }
-    
+
     /**
      * Update animation state based on enemy state
      */
@@ -194,10 +196,10 @@ class Enemy extends Entity {
         if (!this.scene.animationManager) {
             return;
         }
-        
+
         // Determine animation state based on AI state
         let animState = 'idle';
-        
+
         if (this.aiState === 'attack') {
             animState = 'attack';
         } else if (this.aiState === 'chase') {
@@ -205,7 +207,7 @@ class Enemy extends Entity {
         } else if (this.aiState === 'defeated') {
             animState = 'defeat';
         }
-        
+
         // Update animation state
         this.scene.animationManager.setState(this, animState);
     }

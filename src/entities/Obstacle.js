@@ -1,17 +1,19 @@
 // Obstacle - Static obstacle entity for collision testing
 
-class Obstacle extends Entity {
+import { Entity } from './Entity.js';
+
+export class Obstacle extends Entity {
     constructor(scene, x, y, width, height) {
         super(scene, x, y, null);
-        
+
         // Set custom hitbox size
         this.hitbox = {
             width: width || 32,
             height: height || 32,
             offsetX: 0,
-            offsetY: 0
+            offsetY: 0,
         };
-        
+
         // Obstacles don't move
         this.isStatic = true;
     }
@@ -30,7 +32,7 @@ class Obstacle extends Entity {
             this.hitbox.height
         );
         graphics.setPosition(this.x, this.y);
-        
+
         this.sprite = graphics;
     }
 

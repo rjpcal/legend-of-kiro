@@ -1,7 +1,7 @@
 // CombatSystem - Handles combat mechanics
 // To be implemented in future tasks
 
-class CombatSystem {
+export class CombatSystem {
     constructor(scene) {
         this.scene = scene;
     }

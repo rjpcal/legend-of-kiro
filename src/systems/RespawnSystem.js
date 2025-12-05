@@ -1,16 +1,16 @@
 // RespawnSystem - Handles player death detection and respawning
 // Preserves collectibles and coins on respawn
 
-class RespawnSystem {
+export class RespawnSystem {
     constructor(scene) {
         this.scene = scene;
-        
+
         // Starting position for respawn
         this.spawnPoint = { x: 400, y: 300 };
-        
+
         // Track if player is currently dead
         this.isDead = false;
-        
+
         // Respawn delay in milliseconds
         this.respawnDelay = 2000;
     }
@@ -61,7 +61,7 @@ class RespawnSystem {
                 targets: player.sprite,
                 alpha: 0,
                 duration: 1000,
-                ease: 'Power2'
+                ease: 'Power2',
             });
         }
 
@@ -128,9 +128,4 @@ class RespawnSystem {
             this.respawn(player);
         }
     }
-}
-
-// Export for use in other modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = RespawnSystem;
 }

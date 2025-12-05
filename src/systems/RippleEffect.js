@@ -1,7 +1,7 @@
 // RippleEffect - Creates a rippling animation effect for sprites
 // Applies a wave-like distortion to create a ghostly appearance
 
-class RippleEffect {
+export class RippleEffect {
     constructor(scene) {
         this.scene = scene;
         this.rippleSprites = new Map(); // Track sprites with ripple effect
@@ -18,10 +18,10 @@ class RippleEffect {
         }
 
         const rippleConfig = {
-            amplitude: config.amplitude || 0.015,  // Wave height
-            frequency: config.frequency || 3,      // Wave frequency
-            speed: config.speed || 2,              // Animation speed
-            enabled: true
+            amplitude: config.amplitude || 0.015, // Wave height
+            frequency: config.frequency || 3, // Wave frequency
+            speed: config.speed || 2, // Animation speed
+            enabled: true,
         };
 
         // Store the sprite's current scale as the base scale
@@ -33,7 +33,7 @@ class RippleEffect {
             config: rippleConfig,
             time: 0,
             baseScaleX: baseScaleX,
-            baseScaleY: baseScaleY
+            baseScaleY: baseScaleY,
         });
 
         // Try to use shader pipeline if available (Phaser 3.50+)
@@ -64,7 +64,7 @@ class RippleEffect {
             duration: 1000 / config.speed,
             ease: 'Sine.easeInOut',
             yoyo: true,
-            repeat: -1
+            repeat: -1,
         });
 
         // Add subtle alpha pulse for ghostly effect
@@ -74,7 +74,7 @@ class RippleEffect {
             duration: 1500 / config.speed,
             ease: 'Sine.easeInOut',
             yoyo: true,
-            repeat: -1
+            repeat: -1,
         });
 
         // Store tweens for cleanup
@@ -91,7 +91,7 @@ class RippleEffect {
      */
     removeRipple(sprite) {
         const rippleData = this.rippleSprites.get(sprite);
-        
+
         if (rippleData) {
             // Stop tweens if they exist
             if (rippleData.scaleTween) {
@@ -117,10 +117,10 @@ class RippleEffect {
      */
     setEnabled(sprite, enabled) {
         const rippleData = this.rippleSprites.get(sprite);
-        
+
         if (rippleData) {
             rippleData.config.enabled = enabled;
-            
+
             if (!enabled) {
                 // Reset to normal state
                 sprite.setScale(1, 1);
@@ -150,12 +150,7 @@ class RippleEffect {
         this.rippleSprites.forEach((rippleData, sprite) => {
             this.removeRipple(sprite);
         });
-        
+
         this.rippleSprites.clear();
     }
-}
-
-// Export for use in other modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = RippleEffect;
 }

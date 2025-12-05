@@ -1,19 +1,19 @@
 // DamageSystem - Handles damage application and enemy collision with player
 // Manages damage events, health meter pulse triggers, and damage cooldowns
 
-class DamageSystem {
+export class DamageSystem {
     constructor(scene, collisionSystem, healthSystem) {
         this.scene = scene;
         this.collisionSystem = collisionSystem;
         this.healthSystem = healthSystem;
-        
+
         // Track entities that can deal damage
         this.enemies = [];
-        
+
         // Damage cooldown tracking (prevent rapid repeated damage)
         this.damageCooldowns = new Map();
         this.defaultCooldown = 1000; // 1 second between damage applications
-        
+
         // Health meter pulse callback
         this.onHealthMeterPulse = null;
     }
@@ -122,7 +122,7 @@ class DamageSystem {
         }
 
         // Check collision with each enemy
-        for (let enemy of this.enemies) {
+        for (const enemy of this.enemies) {
             if (!enemy.active || enemy.isFriendly) {
                 continue;
             }
@@ -146,9 +146,4 @@ class DamageSystem {
         this.enemies = [];
         this.damageCooldowns.clear();
     }
-}
-
-// Export for use in other modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = DamageSystem;
 }

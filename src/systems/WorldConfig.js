@@ -2,7 +2,7 @@
  * WorldConfig - Loads and validates world configuration from JSON
  * Validates: Requirements 11.1, 11.2, 11.3
  */
-class WorldConfig {
+export class WorldConfig {
     constructor() {
         this.config = null;
         this.isLoaded = false;
@@ -18,13 +18,15 @@ class WorldConfig {
             // Add cache busting parameter to prevent browser caching issues
             const cacheBuster = `?v=${Date.now()}`;
             const response = await fetch(filepath + cacheBuster);
-            
+
             if (!response.ok) {
-                throw new Error(`Failed to load configuration: ${response.status} ${response.statusText}`);
+                throw new Error(
+                    `Failed to load configuration: ${response.status} ${response.statusText}`
+                );
             }
 
             const text = await response.text();
-            
+
             // Parse JSON with error handling
             let data;
             try {
@@ -41,14 +43,13 @@ class WorldConfig {
 
             console.log('World configuration loaded successfully');
             return this.config;
-
         } catch (error) {
             console.error('Error loading world configuration:', error);
-            
+
             // Return a minimal default configuration on error
             this.config = this.getDefaultConfiguration();
             this.isLoaded = false;
-            
+
             throw error;
         }
     }
@@ -64,7 +65,11 @@ class WorldConfig {
             throw new Error('Configuration missing "overworld" section');
         }
 
-        if (!data.overworld.size || typeof data.overworld.size.width !== 'number' || typeof data.overworld.size.height !== 'number') {
+        if (
+            !data.overworld.size ||
+            typeof data.overworld.size.width !== 'number' ||
+            typeof data.overworld.size.height !== 'number'
+        ) {
             throw new Error('Invalid overworld size configuration');
         }
 
@@ -159,7 +164,7 @@ class WorldConfig {
         }
 
         const screen = this.config.overworld.screens.find(s => s.x === x && s.y === y);
-        
+
         if (!screen) {
             console.warn(`Screen not found at coordinates (${x}, ${y})`);
             return null;
@@ -180,7 +185,7 @@ class WorldConfig {
         }
 
         const dungeon = this.config.dungeons.find(d => d.id === dungeonId);
-        
+
         if (!dungeon) {
             console.warn(`Dungeon not found with ID ${dungeonId}`);
             return null;
@@ -201,7 +206,7 @@ class WorldConfig {
         }
 
         const store = this.config.stores.find(s => s.id === storeId);
-        
+
         if (!store) {
             console.warn(`Store not found with ID ${storeId}`);
             return null;
@@ -222,7 +227,7 @@ class WorldConfig {
         }
 
         const enemyConfig = this.config.enemyTypes[enemyType];
-        
+
         if (!enemyConfig) {
             console.warn(`Enemy type not found: ${enemyType}`);
             return null;
@@ -270,9 +275,9 @@ class WorldConfig {
                         enemies: [],
                         collectibles: [],
                         dungeonEntrance: null,
-                        storeEntrance: null
-                    }
-                ]
+                        storeEntrance: null,
+                    },
+                ],
             },
             dungeons: [],
             stores: [],
@@ -283,9 +288,9 @@ class WorldConfig {
                     damage: 5,
                     speed: 50,
                     xp: 10,
-                    sprite: 'zombie'
-                }
-            }
+                    sprite: 'zombie',
+                },
+            },
         };
     }
 
@@ -306,7 +311,4 @@ class WorldConfig {
     }
 }
 
-// Export for Node.js (testing)
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = WorldConfig;
-}
+// WorldConfig is now exported as ES6 module at the top of the file

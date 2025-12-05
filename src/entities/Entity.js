@@ -1,24 +1,24 @@
 // Entity - Base class for all game entities
 // Provides position, sprite, and collision properties for all game objects
 
-class Entity {
+export class Entity {
     constructor(scene, x, y, spriteKey) {
         this.scene = scene;
         this.x = x;
         this.y = y;
         this.spriteKey = spriteKey;
-        
+
         // Sprite object (Phaser sprite)
         this.sprite = null;
-        
+
         // Collision properties
         this.hitbox = {
             width: 32,
             height: 32,
             offsetX: 0,
-            offsetY: 0
+            offsetY: 0,
         };
-        
+
         // Active state
         this.active = true;
     }
@@ -31,7 +31,7 @@ class Entity {
             // Create sprite at entity position
             this.sprite = this.scene.add.sprite(this.x, this.y, this.spriteKey);
             this.sprite.setOrigin(0.5, 0.5);
-            
+
             // Scale sprite to reasonable game size (32x32 pixels default)
             // This can be overridden in subclasses
             if (this.sprite.width > 64 || this.sprite.height > 64) {
@@ -49,7 +49,7 @@ class Entity {
             x: this.x + this.hitbox.offsetX - this.hitbox.width / 2,
             y: this.y + this.hitbox.offsetY - this.hitbox.height / 2,
             width: this.hitbox.width,
-            height: this.hitbox.height
+            height: this.hitbox.height,
         };
     }
 
@@ -95,7 +95,4 @@ class Entity {
     }
 }
 
-// Export for use in other modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = Entity;
-}
+// Entity is now exported as ES6 module at the top of the file

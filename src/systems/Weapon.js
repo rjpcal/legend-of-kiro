@@ -1,7 +1,9 @@
 // Weapon - Weapon class for combat system
 // Handles weapon properties, melee attacks, and ranged projectiles
 
-class Weapon {
+import { Entity } from '../entities/Entity.js';
+
+export class Weapon {
     constructor(config = {}) {
         // Weapon properties
         this.name = config.name || 'Basic Weapon';
@@ -9,7 +11,7 @@ class Weapon {
         this.range = config.range || 40; // Melee attack range in pixels
         this.attackSpeed = config.attackSpeed || 500; // Cooldown in milliseconds
         this.canThrow = config.canThrow !== false; // Can be thrown as ranged attack
-        
+
         // Projectile properties (for ranged attacks)
         this.projectileSpeed = config.projectileSpeed || 200; // pixels per second
         this.projectileRange = config.projectileRange || 300; // max distance before returning
@@ -25,12 +27,12 @@ class Weapon {
     createMeleeHitbox(x, y, direction) {
         const hitboxWidth = 32;
         const hitboxHeight = 32;
-        
+
         let hitboxX = x;
         let hitboxY = y;
-        
+
         // Position hitbox based on direction
-        switch(direction) {
+        switch (direction) {
             case 'up':
                 hitboxY = y - this.range;
                 break;
@@ -44,14 +46,14 @@ class Weapon {
                 hitboxX = x + this.range;
                 break;
         }
-        
+
         return {
             x: hitboxX - hitboxWidth / 2,
             y: hitboxY - hitboxHeight / 2,
             width: hitboxWidth,
             height: hitboxHeight,
             damage: this.damage,
-            direction: direction
+            direction: direction,
         };
     }
 
@@ -99,10 +101,10 @@ class Weapon {
 /**
  * Projectile - Represents a thrown weapon
  */
-class Projectile extends (typeof Entity !== 'undefined' ? Entity : (typeof require !== 'undefined' ? require('../entities/Entity') : class {})) {
+export class Projectile extends Entity {
     constructor(scene, x, y, direction, weapon, owner) {
         super(scene, x, y, 'projectile');
-        
+
         this.direction = direction;
         this.weapon = weapon;
         this.owner = owner; // Reference to player who threw it
@@ -112,15 +114,15 @@ class Projectile extends (typeof Entity !== 'undefined' ? Entity : (typeof requi
         this.startX = x;
         this.startY = y;
         this.returning = false;
-        
+
         // Smaller hitbox for projectile
         this.hitbox = {
             width: 16,
             height: 16,
             offsetX: 0,
-            offsetY: 0
+            offsetY: 0,
         };
-        
+
         // Damage from weapon
         this.damage = weapon.damage;
     }
@@ -131,7 +133,7 @@ class Projectile extends (typeof Entity !== 'undefined' ? Entity : (typeof requi
     createSprite() {
         // Use a simple circle for projectile (can be replaced with actual sprite)
         if (this.scene && this.scene.add) {
-            this.sprite = this.scene.add.circle(this.x, this.y, 8, 0x790ECB);
+            this.sprite = this.scene.add.circle(this.x, this.y, 8, 0x790ecb);
             this.sprite.setDepth(15);
         }
     }
@@ -146,7 +148,7 @@ class Projectile extends (typeof Entity !== 'undefined' ? Entity : (typeof requi
         }
 
         const distance = (this.speed * delta) / 1000;
-        
+
         if (this.returning) {
             // Move back towards owner
             this.moveTowardsOwner(distance);
@@ -154,13 +156,13 @@ class Projectile extends (typeof Entity !== 'undefined' ? Entity : (typeof requi
             // Move in throw direction
             this.moveInDirection(distance);
             this.distanceTraveled += distance;
-            
+
             // Start returning if max distance reached
             if (this.distanceTraveled >= this.maxDistance) {
                 this.startReturning();
             }
         }
-        
+
         // Update sprite position
         super.update(delta);
     }
@@ -170,7 +172,7 @@ class Projectile extends (typeof Entity !== 'undefined' ? Entity : (typeof requi
      * @param {number} distance - Distance to move
      */
     moveInDirection(distance) {
-        switch(this.direction) {
+        switch (this.direction) {
             case 'up':
                 this.y -= distance;
                 break;
@@ -195,17 +197,17 @@ class Projectile extends (typeof Entity !== 'undefined' ? Entity : (typeof requi
             this.destroy();
             return;
         }
-        
+
         const dx = this.owner.x - this.x;
         const dy = this.owner.y - this.y;
         const distToOwner = Math.sqrt(dx * dx + dy * dy);
-        
+
         // If close enough to owner, return weapon and destroy projectile
         if (distToOwner < 20) {
             this.returnToOwner();
             return;
         }
-        
+
         // Move towards owner
         const angle = Math.atan2(dy, dx);
         this.x += Math.cos(angle) * distance;
@@ -234,9 +236,4 @@ class Projectile extends (typeof Entity !== 'undefined' ? Entity : (typeof requi
         // Start returning after hitting enemy
         this.startReturning();
     }
-}
-
-// Export for use in other modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { Weapon, Projectile };
 }

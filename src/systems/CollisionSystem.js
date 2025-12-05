@@ -1,6 +1,6 @@
 // CollisionSystem - Handles collision detection using AABB (Axis-Aligned Bounding Box)
 
-class CollisionSystem {
+export class CollisionSystem {
     constructor(scene) {
         this.scene = scene;
         this.obstacles = []; // Array of obstacle entities
@@ -72,11 +72,11 @@ class CollisionSystem {
             x: x + entity.hitbox.offsetX - entity.hitbox.width / 2,
             y: y + entity.hitbox.offsetY - entity.hitbox.height / 2,
             width: entity.hitbox.width,
-            height: entity.hitbox.height
+            height: entity.hitbox.height,
         };
 
         // Check against all obstacles
-        for (let obstacle of this.obstacles) {
+        for (const obstacle of this.obstacles) {
             const obstacleHitbox = obstacle.getHitbox();
             if (this.checkAABB(tempHitbox, obstacleHitbox)) {
                 return true;
@@ -102,9 +102,4 @@ class CollisionSystem {
     update() {
         // Future: spatial partitioning optimization will be added here
     }
-}
-
-// Export for use in other modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = CollisionSystem;
 }

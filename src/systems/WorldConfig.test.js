@@ -4,16 +4,18 @@
  * Requirements: 11.1, 11.2, 11.3
  */
 
-// Import WorldConfig class
-const WorldConfig = require('./WorldConfig');
+// Import jest globals for ES modules
+import { jest, describe, test, expect, beforeEach } from '@jest/globals';
 
-// Mock fetch for testing
-global.fetch = jest.fn();
+// Import WorldConfig class
+import { WorldConfig } from './WorldConfig.js';
 
 describe('WorldConfig', () => {
     let worldConfig;
 
     beforeEach(() => {
+        // Mock fetch for testing
+        global.fetch = jest.fn();
         worldConfig = new WorldConfig();
         jest.clearAllMocks();
     });
@@ -30,9 +32,9 @@ describe('WorldConfig', () => {
                             terrain: 'grass',
                             obstacles: [],
                             enemies: [],
-                            collectibles: []
-                        }
-                    ]
+                            collectibles: [],
+                        },
+                    ],
                 },
                 dungeons: [],
                 stores: [],
@@ -43,14 +45,14 @@ describe('WorldConfig', () => {
                         damage: 5,
                         speed: 50,
                         xp: 10,
-                        sprite: 'zombie'
-                    }
-                }
+                        sprite: 'zombie',
+                    },
+                },
             };
 
             global.fetch.mockResolvedValue({
                 ok: true,
-                text: async () => JSON.stringify(validConfig)
+                text: async () => JSON.stringify(validConfig),
             });
 
             const result = await worldConfig.loadFromJSON('test.json');
@@ -63,20 +65,24 @@ describe('WorldConfig', () => {
             global.fetch.mockResolvedValue({
                 ok: false,
                 status: 404,
-                statusText: 'Not Found'
+                statusText: 'Not Found',
             });
 
-            await expect(worldConfig.loadFromJSON('missing.json')).rejects.toThrow('Failed to load configuration');
+            await expect(worldConfig.loadFromJSON('missing.json')).rejects.toThrow(
+                'Failed to load configuration'
+            );
             expect(worldConfig.isConfigLoaded()).toBe(false);
         });
 
         test('should handle invalid JSON format', async () => {
             global.fetch.mockResolvedValue({
                 ok: true,
-                text: async () => 'invalid json {'
+                text: async () => 'invalid json {',
             });
 
-            await expect(worldConfig.loadFromJSON('invalid.json')).rejects.toThrow('Invalid JSON format');
+            await expect(worldConfig.loadFromJSON('invalid.json')).rejects.toThrow(
+                'Invalid JSON format'
+            );
             expect(worldConfig.isConfigLoaded()).toBe(false);
         });
 
@@ -84,69 +90,81 @@ describe('WorldConfig', () => {
             const malformedConfig = {
                 overworld: {
                     // Missing size
-                    screens: []
-                }
+                    screens: [],
+                },
             };
 
             global.fetch.mockResolvedValue({
                 ok: true,
-                text: async () => JSON.stringify(malformedConfig)
+                text: async () => JSON.stringify(malformedConfig),
             });
 
-            await expect(worldConfig.loadFromJSON('malformed.json')).rejects.toThrow('Invalid overworld size configuration');
+            await expect(worldConfig.loadFromJSON('malformed.json')).rejects.toThrow(
+                'Invalid overworld size configuration'
+            );
         });
     });
 
     describe('validateConfiguration', () => {
         test('should reject configuration without overworld', () => {
             const invalidConfig = { dungeons: [], stores: [] };
-            expect(() => worldConfig.validateConfiguration(invalidConfig)).toThrow('Configuration missing "overworld" section');
+            expect(() => worldConfig.validateConfiguration(invalidConfig)).toThrow(
+                'Configuration missing "overworld" section'
+            );
         });
 
         test('should reject configuration with invalid overworld size', () => {
             const invalidConfig = {
                 overworld: {
                     size: { width: 'invalid' },
-                    screens: []
-                }
+                    screens: [],
+                },
             };
-            expect(() => worldConfig.validateConfiguration(invalidConfig)).toThrow('Invalid overworld size configuration');
+            expect(() => worldConfig.validateConfiguration(invalidConfig)).toThrow(
+                'Invalid overworld size configuration'
+            );
         });
 
         test('should reject configuration with non-array screens', () => {
             const invalidConfig = {
                 overworld: {
                     size: { width: 6, height: 6 },
-                    screens: 'not an array'
-                }
+                    screens: 'not an array',
+                },
             };
-            expect(() => worldConfig.validateConfiguration(invalidConfig)).toThrow('Overworld screens must be an array');
+            expect(() => worldConfig.validateConfiguration(invalidConfig)).toThrow(
+                'Overworld screens must be an array'
+            );
         });
 
         test('should reject screen without coordinates', () => {
             const invalidConfig = {
                 overworld: {
                     size: { width: 6, height: 6 },
-                    screens: [{ terrain: 'grass' }]
+                    screens: [{ terrain: 'grass' }],
                 },
                 dungeons: [],
                 stores: [],
-                enemyTypes: {}
+                enemyTypes: {},
             };
-            expect(() => worldConfig.validateConfiguration(invalidConfig)).toThrow('missing valid x/y coordinates');
+            expect(() => worldConfig.validateConfiguration(invalidConfig)).toThrow(
+                'missing valid x/y coordinates'
+            );
         });
 
         test('should reject dungeon without rooms', () => {
             const invalidConfig = {
                 overworld: {
                     size: { width: 6, height: 6 },
-                    screens: []
+                    screens: [],
                 },
                 dungeons: [{ id: 1, name: 'Test', rooms: [] }],
                 stores: [],
-                enemyTypes: {}
+                enemyTypes: {},
             };
-            expect(() => worldConfig.validateConfiguration(invalidConfig)).toThrow('must have at least one room');
+            expect(() => worldConfig.validateConfiguration(invalidConfig)).toThrow(
+                'must have at least one room'
+            );
         });
     });
 
@@ -156,18 +174,32 @@ describe('WorldConfig', () => {
                 overworld: {
                     size: { width: 6, height: 6 },
                     screens: [
-                        { x: 0, y: 0, terrain: 'grass', obstacles: [], enemies: [], collectibles: [] },
-                        { x: 1, y: 0, terrain: 'dirt', obstacles: [], enemies: [], collectibles: [] }
-                    ]
+                        {
+                            x: 0,
+                            y: 0,
+                            terrain: 'grass',
+                            obstacles: [],
+                            enemies: [],
+                            collectibles: [],
+                        },
+                        {
+                            x: 1,
+                            y: 0,
+                            terrain: 'dirt',
+                            obstacles: [],
+                            enemies: [],
+                            collectibles: [],
+                        },
+                    ],
                 },
                 dungeons: [],
                 stores: [],
-                enemyTypes: {}
+                enemyTypes: {},
             };
 
             global.fetch.mockResolvedValue({
                 ok: true,
-                text: async () => JSON.stringify(config)
+                text: async () => JSON.stringify(config),
             });
 
             await worldConfig.loadFromJSON('test.json');
@@ -190,18 +222,18 @@ describe('WorldConfig', () => {
             const config = {
                 overworld: {
                     size: { width: 6, height: 6 },
-                    screens: []
+                    screens: [],
                 },
                 dungeons: [
-                    { id: 1, name: 'Test Dungeon', rooms: [{ id: 1, type: 'combat', doors: [] }] }
+                    { id: 1, name: 'Test Dungeon', rooms: [{ id: 1, type: 'combat', doors: [] }] },
                 ],
                 stores: [],
-                enemyTypes: {}
+                enemyTypes: {},
             };
 
             global.fetch.mockResolvedValue({
                 ok: true,
-                text: async () => JSON.stringify(config)
+                text: async () => JSON.stringify(config),
             });
 
             await worldConfig.loadFromJSON('test.json');
@@ -224,18 +256,16 @@ describe('WorldConfig', () => {
             const config = {
                 overworld: {
                     size: { width: 6, height: 6 },
-                    screens: []
+                    screens: [],
                 },
                 dungeons: [],
-                stores: [
-                    { id: 1, inventory: [{ type: 'weapon', name: 'Sword' }] }
-                ],
-                enemyTypes: {}
+                stores: [{ id: 1, inventory: [{ type: 'weapon', name: 'Sword' }] }],
+                enemyTypes: {},
             };
 
             global.fetch.mockResolvedValue({
                 ok: true,
-                text: async () => JSON.stringify(config)
+                text: async () => JSON.stringify(config),
             });
 
             await worldConfig.loadFromJSON('test.json');
@@ -259,7 +289,7 @@ describe('WorldConfig', () => {
             const config = {
                 overworld: {
                     size: { width: 6, height: 6 },
-                    screens: []
+                    screens: [],
                 },
                 dungeons: [],
                 stores: [],
@@ -267,14 +297,14 @@ describe('WorldConfig', () => {
                     zombie: {
                         name: 'Zombie',
                         health: 30,
-                        damage: 5
-                    }
-                }
+                        damage: 5,
+                    },
+                },
             };
 
             global.fetch.mockResolvedValue({
                 ok: true,
-                text: async () => JSON.stringify(config)
+                text: async () => JSON.stringify(config),
             });
 
             await worldConfig.loadFromJSON('test.json');
@@ -296,7 +326,7 @@ describe('WorldConfig', () => {
     describe('getDefaultConfiguration', () => {
         test('should return valid default configuration', () => {
             const defaultConfig = worldConfig.getDefaultConfiguration();
-            
+
             expect(defaultConfig.overworld).toBeDefined();
             expect(defaultConfig.overworld.size).toEqual({ width: 6, height: 6 });
             expect(defaultConfig.overworld.screens.length).toBeGreaterThan(0);

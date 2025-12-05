@@ -1,11 +1,11 @@
 // CollectionSystem - Manages collectible detection and collection
 // Handles collision detection between player and collectibles
 
-class CollectionSystem {
+export class CollectionSystem {
     constructor(scene, collisionSystem) {
         this.scene = scene;
         this.collisionSystem = collisionSystem;
-        
+
         // Track all collectibles in the scene
         this.collectibles = [];
     }
@@ -45,7 +45,7 @@ class CollectionSystem {
         // Check each collectible
         for (let i = this.collectibles.length - 1; i >= 0; i--) {
             const collectible = this.collectibles[i];
-            
+
             if (!collectible.active) {
                 continue;
             }
@@ -56,7 +56,7 @@ class CollectionSystem {
             if (this.collisionSystem.checkAABB(playerHitbox, collectibleHitbox)) {
                 // Collect the item
                 collectible.collect(player);
-                
+
                 // Remove from tracking
                 this.removeCollectible(collectible);
             }
@@ -76,7 +76,7 @@ class CollectionSystem {
      */
     clear() {
         // Destroy all collectibles
-        for (let collectible of this.collectibles) {
+        for (const collectible of this.collectibles) {
             collectible.destroy();
         }
         this.collectibles = [];
@@ -89,9 +89,4 @@ class CollectionSystem {
     getCollectibles() {
         return this.collectibles.filter(c => c.active);
     }
-}
-
-// Export for use in other modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = CollectionSystem;
 }

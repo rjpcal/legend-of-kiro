@@ -3,6 +3,7 @@
 ## Completed Tasks
 
 ### Task 5.1: Create sprite animation manager ✓
+
 - Created `AnimationManager` class in `src/systems/AnimationManager.js`
 - Manages animation definitions and entity animation states
 - Tracks animation state per entity (idle, move, attack, defeat)
@@ -10,6 +11,7 @@
 - Currently works with single-image sprites
 
 ### Task 5.2: Add ripple effect for Kiro sprite ✓
+
 - Created `RippleEffect` class in `src/systems/RippleEffect.js`
 - Applies ghostly rippling effect to Kiro sprite using tweens
 - Uses subtle scale and alpha animations for wave-like appearance
@@ -17,17 +19,18 @@
 - Applied automatically to Kiro when sprite is created
 
 ### Task 5.3: Integrate animations with entity states ✓
+
 - Updated `Player` class to track animation states
 - Animation changes based on player state:
-  - `idle` - when not moving or attacking
-  - `move` - when moving in any direction
-  - `attack` - when performing an attack
+    - `idle` - when not moving or attacking
+    - `move` - when moving in any direction
+    - `attack` - when performing an attack
 - Updated `Enemy` class to track animation states
 - Animation changes based on AI state:
-  - `idle` - default state
-  - `move` - when chasing player
-  - `attack` - when attacking
-  - `defeat` - when defeated (with fade-out effect)
+    - `idle` - default state
+    - `move` - when chasing player
+    - `attack` - when attacking
+    - `defeat` - when defeated (with fade-out effect)
 - Sprite flipping for left/right facing directions
 
 ## New Files Created
@@ -46,18 +49,21 @@
 ## How It Works
 
 ### Animation Manager
+
 - Tracks animation state for each entity
 - Updates animation based on entity state (idle, moving, attacking)
 - Ready to handle sprite sheet animations when added
 - Currently manages state transitions
 
 ### Ripple Effect
+
 - Applied to Kiro sprite for ghostly appearance
 - Creates wave-like distortion using scale tweens
 - Adds subtle alpha pulsing for ethereal effect
 - Runs continuously in background
 
 ### State Integration
+
 - Player animations update based on movement and combat state
 - Enemy animations update based on AI state
 - Smooth transitions between states
@@ -77,6 +83,7 @@ To see the animation system in action:
 ## Future Enhancements
 
 When sprite sheets are added:
+
 1. Load sprite sheets in BootScene preload
 2. Define frame-based animations using AnimationManager
 3. Animations will automatically play based on state

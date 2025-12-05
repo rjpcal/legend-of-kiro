@@ -1,48 +1,51 @@
 // Player - Kiro character class
 // Extends Entity with player-specific properties including health, inventory, and stats
 
-class Player extends Entity {
+import { Entity } from './Entity.js';
+import { Weapon } from '../systems/Weapon.js';
+
+export class Player extends Entity {
     constructor(scene, x, y) {
         super(scene, x, y, 'kiro');
-        
+
         // Health system
         this.health = {
             current: 6,
-            max: 6
+            max: 6,
         };
-        
+
         // Inventory system
         this.inventory = {
             coins: 0,
             items: [],
             equippedWeapon: null,
-            equippedArmor: null
+            equippedArmor: null,
         };
-        
+
         // Stats
         this.stats = {
-            damage: 1,        // Base damage
-            defense: 0,       // Damage reduction
-            speed: 100,       // Movement speed in pixels per second
-            xp: 0,           // Experience points
-            level: 1         // Current level
+            damage: 1, // Base damage
+            defense: 0, // Damage reduction
+            speed: 100, // Movement speed in pixels per second
+            xp: 0, // Experience points
+            level: 1, // Current level
         };
-        
+
         // Movement state
         this.facing = 'down'; // Direction player is facing: up, down, left, right
         this.isMoving = false;
-        
+
         // Combat state
         this.isAttacking = false;
         this.canAttack = true;
         this.attackCooldown = 500; // milliseconds
-        
+
         // Set player-specific hitbox
         this.hitbox = {
             width: 24,
             height: 24,
             offsetX: 0,
-            offsetY: 0
+            offsetY: 0,
         };
     }
 
@@ -54,16 +57,16 @@ class Player extends Entity {
         if (this.sprite) {
             // Set depth for rendering order
             this.sprite.setDepth(10);
-            
+
             // Apply ripple effect to Kiro sprite
             if (this.scene.rippleEffect) {
                 this.scene.rippleEffect.applyRipple(this.sprite, {
                     amplitude: 0.02,
                     frequency: 3,
-                    speed: 1.5
+                    speed: 1.5,
                 });
             }
-            
+
             // Initialize animation state
             if (this.scene.animationManager) {
                 this.scene.animationManager.initializeEntity(this, 'idle');
@@ -79,17 +82,17 @@ class Player extends Entity {
     move(direction, delta) {
         this.facing = direction;
         this.isMoving = true;
-        
+
         // Calculate movement distance based on speed and delta time
         // Convert delta from milliseconds to seconds, then multiply by speed (pixels per second)
         const distance = (this.stats.speed * delta) / 1000;
-        
+
         // Store intended new position
         this.intendedX = this.x;
         this.intendedY = this.y;
-        
+
         // Calculate new position based on direction
-        switch(direction) {
+        switch (direction) {
             case 'up':
                 this.intendedY -= distance;
                 break;
@@ -104,7 +107,7 @@ class Player extends Entity {
                 break;
         }
     }
-    
+
     /**
      * Apply the intended movement (called after collision check)
      */
@@ -118,7 +121,7 @@ class Player extends Entity {
         this.intendedX = undefined;
         this.intendedY = undefined;
     }
-    
+
     /**
      * Cancel the intended movement (called when collision detected)
      */
@@ -127,14 +130,14 @@ class Player extends Entity {
         this.intendedY = undefined;
         this.isMoving = false;
     }
-    
+
     /**
      * Get the intended position after movement
      */
     getIntendedPosition() {
         return {
             x: this.intendedX !== undefined ? this.intendedX : this.x,
-            y: this.intendedY !== undefined ? this.intendedY : this.y
+            y: this.intendedY !== undefined ? this.intendedY : this.y,
         };
     }
 
@@ -146,30 +149,30 @@ class Player extends Entity {
         if (!this.canAttack || this.isAttacking) {
             return null;
         }
-        
+
         this.isAttacking = true;
         this.canAttack = false;
-        
+
         // Get equipped weapon or use default
         const weapon = this.inventory.equippedWeapon || this.getDefaultWeapon();
-        
+
         // Create attack hitbox in facing direction
         const attackHitbox = weapon.attack(this.x, this.y, this.facing);
-        
+
         // Trigger attack animation
         if (this.scene.animationManager) {
             this.scene.animationManager.setState(this, 'attack');
         }
-        
+
         // Reset attack state after cooldown
         setTimeout(() => {
             this.isAttacking = false;
             this.canAttack = true;
         }, this.attackCooldown);
-        
+
         return attackHitbox;
     }
-    
+
     /**
      * Get default weapon if none equipped
      * @returns {Weapon} Default weapon
@@ -183,7 +186,7 @@ class Player extends Entity {
                 damage: 1,
                 range: 35,
                 attackSpeed: 500,
-                canThrow: false
+                canThrow: false,
             });
         }
         return this._defaultWeapon;
@@ -199,35 +202,35 @@ class Player extends Entity {
         if (this.health.current < this.health.max) {
             return null; // Can only throw at max health
         }
-        
+
         if (!this.canAttack || this.isAttacking) {
             return null;
         }
-        
+
         // Get equipped weapon or use default
         const weapon = this.inventory.equippedWeapon || this.getDefaultWeapon();
-        
+
         // Check if weapon can be thrown
         if (!weapon.canThrow) {
             return null;
         }
-        
+
         this.isAttacking = true;
         this.canAttack = false;
-        
+
         // Create projectile
         const projectile = weapon.throw(this.scene, this.x, this.y, this.facing, this);
-        
+
         if (projectile) {
             projectile.createSprite();
         }
-        
+
         // Reset attack state after cooldown
         setTimeout(() => {
             this.isAttacking = false;
             this.canAttack = true;
         }, this.attackCooldown);
-        
+
         return projectile;
     }
 
@@ -238,9 +241,9 @@ class Player extends Entity {
     takeDamage(amount) {
         // Apply defense reduction
         const actualDamage = Math.max(1, amount - this.stats.defense);
-        
+
         this.health.current = Math.max(0, this.health.current - actualDamage);
-        
+
         // Death is handled by RespawnSystem
         // No need to handle death here - system will detect health === 0
     }
@@ -307,12 +310,12 @@ class Player extends Entity {
      */
     levelUp() {
         this.stats.level++;
-        
+
         // Increase max health on level up (Property 11, Requirements 3.5, 7.2)
         const healthIncrease = 2;
         this.health.max += healthIncrease;
         this.health.current = this.health.max; // Fully heal on level up
-        
+
         // Play level up sound if available
         if (this.scene && this.scene.sound) {
             try {
@@ -365,7 +368,7 @@ class Player extends Entity {
      */
     handleInput(cursors, wasd, delta) {
         this.isMoving = false;
-        
+
         // Check for movement input (arrow keys or WASD)
         if (cursors.up.isDown || wasd.W.isDown) {
             this.move('up', delta);
@@ -377,18 +380,18 @@ class Player extends Entity {
             this.move('right', delta);
         }
     }
-    
+
     /**
      * Update player state
      * @param {number} delta - Time elapsed since last frame
      */
     update(delta) {
         super.update(delta);
-        
+
         // Update animation state based on current state
         this.updateAnimationState();
     }
-    
+
     /**
      * Update animation state based on player state
      */
@@ -396,19 +399,19 @@ class Player extends Entity {
         if (!this.scene.animationManager) {
             return;
         }
-        
+
         // Determine animation state based on player state
         let animState = 'idle';
-        
+
         if (this.isAttacking) {
             animState = 'attack';
         } else if (this.isMoving) {
             animState = 'move';
         }
-        
+
         // Update animation state
         this.scene.animationManager.setState(this, animState);
-        
+
         // Update sprite facing direction (flip sprite for left/right)
         if (this.sprite) {
             if (this.facing === 'left') {
@@ -420,7 +423,4 @@ class Player extends Entity {
     }
 }
 
-// Export for use in other modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = Player;
-}
+// Player is now exported as ES6 module at the top of the file

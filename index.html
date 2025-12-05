@@ -26,39 +26,7 @@
     <!-- Phaser.js via CDN -->
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
     
-    <!-- Game files -->
-    <!-- Systems -->
-    <script src="src/systems/WorldConfig.js"></script>
-    <script src="src/systems/CollisionSystem.js"></script>
-    <script src="src/systems/CollectionSystem.js"></script>
-    <script src="src/systems/CombatSystem.js"></script>
-    <script src="src/systems/AnimationManager.js"></script>
-    <script src="src/systems/RippleEffect.js"></script>
-    <script src="src/systems/Weapon.js"></script>
-    
-    <!-- UI Components -->
-    <script src="src/ui/HealthMeter.js"></script>
-    <script src="src/ui/CoinCounter.js"></script>
-    <script src="src/ui/XPBar.js"></script>
-    <script src="src/ui/Minimap.js"></script>
-    <script src="src/ui/HUD.js"></script>
-    
-    <!-- Entities -->
-    <script src="src/entities/Entity.js"></script>
-    <script src="src/entities/Player.js"></script>
-    <script src="src/entities/Enemy.js"></script>
-    <script src="src/entities/Obstacle.js"></script>
-    <script src="src/entities/Collectible.js"></script>
-    
-    <!-- Scenes -->
-    <script src="src/scenes/BootScene.js"></script>
-    <script src="src/scenes/MainMenuScene.js"></script>
-    <script src="src/scenes/OverworldScene.js"></script>
-    <script src="src/scenes/DungeonScene.js"></script>
-    <script src="src/scenes/StoreScene.js"></script>
-    <script src="src/scenes/GameOverScene.js"></script>
-    
-    <!-- Main -->
-    <script src="src/main.js"></script>
+    <!-- Main entry point as ES6 module - browser will load dependencies automatically -->
+    <script type="module" src="src/main.js"></script>
 </body>
 </html>

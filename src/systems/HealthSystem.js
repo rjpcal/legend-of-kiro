@@ -1,7 +1,7 @@
 // HealthSystem - Manages health tracking and modifications for entities
 // Provides centralized health management with max health tracking and modification methods
 
-class HealthSystem {
+export class HealthSystem {
     constructor() {
         // Track entities with health
         this.entities = new Map();
@@ -16,7 +16,7 @@ class HealthSystem {
     registerEntity(entity, currentHealth, maxHealth) {
         this.entities.set(entity, {
             current: currentHealth,
-            max: maxHealth
+            max: maxHealth,
         });
     }
 
@@ -152,9 +152,4 @@ class HealthSystem {
         }
         return health.current / health.max;
     }
-}
-
-// Export for use in other modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = HealthSystem;
 }

@@ -1,10 +1,15 @@
 // HUD - Main HUD manager that coordinates all UI components
 // Manages health meter, coin counter, XP bar, and minimap
 
-class HUD {
+import { HealthMeter } from './HealthMeter.js';
+import { CoinCounter } from './CoinCounter.js';
+import { XPBar } from './XPBar.js';
+import { Minimap } from './Minimap.js';
+
+export class HUD {
     constructor(scene) {
         this.scene = scene;
-        
+
         // UI components
         this.healthMeter = null;
         this.coinCounter = null;
@@ -18,19 +23,19 @@ class HUD {
      */
     create(player) {
         const { width, height } = this.scene.cameras.main;
-        
+
         // Create health meter (top left)
         this.healthMeter = new HealthMeter(this.scene, 20, 20);
         this.healthMeter.create(player.health.current, player.health.max);
-        
+
         // Create coin counter (top right)
         this.coinCounter = new CoinCounter(this.scene, width - 100, 20);
         this.coinCounter.create(player.inventory.coins);
-        
+
         // Create XP bar (bottom center)
         this.xpBar = new XPBar(this.scene, width / 2, height - 30, 250);
         this.xpBar.create(player.stats.xp, player.stats.level);
-        
+
         // Create minimap (top right, below coin counter)
         this.minimap = new Minimap(this.scene, width - 120, 60);
         this.minimap.create(0, 0); // Default position, will be updated by scene
@@ -44,11 +49,11 @@ class HUD {
         if (this.healthMeter) {
             this.healthMeter.update(player.health.current, player.health.max);
         }
-        
+
         if (this.coinCounter) {
             this.coinCounter.update(player.inventory.coins);
         }
-        
+
         if (this.xpBar) {
             this.xpBar.update(player.stats.xp, player.stats.level);
         }
@@ -104,9 +109,4 @@ class HUD {
             this.minimap.destroy();
         }
     }
-}
-
-// Export for use in other modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = HUD;
 }
