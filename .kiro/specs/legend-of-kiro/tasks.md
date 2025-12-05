@@ -543,13 +543,13 @@
         - **Property 20: Configuration hot-reload**
         - **Validates: Requirements 11.4**
 
-- [ ]   21. Create game assets
-    - [ ] 21.1 Prepare Kiro sprite
+- [x]   21. Create game assets
+    - [x] 21.1 Prepare Kiro sprite
         - Use kiro-logo.png as base sprite
         - Create sprite sheet with animation frames if needed
         - _Requirements: 12.1_
 
-    - [ ] 21.2 Create enemy sprites
+    - [x] 21.2 Create enemy sprites
         - Create zombie sprite with animations
         - Create skeleton sprite with animations
         - Create ghoul sprite with animations
@@ -557,14 +557,14 @@
         - Create boss sprites
         - _Requirements: 12.3, 12.4_
 
-    - [ ] 21.3 Create environment sprites
+    - [x] 21.3 Create environment sprites
         - Create terrain tiles (grass, stone, etc.)
         - Create obstacle sprites (walls, rocks, trees)
         - Create door sprites (locked, unlocked)
         - Create collectible sprites (coins, health, weapons, armor)
         - _Requirements: 5.5, 6.1_
 
-    - [ ] 21.4 Create UI sprites
+    - [x] 21.4 Create UI sprites
         - Create health meter graphics
         - Create minimap graphics
         - Create menu and store UI graphics

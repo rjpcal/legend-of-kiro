@@ -3,7 +3,7 @@
 import { Entity } from './Entity.js';
 
 export class Obstacle extends Entity {
-    constructor(scene, x, y, width, height) {
+    constructor(scene, x, y, width, height, type = 'wall') {
         super(scene, x, y, null);
 
         // Set custom hitbox size
@@ -14,6 +14,9 @@ export class Obstacle extends Entity {
             offsetY: 0,
         };
 
+        // Store obstacle type
+        this.obstacleType = type;
+
         // Obstacles don't move
         this.isStatic = true;
     }
@@ -22,18 +25,26 @@ export class Obstacle extends Entity {
      * Create a visual representation of the obstacle
      */
     createSprite() {
-        // Create a simple rectangle graphic for the obstacle
-        const graphics = this.scene.add.graphics();
-        graphics.fillStyle(0x555555, 1);
-        graphics.fillRect(
-            -this.hitbox.width / 2,
-            -this.hitbox.height / 2,
-            this.hitbox.width,
-            this.hitbox.height
-        );
-        graphics.setPosition(this.x, this.y);
+        // Try to use sprite texture if available, otherwise use graphics
+        const spriteKey = this.obstacleType;
 
-        this.sprite = graphics;
+        if (this.scene.textures.exists(spriteKey)) {
+            // Use the sprite texture
+            this.sprite = this.scene.add.image(this.x, this.y, spriteKey);
+            this.sprite.setDisplaySize(this.hitbox.width, this.hitbox.height);
+        } else {
+            // Fallback to gray rectangle
+            const graphics = this.scene.add.graphics();
+            graphics.fillStyle(0x555555, 1);
+            graphics.fillRect(
+                -this.hitbox.width / 2,
+                -this.hitbox.height / 2,
+                this.hitbox.width,
+                this.hitbox.height
+            );
+            graphics.setPosition(this.x, this.y);
+            this.sprite = graphics;
+        }
     }
 
     /**

@@ -367,8 +367,9 @@ export class OverworldScene extends Phaser.Scene {
 
         const entrance = this.screenData.dungeonEntrance;
 
-        // Create visual marker for dungeon entrance
-        const marker = this.add.rectangle(entrance.x, entrance.y, 60, 60, 0x790ecb, 0.7);
+        // Create visual marker for dungeon entrance using sprite
+        const marker = this.add.image(entrance.x, entrance.y, 'dungeon_entrance');
+        marker.setDisplaySize(60, 60);
         marker.setDepth(5);
 
         // Add text label

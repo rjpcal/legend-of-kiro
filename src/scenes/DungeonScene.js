@@ -437,17 +437,11 @@ export class DungeonScene extends Phaser.Scene {
                     break;
             }
 
-            // Create door visual
-            const doorColor = doorData.locked ? 0xff0000 : 0x00ff00;
-            const doorSprite = this.add.rectangle(
-                doorX,
-                doorY,
-                this.DOOR_SIZE,
-                this.DOOR_SIZE,
-                doorColor,
-                0.7
-            );
+            // Create door visual using sprite
+            const doorTexture = doorData.locked ? 'door_locked' : 'door_unlocked';
+            const doorSprite = this.add.image(doorX, doorY, doorTexture);
             doorSprite.setDepth(5);
+            doorSprite.setDisplaySize(this.DOOR_SIZE, this.DOOR_SIZE);
 
             // Add label
             const label = this.add.text(doorX, doorY, doorData.locked ? 'LOCKED' : 'OPEN', {
@@ -962,7 +956,7 @@ export class DungeonScene extends Phaser.Scene {
 
             // Update door visual
             if (door.sprite) {
-                door.sprite.setFillStyle(0x00ff00, 0.7);
+                door.sprite.setTexture('door_unlocked');
             }
             if (door.label) {
                 door.label.setText('OPEN');
@@ -983,7 +977,7 @@ export class DungeonScene extends Phaser.Scene {
 
             // Update door visual
             if (door.sprite) {
-                door.sprite.setFillStyle(0xff0000, 0.7);
+                door.sprite.setTexture('door_locked');
             }
             if (door.label) {
                 door.label.setText('LOCKED');
@@ -1051,7 +1045,7 @@ export class DungeonScene extends Phaser.Scene {
 
                 // Update door visual
                 if (door.sprite) {
-                    door.sprite.setFillStyle(0x00ff00, 0.7);
+                    door.sprite.setTexture('door_unlocked');
                 }
                 if (door.label) {
                     door.label.setText('OPEN');

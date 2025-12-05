@@ -65,25 +65,13 @@ export class HealthMeter {
             const heartY = row * (this.heartSize + this.heartSpacing);
 
             // Create empty heart (background)
-            const emptyHeart = this.scene.add.rectangle(
-                heartX,
-                heartY,
-                this.heartSize,
-                this.heartSize,
-                0x333333
-            );
-            emptyHeart.setStrokeStyle(2, 0x666666);
+            const emptyHeart = this.scene.add.image(heartX, heartY, 'heart_empty');
+            emptyHeart.setDisplaySize(this.heartSize, this.heartSize);
             this.container.add(emptyHeart);
 
             // Create full heart (foreground)
-            const fullHeart = this.scene.add.rectangle(
-                heartX,
-                heartY,
-                this.heartSize,
-                this.heartSize,
-                0x790ecb // Kiro purple
-            );
-            fullHeart.setStrokeStyle(2, 0x9a3ee0);
+            const fullHeart = this.scene.add.image(heartX, heartY, 'heart_full');
+            fullHeart.setDisplaySize(this.heartSize, this.heartSize);
             this.container.add(fullHeart);
 
             this.hearts.push({

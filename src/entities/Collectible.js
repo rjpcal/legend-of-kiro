@@ -80,152 +80,171 @@ export class Collectible {
      * Create coin sprite (gold circle)
      */
     createCoinSprite() {
-        const graphics = this.scene.add.graphics();
-        const center = SPRITE_CONFIG.CENTER;
-        const size = SPRITE_CONFIG.TEXTURE_SIZE;
+        // Use the coin texture created in BootScene
+        if (this.scene.textures.exists('coin')) {
+            this.sprite = this.scene.add.sprite(this.x, this.y, 'coin');
+            this.sprite.setOrigin(0.5, 0.5);
+            this.sprite.setDisplaySize(SPRITE_CONFIG.TEXTURE_SIZE, SPRITE_CONFIG.TEXTURE_SIZE);
+        } else {
+            // Fallback to procedural generation
+            const graphics = this.scene.add.graphics();
+            const center = SPRITE_CONFIG.CENTER;
+            const size = SPRITE_CONFIG.TEXTURE_SIZE;
 
-        // Draw gold coin
-        const radius = size * 0.42; // 42% of texture size
-        graphics.fillStyle(0xffd700, 1); // Gold
-        graphics.fillCircle(center, center, radius);
-        graphics.lineStyle(2, 0xffa500, 1); // Orange border
-        graphics.strokeCircle(center, center, radius);
+            const radius = size * 0.42;
+            graphics.fillStyle(0xffd700, 1);
+            graphics.fillCircle(center, center, radius);
+            graphics.lineStyle(2, 0xffa500, 1);
+            graphics.strokeCircle(center, center, radius);
 
-        // Add shine effect
-        graphics.fillStyle(0xffffff, 0.5);
-        graphics.fillCircle(center - 3, center - 3, 3);
+            graphics.fillStyle(0xffffff, 0.5);
+            graphics.fillCircle(center - 3, center - 3, 3);
 
-        graphics.generateTexture('coin_texture', size, size);
-        graphics.destroy();
+            graphics.generateTexture('coin_texture', size, size);
+            graphics.destroy();
 
-        this.sprite = this.scene.add.sprite(this.x, this.y, 'coin_texture');
-        this.sprite.setOrigin(0.5, 0.5);
+            this.sprite = this.scene.add.sprite(this.x, this.y, 'coin_texture');
+            this.sprite.setOrigin(0.5, 0.5);
+        }
     }
 
     /**
      * Create health sprite (red heart)
      */
     createHealthSprite() {
-        const graphics = this.scene.add.graphics();
-        const center = SPRITE_CONFIG.CENTER;
-        const size = SPRITE_CONFIG.TEXTURE_SIZE;
+        // Use the health texture created in BootScene
+        if (this.scene.textures.exists('health')) {
+            this.sprite = this.scene.add.sprite(this.x, this.y, 'health');
+            this.sprite.setOrigin(0.5, 0.5);
+            this.sprite.setDisplaySize(SPRITE_CONFIG.TEXTURE_SIZE, SPRITE_CONFIG.TEXTURE_SIZE);
+        } else {
+            // Fallback to procedural generation
+            const graphics = this.scene.add.graphics();
+            const center = SPRITE_CONFIG.CENTER;
+            const size = SPRITE_CONFIG.TEXTURE_SIZE;
 
-        // Draw heart shape (proportional to texture size)
-        const heartRadius = size * 0.25; // 25% of texture size
-        const heartWidth = size * 0.42; // 42% of texture size
+            const heartRadius = size * 0.25;
+            const heartWidth = size * 0.42;
 
-        graphics.fillStyle(0xff0000, 1); // Red
-        graphics.fillCircle(center - heartRadius, center - 2, heartRadius);
-        graphics.fillCircle(center + heartRadius, center - 2, heartRadius);
-        graphics.beginPath();
-        graphics.moveTo(center - heartWidth, center);
-        graphics.lineTo(center, center + heartWidth);
-        graphics.lineTo(center + heartWidth, center);
-        graphics.closePath();
-        graphics.fillPath();
+            graphics.fillStyle(0xff0000, 1);
+            graphics.fillCircle(center - heartRadius, center - 2, heartRadius);
+            graphics.fillCircle(center + heartRadius, center - 2, heartRadius);
+            graphics.beginPath();
+            graphics.moveTo(center - heartWidth, center);
+            graphics.lineTo(center, center + heartWidth);
+            graphics.lineTo(center + heartWidth, center);
+            graphics.closePath();
+            graphics.fillPath();
 
-        // Add highlight
-        graphics.fillStyle(0xff6666, 1);
-        graphics.fillCircle(center - 3, center - 4, 2);
+            graphics.fillStyle(0xff6666, 1);
+            graphics.fillCircle(center - 3, center - 4, 2);
 
-        graphics.generateTexture('health_texture', size, size);
-        graphics.destroy();
+            graphics.generateTexture('health_texture', size, size);
+            graphics.destroy();
 
-        this.sprite = this.scene.add.sprite(this.x, this.y, 'health_texture');
-        this.sprite.setOrigin(0.5, 0.5);
+            this.sprite = this.scene.add.sprite(this.x, this.y, 'health_texture');
+            this.sprite.setOrigin(0.5, 0.5);
+        }
     }
 
     /**
      * Create weapon sprite (sword)
      */
     createWeaponSprite() {
-        const graphics = this.scene.add.graphics();
-        const center = SPRITE_CONFIG.CENTER;
-        const size = SPRITE_CONFIG.TEXTURE_SIZE;
+        // Use the weapon texture created in BootScene
+        if (this.scene.textures.exists('weapon')) {
+            this.sprite = this.scene.add.sprite(this.x, this.y, 'weapon');
+            this.sprite.setOrigin(0.5, 0.5);
+            this.sprite.setDisplaySize(SPRITE_CONFIG.TEXTURE_SIZE, SPRITE_CONFIG.TEXTURE_SIZE);
+        } else {
+            // Fallback to procedural generation
+            const graphics = this.scene.add.graphics();
+            const center = SPRITE_CONFIG.CENTER;
+            const size = SPRITE_CONFIG.TEXTURE_SIZE;
 
-        // Proportional dimensions
-        const bladeWidth = size * 0.17;
-        const bladeHeight = size * 0.5;
-        const guardWidth = size * 0.5;
-        const guardHeight = size * 0.08;
-        const handleWidth = size * 0.125;
-        const handleHeight = size * 0.25;
+            const bladeWidth = size * 0.17;
+            const bladeHeight = size * 0.5;
+            const guardWidth = size * 0.5;
+            const guardHeight = size * 0.08;
+            const handleWidth = size * 0.125;
+            const handleHeight = size * 0.25;
 
-        // Draw sword blade
-        graphics.fillStyle(0xc0c0c0, 1); // Silver blade
-        graphics.fillRect(
-            center - bladeWidth / 2,
-            center - bladeHeight * 0.67,
-            bladeWidth,
-            bladeHeight
-        );
+            graphics.fillStyle(0xc0c0c0, 1);
+            graphics.fillRect(
+                center - bladeWidth / 2,
+                center - bladeHeight * 0.67,
+                bladeWidth,
+                bladeHeight
+            );
 
-        // Crossguard
-        graphics.fillStyle(0x8b4513, 1); // Brown
-        graphics.fillRect(
-            center - guardWidth / 2,
-            center + bladeHeight * 0.33,
-            guardWidth,
-            guardHeight
-        );
+            graphics.fillStyle(0x8b4513, 1);
+            graphics.fillRect(
+                center - guardWidth / 2,
+                center + bladeHeight * 0.33,
+                guardWidth,
+                guardHeight
+            );
 
-        // Handle
-        graphics.fillStyle(0x654321, 1); // Dark brown
-        graphics.fillRect(
-            center - handleWidth / 2,
-            center + bladeHeight * 0.5,
-            handleWidth,
-            handleHeight
-        );
+            graphics.fillStyle(0x654321, 1);
+            graphics.fillRect(
+                center - handleWidth / 2,
+                center + bladeHeight * 0.5,
+                handleWidth,
+                handleHeight
+            );
 
-        // Pommel
-        graphics.fillStyle(0xffd700, 1); // Gold
-        graphics.fillCircle(center, center + size * 0.5, 2);
+            graphics.fillStyle(0xffd700, 1);
+            graphics.fillCircle(center, center + size * 0.5, 2);
 
-        graphics.generateTexture('weapon_texture', size, size);
-        graphics.destroy();
+            graphics.generateTexture('weapon_texture', size, size);
+            graphics.destroy();
 
-        this.sprite = this.scene.add.sprite(this.x, this.y, 'weapon_texture');
-        this.sprite.setOrigin(0.5, 0.5);
+            this.sprite = this.scene.add.sprite(this.x, this.y, 'weapon_texture');
+            this.sprite.setOrigin(0.5, 0.5);
+        }
     }
 
     /**
      * Create armor sprite (shield)
      */
     createArmorSprite() {
-        const graphics = this.scene.add.graphics();
-        const center = SPRITE_CONFIG.CENTER;
-        const size = SPRITE_CONFIG.TEXTURE_SIZE;
+        // Use the armor texture created in BootScene
+        if (this.scene.textures.exists('armor')) {
+            this.sprite = this.scene.add.sprite(this.x, this.y, 'armor');
+            this.sprite.setOrigin(0.5, 0.5);
+            this.sprite.setDisplaySize(SPRITE_CONFIG.TEXTURE_SIZE, SPRITE_CONFIG.TEXTURE_SIZE);
+        } else {
+            // Fallback to procedural generation
+            const graphics = this.scene.add.graphics();
+            const center = SPRITE_CONFIG.CENTER;
+            const size = SPRITE_CONFIG.TEXTURE_SIZE;
 
-        // Proportional dimensions
-        const shieldWidth = size * 0.67;
-        const shieldHeight = size * 0.92;
+            const shieldWidth = size * 0.67;
+            const shieldHeight = size * 0.92;
 
-        // Draw shield
-        graphics.fillStyle(0x4169e1, 1); // Royal blue
-        graphics.beginPath();
-        graphics.moveTo(center, center - shieldHeight * 0.45);
-        graphics.lineTo(center + shieldWidth * 0.4, center - shieldHeight * 0.27);
-        graphics.lineTo(center + shieldWidth * 0.4, center + shieldHeight * 0.27);
-        graphics.lineTo(center, center + shieldHeight * 0.55);
-        graphics.lineTo(center - shieldWidth * 0.4, center + shieldHeight * 0.27);
-        graphics.lineTo(center - shieldWidth * 0.4, center - shieldHeight * 0.27);
-        graphics.closePath();
-        graphics.fillPath();
+            graphics.fillStyle(0x4169e1, 1);
+            graphics.beginPath();
+            graphics.moveTo(center, center - shieldHeight * 0.45);
+            graphics.lineTo(center + shieldWidth * 0.4, center - shieldHeight * 0.27);
+            graphics.lineTo(center + shieldWidth * 0.4, center + shieldHeight * 0.27);
+            graphics.lineTo(center, center + shieldHeight * 0.55);
+            graphics.lineTo(center - shieldWidth * 0.4, center + shieldHeight * 0.27);
+            graphics.lineTo(center - shieldWidth * 0.4, center - shieldHeight * 0.27);
+            graphics.closePath();
+            graphics.fillPath();
 
-        // Border
-        graphics.lineStyle(2, 0xc0c0c0, 1); // Silver
-        graphics.strokePath();
+            graphics.lineStyle(2, 0xc0c0c0, 1);
+            graphics.strokePath();
 
-        // Emblem
-        graphics.fillStyle(0xffd700, 1); // Gold
-        graphics.fillCircle(center, center, 3);
+            graphics.fillStyle(0xffd700, 1);
+            graphics.fillCircle(center, center, 3);
 
-        graphics.generateTexture('armor_texture', size, size);
-        graphics.destroy();
+            graphics.generateTexture('armor_texture', size, size);
+            graphics.destroy();
 
-        this.sprite = this.scene.add.sprite(this.x, this.y, 'armor_texture');
-        this.sprite.setOrigin(0.5, 0.5);
+            this.sprite = this.scene.add.sprite(this.x, this.y, 'armor_texture');
+            this.sprite.setOrigin(0.5, 0.5);
+        }
     }
 
     /**
