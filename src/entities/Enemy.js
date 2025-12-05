@@ -12,8 +12,8 @@ export class Enemy extends Entity {
 
         // Health system
         this.health = {
-            current: config.health || 3,
-            max: config.health || 3,
+            current: config.health || 4,
+            max: config.health || 4,
         };
 
         // Attack properties
@@ -58,6 +58,65 @@ export class Enemy extends Entity {
             if (this.scene.animationManager) {
                 this.scene.animationManager.initializeEntity(this, 'idle');
             }
+
+            // Create health bar
+            this.createHealthBar();
+
+            // Add debug label showing enemy type
+            this.label = this.scene.add.text(this.x, this.y - 20, this.enemyType, {
+                fontSize: '10px',
+                fill: '#ff0000',
+                fontFamily: 'Arial',
+                backgroundColor: '#000000',
+                padding: { x: 2, y: 1 },
+            });
+            this.label.setOrigin(0.5);
+            this.label.setDepth(6);
+        }
+    }
+
+    /**
+     * Create health bar above enemy
+     */
+    createHealthBar() {
+        const barWidth = 40;
+        const barHeight = 4;
+        const barY = this.y - 35; // Above the label
+
+        // Background (red)
+        this.healthBarBg = this.scene.add.rectangle(this.x, barY, barWidth, barHeight, 0xff0000);
+        this.healthBarBg.setOrigin(0.5);
+        this.healthBarBg.setDepth(6);
+
+        // Foreground (green) - shows current health
+        this.healthBarFg = this.scene.add.rectangle(this.x, barY, barWidth, barHeight, 0x00ff00);
+        this.healthBarFg.setOrigin(0.5);
+        this.healthBarFg.setDepth(7);
+
+        // Update health bar to reflect current health
+        this.updateHealthBar();
+    }
+
+    /**
+     * Update health bar to reflect current health
+     */
+    updateHealthBar() {
+        if (!this.healthBarFg || !this.healthBarBg) return;
+
+        const barWidth = 40;
+        const healthPercent = this.health.current / this.health.max;
+        const currentWidth = barWidth * healthPercent;
+
+        // Update foreground width
+        this.healthBarFg.width = currentWidth;
+
+        // Change color based on health percentage
+        if (healthPercent > 0.6) {
+            this.healthBarFg.setFillStyle(0x00ff00); // Green
+        } else if (healthPercent > 0.3) {
+            this.healthBarFg.setFillStyle(0xffff00); // Yellow
+        } else {
+            this.healthBarFg.setFillStyle(0xff8800); // Orange
         }
     }
 
@@ -103,6 +162,9 @@ export class Enemy extends Entity {
 
         this.health.current = Math.max(0, this.health.current - amount);
 
+        // Update health bar
+        this.updateHealthBar();
+
         if (this.health.current === 0) {
             this.defeat();
         }
@@ -129,10 +191,21 @@ export class Enemy extends Entity {
             this.scene.animationManager.setState(this, 'defeat');
         }
 
-        // Fade out sprite
+        // Fade out sprite, label, and health bars
         if (this.sprite && this.scene.tweens) {
+            const targets = [this.sprite];
+            if (this.label) {
+                targets.push(this.label);
+            }
+            if (this.healthBarBg) {
+                targets.push(this.healthBarBg);
+            }
+            if (this.healthBarFg) {
+                targets.push(this.healthBarFg);
+            }
+
             this.scene.tweens.add({
-                targets: this.sprite,
+                targets: targets,
                 alpha: 0,
                 scale: 1.5,
                 duration: 500,
@@ -187,6 +260,18 @@ export class Enemy extends Entity {
             this.ai();
             this.updateAnimationState();
         }
+
+        // Update health bar position
+        if (this.healthBarBg && this.healthBarFg) {
+            const barY = this.y - 35;
+            this.healthBarBg.setPosition(this.x, barY);
+            this.healthBarFg.setPosition(this.x, barY);
+        }
+
+        // Update label position
+        if (this.label) {
+            this.label.setPosition(this.x, this.y - 20);
+        }
     }
 
     /**
@@ -210,6 +295,30 @@ export class Enemy extends Entity {
 
         // Update animation state
         this.scene.animationManager.setState(this, animState);
+    }
+
+    /**
+     * Destroy the enemy and clean up resources
+     */
+    destroy() {
+        // Destroy health bars
+        if (this.healthBarBg) {
+            this.healthBarBg.destroy();
+            this.healthBarBg = null;
+        }
+        if (this.healthBarFg) {
+            this.healthBarFg.destroy();
+            this.healthBarFg = null;
+        }
+
+        // Destroy label
+        if (this.label) {
+            this.label.destroy();
+            this.label = null;
+        }
+
+        // Call parent destroy
+        super.destroy();
     }
 }
 

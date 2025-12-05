@@ -2,6 +2,7 @@
 
 import { Player } from '../entities/Player.js';
 import { Enemy } from '../entities/Enemy.js';
+import { Boss } from '../entities/Boss.js';
 import { Obstacle } from '../entities/Obstacle.js';
 import { Collectible } from '../entities/Collectible.js';
 import { PushableBlock } from '../entities/PushableBlock.js';
@@ -44,6 +45,9 @@ export class DungeonScene extends Phaser.Scene {
 
         // Room completion tracking
         this.roomObjectiveComplete = false;
+
+        // Transition state
+        this.isTransitioning = false;
 
         // Configuration
         this.ROOM_WIDTH = 800;
@@ -157,8 +161,9 @@ export class DungeonScene extends Phaser.Scene {
     /**
      * Load a room from dungeon configuration
      * @param {number} roomId - Room ID to load
+     * @param {string} entryDirection - Direction player entered from (optional)
      */
-    loadRoom(roomId) {
+    loadRoom(roomId, entryDirection = null) {
         // Find room data
         this.currentRoomData = this.dungeonData.rooms.find(room => room.id === roomId);
 
@@ -185,6 +190,60 @@ export class DungeonScene extends Phaser.Scene {
         this.renderPushableBlocks();
         this.renderSwitches();
         this.renderBoss();
+
+        // Position player based on entry direction
+        if (this.player) {
+            this.positionPlayerAtEntryDoor(entryDirection);
+        }
+    }
+
+    /**
+     * Position player at the appropriate door based on entry direction
+     * @param {string} entryDirection - Direction player entered from (north, south, east, west)
+     */
+    positionPlayerAtEntryDoor(entryDirection) {
+        const { width, height } = this.cameras.main;
+        const doorOffset = 80; // Distance from edge to place player
+
+        // Map entry direction to opposite exit direction
+        const oppositeDirection = {
+            north: 'south',
+            south: 'north',
+            east: 'west',
+            west: 'east',
+        };
+
+        // Get the opposite direction (where player should appear)
+        const exitDirection = entryDirection ? oppositeDirection[entryDirection] : null;
+
+        // Position player at the opposite door
+        if (exitDirection === 'north') {
+            // Entered from south, appear at north door
+            this.player.x = width / 2;
+            this.player.y = doorOffset;
+        } else if (exitDirection === 'south') {
+            // Entered from north, appear at south door
+            this.player.x = width / 2;
+            this.player.y = height - doorOffset;
+        } else if (exitDirection === 'east') {
+            // Entered from west, appear at east door
+            this.player.x = width - doorOffset;
+            this.player.y = height / 2;
+        } else if (exitDirection === 'west') {
+            // Entered from east, appear at west door
+            this.player.x = doorOffset;
+            this.player.y = height / 2;
+        } else {
+            // No entry direction specified (first room), center player
+            this.player.x = width / 2;
+            this.player.y = height / 2;
+        }
+
+        // Update sprite position
+        if (this.player.sprite) {
+            this.player.sprite.x = this.player.x;
+            this.player.sprite.y = this.player.y;
+        }
     }
 
     /**
@@ -488,25 +547,26 @@ export class DungeonScene extends Phaser.Scene {
 
     /**
      * Render boss if this is a boss room
+     * Validates: Requirements 6.5, 7.1
      */
     renderBoss() {
         if (!this.currentRoomData.isBossRoom || !this.currentRoomData.boss) return;
 
         const bossData = this.currentRoomData.boss;
 
-        // Create boss as a special enemy with enhanced stats
-        this.boss = new Enemy(this, bossData.x, bossData.y, bossData.type, {
+        // Create boss with Boss class (enhanced stats and unique attack patterns)
+        this.boss = new Boss(this, bossData.x, bossData.y, bossData.type, {
             health: bossData.health,
             damage: bossData.damage,
-            speed: 60,
-            xp: bossData.xp,
+            speed: bossData.speed || 60,
+            attackCooldown: bossData.attackCooldown || 800,
+            xpReward: bossData.xp,
+            attackPattern: bossData.attackPattern || 'aggressive',
         });
-        this.boss.isBoss = true;
-        this.boss.attackPattern = bossData.attackPattern;
         this.boss.createSprite();
         this.boss.setTarget(this.player);
 
-        console.log(`Boss spawned: ${bossData.type}`);
+        console.log(`Boss spawned: ${bossData.type} with ${this.boss.attackPattern} pattern`);
     }
 
     /**
@@ -586,7 +646,8 @@ export class DungeonScene extends Phaser.Scene {
     }
 
     /**
-     * Handle boss defeat
+     * Handle boss defeat and dungeon completion
+     * Validates: Requirements 7.2, 7.3
      */
     handleBossDefeat() {
         console.log('Boss defeated!');
@@ -594,22 +655,26 @@ export class DungeonScene extends Phaser.Scene {
         // Award XP
         this.player.addXP(this.boss.getXPReward());
 
+        // Mark dungeon as complete
+        this.markDungeonComplete();
+
         // Increase max health (Property 11, Requirements 7.2)
         const healthIncrease = 2;
         this.player.health.max += healthIncrease;
         this.player.health.current = this.player.health.max;
 
-        // Play completion sound
+        // Play completion sound (Requirements 7.3)
         if (this.sound && this.sound.get && this.sound.get('dungeon_complete')) {
             this.sound.play('dungeon_complete');
         }
 
-        // Display completion message
+        // Display completion message (Requirements 7.3)
         const { width, height } = this.cameras.main;
+        const completedDungeons = this.getCompletedDungeons();
         const message = this.add.text(
             width / 2,
             height / 2,
-            `${this.dungeonData.name} Complete!\nMax Health Increased!\nPress ESC to exit`,
+            `${this.dungeonData.name} Complete!\nMax Health Increased!\nDungeons Completed: ${completedDungeons.length}/4\nPress ESC to exit`,
             {
                 fontSize: '24px',
                 fill: '#00ff00',
@@ -627,6 +692,55 @@ export class DungeonScene extends Phaser.Scene {
 
         // Mark room objective as complete
         this.roomObjectiveComplete = true;
+    }
+
+    /**
+     * Mark current dungeon as complete and check victory condition
+     * Validates: Requirements 7.4
+     */
+    markDungeonComplete() {
+        // Get completed dungeons from registry
+        const completedDungeons = this.registry.get('completedDungeons') || [];
+
+        // Add current dungeon if not already completed
+        if (!completedDungeons.includes(this.dungeonId)) {
+            completedDungeons.push(this.dungeonId);
+            this.registry.set('completedDungeons', completedDungeons);
+            console.log(`Dungeon ${this.dungeonId} marked as complete`);
+
+            // Check victory condition (all 4 dungeons complete)
+            if (completedDungeons.length >= 4) {
+                this.triggerVictory();
+            }
+        }
+    }
+
+    /**
+     * Trigger victory screen when all dungeons are complete
+     * Validates: Requirements 7.4
+     */
+    triggerVictory() {
+        console.log('All dungeons complete! Victory!');
+
+        // Save player state
+        this.registry.set('playerState', {
+            health: this.player.health,
+            inventory: this.player.inventory,
+            stats: this.player.stats,
+        });
+
+        // Transition to victory screen after a short delay
+        this.time.delayedCall(3000, () => {
+            this.scene.start('GameOverScene', { victory: true });
+        });
+    }
+
+    /**
+     * Get list of completed dungeons
+     * @returns {Array} Array of completed dungeon IDs
+     */
+    getCompletedDungeons() {
+        return this.registry.get('completedDungeons') || [];
     }
 
     /**
@@ -940,7 +1054,7 @@ export class DungeonScene extends Phaser.Scene {
      * Check if player is colliding with a door
      */
     checkDoorCollision() {
-        if (!this.player) return;
+        if (!this.player || this.isTransitioning) return;
 
         const playerHitbox = this.player.getHitbox();
 
@@ -959,7 +1073,7 @@ export class DungeonScene extends Phaser.Scene {
 
             // Check AABB collision
             if (this.collisionSystem.checkAABB(playerHitbox, doorHitbox)) {
-                this.transitionToRoom(door.leadsTo);
+                this.transitionToRoom(door.leadsTo, door.direction);
                 return;
             }
         }
@@ -968,19 +1082,30 @@ export class DungeonScene extends Phaser.Scene {
     /**
      * Transition to a new room
      * @param {number} roomId - ID of room to transition to
+     * @param {string} entryDirection - Direction player entered from (north, south, east, west)
      */
-    transitionToRoom(roomId) {
-        console.log(`Transitioning to room ${roomId}`);
+    transitionToRoom(roomId, entryDirection) {
+        if (this.isTransitioning) return;
+
+        console.log(`Transitioning to room ${roomId} from ${entryDirection} door`);
+
+        // Set transition flag to prevent multiple transitions
+        this.isTransitioning = true;
 
         // Fade out effect
         this.cameras.main.fadeOut(300, 0, 0, 0);
 
         this.cameras.main.once('camerafadeoutcomplete', () => {
-            // Load new room
-            this.loadRoom(roomId);
+            // Load new room with entry direction
+            this.loadRoom(roomId, entryDirection);
 
             // Fade in
             this.cameras.main.fadeIn(300, 0, 0, 0);
+
+            // Clear transition flag after fade in completes
+            this.cameras.main.once('camerafadeincomplete', () => {
+                this.isTransitioning = false;
+            });
         });
     }
 

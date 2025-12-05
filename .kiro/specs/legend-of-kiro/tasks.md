@@ -365,25 +365,25 @@
 - [x]   14. Checkpoint - Ensure all tests pass
     - Ensure all tests pass, ask the user if questions arise.
 
-- [ ]   15. Implement boss system
-    - [ ] 15.1 Create Boss class
+- [x]   15. Implement boss system
+    - [x] 15.1 Create Boss class
         - Extend Enemy with enhanced stats
         - Implement unique attack patterns
         - _Requirements: 7.1, 7.5_
 
-    - [ ] 15.2 Implement boss spawning
+    - [x] 15.2 Implement boss spawning
         - Detect final room of dungeon
         - Spawn boss enemy
         - _Requirements: 6.5, 7.1_
 
-    - [ ] 15.3 Implement boss defeat and dungeon completion
+    - [x] 15.3 Implement boss defeat and dungeon completion
         - Detect boss defeat
         - Mark dungeon as complete
         - Increase max health
         - Play completion sound and message
         - _Requirements: 7.2, 7.3_
 
-    - [ ] 15.4 Implement victory condition
+    - [x] 15.4 Implement victory condition
         - Track completed dungeons
         - Display victory screen when all 4 dungeons complete
         - _Requirements: 7.4_

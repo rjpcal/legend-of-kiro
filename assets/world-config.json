@@ -455,7 +455,7 @@
                         "type": "manor_lord",
                         "x": 400,
                         "y": 300,
-                        "health": 100,
+                        "health": 20,
                         "damage": 15,
                         "xp": 100,
                         "attackPattern": "charge_and_swing"
@@ -498,7 +498,7 @@
                         "type": "bone_king",
                         "x": 400,
                         "y": 300,
-                        "health": 120,
+                        "health": 20,
                         "damage": 18,
                         "xp": 120,
                         "attackPattern": "summon_minions"
@@ -541,7 +541,7 @@
                         "type": "phantom_general",
                         "x": 400,
                         "y": 300,
-                        "health": 140,
+                        "health": 20,
                         "damage": 20,
                         "xp": 140,
                         "attackPattern": "teleport_strike"
@@ -609,7 +609,7 @@
                         "type": "shadow_overlord",
                         "x": 400,
                         "y": 300,
-                        "health": 160,
+                        "health": 20,
                         "damage": 25,
                         "xp": 160,
                         "attackPattern": "shadow_wave"
@@ -683,7 +683,7 @@
     "enemyTypes": {
         "zombie": {
             "name": "Zombie",
-            "health": 30,
+            "health": 3,
             "damage": 5,
             "speed": 50,
             "xp": 10,
@@ -691,7 +691,7 @@
         },
         "skeleton": {
             "name": "Skeleton",
-            "health": 40,
+            "health": 4,
             "damage": 8,
             "speed": 70,
             "xp": 15,
@@ -699,7 +699,7 @@
         },
         "ghoul": {
             "name": "Ghoul",
-            "health": 50,
+            "health": 5,
             "damage": 12,
             "speed": 60,
             "xp": 20,
@@ -707,7 +707,7 @@
         },
         "spirit": {
             "name": "Spirit",
-            "health": 60,
+            "health": 6,
             "damage": 15,
             "speed": 90,
             "xp": 25,

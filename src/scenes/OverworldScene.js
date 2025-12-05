@@ -63,6 +63,26 @@ export class OverworldScene extends Phaser.Scene {
 
         // Create player at center of screen
         this.player = new Player(this, width / 2, height / 2);
+
+        // Restore player state from registry if it exists
+        const playerState = this.registry.get('playerState');
+        if (playerState) {
+            this.player.health = playerState.health;
+            this.player.inventory = playerState.inventory;
+            this.player.stats = playerState.stats;
+
+            // Restore screen position if returning from dungeon
+            if (playerState.returnScreen) {
+                this.currentScreen.x = playerState.returnScreen.x;
+                this.currentScreen.y = playerState.returnScreen.y;
+                console.log(
+                    `Returning to screen (${this.currentScreen.x}, ${this.currentScreen.y})`
+                );
+            }
+
+            console.log('Restored player state from registry');
+        }
+
         this.player.createSprite();
 
         // Initialize player in animation manager
@@ -108,9 +128,15 @@ export class OverworldScene extends Phaser.Scene {
         // Load initial screen from configuration
         this.loadScreen(this.currentScreen.x, this.currentScreen.y);
 
-        // Create HUD
-        this.hud = new HUD(this);
+        // Create HUD with debug mode enabled
+        this.hud = new HUD(this, {
+            debugMode: true, // Enable debug mode for development
+            onMinimapTeleport: (gridX, gridY) => this.handleMinimapTeleport(gridX, gridY),
+        });
         this.hud.create(this.player);
+
+        // Update minimap to show current position
+        this.hud.updateMinimapPosition(this.currentScreen.x, this.currentScreen.y);
 
         // Mark starting position as visited on minimap
         this.hud.markMinimapVisited(this.currentScreen.x, this.currentScreen.y);
@@ -387,6 +413,57 @@ export class OverworldScene extends Phaser.Scene {
             if (screen.dungeonEntrance) {
                 this.hud.markMinimapDungeon(screen.x, screen.y);
             }
+        });
+    }
+
+    /**
+     * Handle minimap teleport in debug mode
+     * @param {number} gridX - Target grid X coordinate
+     * @param {number} gridY - Target grid Y coordinate
+     */
+    handleMinimapTeleport(gridX, gridY) {
+        if (this.isTransitioning) return;
+
+        console.log(`[DEBUG] Teleporting to screen (${gridX}, ${gridY})`);
+
+        // Check if target screen exists
+        const targetScreen = this.worldConfig.getOverworldScreen(gridX, gridY);
+        if (!targetScreen) {
+            console.warn(`[DEBUG] No screen at (${gridX}, ${gridY})`);
+            return;
+        }
+
+        // Set transition flag
+        this.isTransitioning = true;
+
+        // Fade out
+        this.cameras.main.fadeOut(200, 0, 0, 0);
+
+        this.cameras.main.once('camerafadeoutcomplete', () => {
+            // Load new screen
+            this.loadScreen(gridX, gridY);
+
+            // Update minimap
+            if (this.hud) {
+                this.hud.updateMinimapPosition(gridX, gridY);
+                this.hud.markMinimapVisited(gridX, gridY);
+            }
+
+            // Center player on new screen
+            const { width, height } = this.cameras.main;
+            this.player.x = width / 2;
+            this.player.y = height / 2;
+            if (this.player.sprite) {
+                this.player.sprite.x = this.player.x;
+                this.player.sprite.y = this.player.y;
+            }
+
+            // Fade in
+            this.cameras.main.fadeIn(200, 0, 0, 0);
+
+            this.cameras.main.once('camerafadeincomplete', () => {
+                this.isTransitioning = false;
+            });
         });
     }
 

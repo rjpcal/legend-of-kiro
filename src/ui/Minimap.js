@@ -2,7 +2,7 @@
 // Displays 6x6 grid representation and highlights current screen position
 
 export class Minimap {
-    constructor(scene, x, y) {
+    constructor(scene, x, y, options = {}) {
         this.scene = scene;
         this.x = x;
         this.y = y;
@@ -21,6 +21,10 @@ export class Minimap {
         this.container = null;
         this.cells = [];
         this.highlightCell = null;
+
+        // Debug mode
+        this.debugMode = options.debugMode || false;
+        this.onTeleport = options.onTeleport || null;
     }
 
     /**
@@ -53,6 +57,35 @@ export class Minimap {
                 cell.setStrokeStyle(1, 0x666666);
                 this.container.add(cell);
 
+                // Make cells interactive in debug mode
+                if (this.debugMode) {
+                    cell.setInteractive({ useHandCursor: true });
+
+                    // Store grid position on the cell
+                    cell.setData('gridX', col);
+                    cell.setData('gridY', row);
+
+                    // Hover effect
+                    cell.on('pointerover', () => {
+                        if (col !== this.currentX || row !== this.currentY) {
+                            cell.setStrokeStyle(2, 0x00ff00);
+                        }
+                    });
+
+                    cell.on('pointerout', () => {
+                        if (col !== this.currentX || row !== this.currentY) {
+                            cell.setStrokeStyle(1, 0x666666);
+                        }
+                    });
+
+                    // Click to teleport
+                    cell.on('pointerdown', () => {
+                        if (this.onTeleport) {
+                            this.onTeleport(col, row);
+                        }
+                    });
+                }
+
                 this.cells.push({
                     rect: cell,
                     gridX: col,
@@ -71,6 +104,18 @@ export class Minimap {
         );
         this.highlightCell.setStrokeStyle(2, 0x9a3ee0);
         this.container.add(this.highlightCell);
+
+        // Add debug mode indicator
+        if (this.debugMode) {
+            const debugLabel = this.scene.add.text(0, -15, 'DEBUG', {
+                fontSize: '8px',
+                fill: '#00ff00',
+                fontFamily: 'Arial',
+                fontStyle: 'bold',
+            });
+            debugLabel.setOrigin(0, 1);
+            this.container.add(debugLabel);
+        }
 
         // Update highlight position
         this.updateHighlight();

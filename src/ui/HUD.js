@@ -7,7 +7,7 @@ import { XPBar } from './XPBar.js';
 import { Minimap } from './Minimap.js';
 
 export class HUD {
-    constructor(scene) {
+    constructor(scene, options = {}) {
         this.scene = scene;
 
         // UI components
@@ -15,6 +15,10 @@ export class HUD {
         this.coinCounter = null;
         this.xpBar = null;
         this.minimap = null;
+
+        // Options
+        this.debugMode = options.debugMode || false;
+        this.onMinimapTeleport = options.onMinimapTeleport || null;
     }
 
     /**
@@ -37,7 +41,10 @@ export class HUD {
         this.xpBar.create(player.stats.xp, player.stats.level);
 
         // Create minimap (top right, below coin counter)
-        this.minimap = new Minimap(this.scene, width - 120, 60);
+        this.minimap = new Minimap(this.scene, width - 120, 60, {
+            debugMode: this.debugMode,
+            onTeleport: this.onMinimapTeleport,
+        });
         this.minimap.create(0, 0); // Default position, will be updated by scene
     }
 
