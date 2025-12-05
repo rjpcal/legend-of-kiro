@@ -134,6 +134,24 @@ export class Minimap {
     }
 
     /**
+     * Show the minimap
+     */
+    show() {
+        if (this.container) {
+            this.container.setVisible(true);
+        }
+    }
+
+    /**
+     * Hide the minimap
+     */
+    hide() {
+        if (this.container) {
+            this.container.setVisible(false);
+        }
+    }
+
+    /**
      * Destroy the minimap
      */
     destroy() {

@@ -93,6 +93,24 @@ export class HUD {
     }
 
     /**
+     * Show the minimap
+     */
+    showMinimap() {
+        if (this.minimap) {
+            this.minimap.show();
+        }
+    }
+
+    /**
+     * Hide the minimap
+     */
+    hideMinimap() {
+        if (this.minimap) {
+            this.minimap.hide();
+        }
+    }
+
+    /**
      * Destroy all HUD components
      */
     destroy() {

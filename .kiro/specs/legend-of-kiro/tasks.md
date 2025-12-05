@@ -314,30 +314,30 @@
         - Test dungeon entrance detection
         - _Requirements: 5.1, 5.4_
 
-- [ ]   13. Implement dungeon system
-    - [ ] 13.1 Create dungeon scene
+- [x]   13. Implement dungeon system
+    - [x] 13.1 Create dungeon scene
         - Load dungeon rooms from configuration
         - Render current room with walls and doors
         - Place enemies and puzzle elements
         - _Requirements: 6.1, 11.3_
 
-    - [ ] 13.2 Implement room transition
+    - [x] 13.2 Implement room transition
         - Detect player reaching unlocked door
         - Transition to adjacent room
         - _Requirements: 6.2_
 
-    - [ ] 13.3 Implement room completion logic
+    - [x] 13.3 Implement room completion logic
         - Track room objectives (defeat all enemies, activate switches)
         - Unlock doors when objectives complete
         - _Requirements: 6.2_
 
-    - [ ] 13.4 Implement pushable blocks
+    - [x] 13.4 Implement pushable blocks
         - Create pushable block entity
         - Implement push physics
         - Detect collision with obstacles
         - _Requirements: 6.3_
 
-    - [ ] 13.5 Implement switch puzzle mechanics
+    - [x] 13.5 Implement switch puzzle mechanics
         - Create switch entity
         - Detect block on switch
         - Activate switch and trigger mechanism
