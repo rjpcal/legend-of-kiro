@@ -620,20 +620,20 @@
 - [x]   24. Final Checkpoint - Ensure all tests pass
     - Ensure all tests pass, ask the user if questions arise.
 
-- [ ]   25. Create main menu and game over screens
-    - [ ] 25.1 Create main menu scene
+- [x]   25. Create main menu and game over screens
+    - [x] 25.1 Create main menu scene
         - Add start game button
         - Add load game button
         - Add settings (music/sfx toggle)
         - _Requirements: 10.4_
 
-    - [ ] 25.2 Create game over scene
+    - [x] 25.2 Create game over scene
         - Display on death
         - Show stats (coins, level, dungeons completed)
         - Add restart and main menu buttons
         - _Requirements: 3.4_
 
-    - [ ] 25.3 Create victory scene
+    - [x] 25.3 Create victory scene
         - Display when all dungeons complete
         - Show final stats
         - Add play again button
