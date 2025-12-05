@@ -113,23 +113,32 @@ export class ParticleSystem {
             // Calculate random angle for particle direction
             const angle = (Math.PI * 2 * i) / config.count + (Math.random() - 0.5) * 0.5;
 
-            // Calculate velocity
-            const speed = config.speed * (0.7 + Math.random() * 0.6); // Vary speed
+            // Calculate velocity with more variation
+            const speed = config.speed * (0.5 + Math.random() * 1.0); // More speed variation
             const vx = Math.cos(angle) * speed;
             const vy = Math.sin(angle) * speed;
 
-            // Create particle sprite
-            const particle = this.scene.add.circle(x, y, config.size, config.color, 1);
+            // Vary particle size slightly
+            const size = config.size * (0.8 + Math.random() * 0.4);
+
+            // Create particle sprite with glow effect
+            const particle = this.scene.add.circle(x, y, size, config.color, 1);
             particle.setDepth(50); // High depth to render above most things
+
+            // Add subtle glow by creating a larger, semi-transparent circle behind
+            const glow = this.scene.add.circle(x, y, size * 1.5, config.color, 0.3);
+            glow.setDepth(49);
 
             // Store particle data
             const particleData = {
                 sprite: particle,
+                glow: glow,
                 vx: vx,
                 vy: vy,
                 lifetime: config.lifetime,
                 createdAt: Date.now(),
                 initialAlpha: 1,
+                rotationSpeed: (Math.random() - 0.5) * 10, // Random rotation
             };
 
             particles.push(particleData);
@@ -161,21 +170,45 @@ export class ParticleSystem {
             particle.sprite.x += particle.vx * deltaSeconds;
             particle.sprite.y += particle.vy * deltaSeconds;
 
+            // Update glow position
+            if (particle.glow) {
+                particle.glow.x = particle.sprite.x;
+                particle.glow.y = particle.sprite.y;
+            }
+
             // Apply gravity (particles fall slightly)
             particle.vy += 200 * deltaSeconds;
 
-            // Fade out particle based on lifetime
-            const lifetimeProgress = age / particle.lifetime;
-            particle.sprite.setAlpha(particle.initialAlpha * (1 - lifetimeProgress));
+            // Apply rotation
+            particle.sprite.rotation += particle.rotationSpeed * deltaSeconds;
+            if (particle.glow) {
+                particle.glow.rotation = particle.sprite.rotation;
+            }
 
-            // Shrink particle slightly
-            const scale = 1 - lifetimeProgress * 0.5;
+            // Fade out particle based on lifetime with smooth curve
+            const lifetimeProgress = age / particle.lifetime;
+            const fadeAlpha = Math.pow(1 - lifetimeProgress, 2); // Quadratic fade
+            particle.sprite.setAlpha(particle.initialAlpha * fadeAlpha);
+
+            // Fade glow faster
+            if (particle.glow) {
+                particle.glow.setAlpha(0.3 * fadeAlpha);
+            }
+
+            // Shrink particle with smooth curve
+            const scale = 1 - lifetimeProgress * 0.6;
             particle.sprite.setScale(scale);
+            if (particle.glow) {
+                particle.glow.setScale(scale * 1.5);
+            }
         }
 
         // Remove expired particles
         for (const particle of particlesToRemove) {
             particle.sprite.destroy();
+            if (particle.glow) {
+                particle.glow.destroy();
+            }
             const index = this.activeParticles.indexOf(particle);
             if (index > -1) {
                 this.activeParticles.splice(index, 1);

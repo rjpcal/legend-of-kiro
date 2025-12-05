@@ -282,9 +282,9 @@ export class Player extends Entity {
      * @returns {number} XP required for next level
      */
     calculateLevelThreshold(level) {
-        // Simple formula: level * 10
-        // This creates thresholds: 10, 20, 30, 40, etc.
-        return level * 10;
+        // Balanced formula: increases progressively
+        // Level 1->2: 50 XP, Level 2->3: 75 XP, Level 3->4: 100 XP, etc.
+        return 25 + level * 25;
     }
 
     /**

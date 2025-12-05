@@ -37,9 +37,9 @@ describe('Progression System', () => {
         });
 
         test('calculateLevelThreshold returns correct threshold', () => {
-            expect(player.calculateLevelThreshold(1)).toBe(10);
-            expect(player.calculateLevelThreshold(2)).toBe(20);
-            expect(player.calculateLevelThreshold(5)).toBe(50);
+            expect(player.calculateLevelThreshold(1)).toBe(50); // 25 + 1*25
+            expect(player.calculateLevelThreshold(2)).toBe(75); // 25 + 2*25
+            expect(player.calculateLevelThreshold(5)).toBe(150); // 25 + 5*25
         });
 
         test('addXP increases XP', () => {
@@ -49,7 +49,7 @@ describe('Progression System', () => {
 
         test('addXP triggers level up when threshold reached', () => {
             const initialMaxHealth = player.health.max;
-            const leveledUp = player.addXP(10); // Reach level 2 threshold
+            const leveledUp = player.addXP(50); // Reach level 2 threshold (25 + 1*25 = 50)
 
             expect(leveledUp).toBe(true);
             expect(player.stats.level).toBe(2);
@@ -71,10 +71,10 @@ describe('Progression System', () => {
         });
 
         test('multiple level ups work correctly', () => {
-            player.addXP(10); // Level 2
+            player.addXP(50); // Level 2 (threshold: 50)
             expect(player.stats.level).toBe(2);
 
-            player.addXP(20); // Level 3 (total 30 XP)
+            player.addXP(75); // Level 3 (total 125 XP, threshold for level 3: 75)
             expect(player.stats.level).toBe(3);
         });
     });
@@ -170,10 +170,10 @@ describe('Progression System', () => {
             // Defeat enemy
             enemy.takeDamage(1);
 
-            // Award XP
-            const leveledUp = player.addXP(enemy.getXPReward());
+            // Award XP (need 50 XP to level up from level 1)
+            const leveledUp = player.addXP(50);
 
-            expect(player.stats.xp).toBe(10);
+            expect(player.stats.xp).toBe(50);
             expect(leveledUp).toBe(true);
             expect(player.stats.level).toBe(initialLevel + 1);
         });

@@ -27,9 +27,9 @@ export class CoinCounter {
         this.container = this.scene.add.container(this.x, this.y);
         this.container.setDepth(1000);
 
-        // Create coin icon (simple circle)
+        // Create coin icon (simple circle with better styling)
         this.coinIcon = this.scene.add.circle(0, 0, 12, 0xffd700); // Gold color
-        this.coinIcon.setStrokeStyle(2, 0xffa500);
+        this.coinIcon.setStrokeStyle(3, 0xffaa00);
         this.container.add(this.coinIcon);
 
         // Create coin text
@@ -64,21 +64,29 @@ export class CoinCounter {
      * Animate coin collection
      */
     animateCollection() {
-        // Scale up and down animation
+        // Scale up and down animation with bounce
         this.scene.tweens.add({
             targets: this.container,
-            scaleX: 1.3,
-            scaleY: 1.3,
-            duration: 100,
+            scaleX: 1.4,
+            scaleY: 1.4,
+            duration: 150,
+            ease: 'Back.easeOut',
             yoyo: true,
         });
 
-        // Flash the coin icon
+        // Flash the coin icon with glow effect
         this.scene.tweens.add({
             targets: this.coinIcon,
-            alpha: 0.5,
-            duration: 100,
+            alpha: 0.4,
+            duration: 150,
             yoyo: true,
+        });
+
+        // Rotate coin for extra flair
+        this.scene.tweens.add({
+            targets: this.coinIcon,
+            angle: 360,
+            duration: 300,
         });
     }
 

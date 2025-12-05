@@ -36,12 +36,12 @@ export class XPBar {
         this.container = this.scene.add.container(this.x, this.y);
         this.container.setDepth(1000);
 
-        // Create background bar
-        this.background = this.scene.add.rectangle(0, 0, this.width, this.height, 0x333333);
-        this.background.setStrokeStyle(2, 0x666666);
+        // Create background bar with dark theme
+        this.background = this.scene.add.rectangle(0, 0, this.width, this.height, 0x1a1a1a);
+        this.background.setStrokeStyle(3, 0x790ecb); // Kiro purple border
         this.container.add(this.background);
 
-        // Create fill bar (progress)
+        // Create fill bar (progress) with gradient effect
         this.fillBar = this.scene.add.rectangle(
             -this.width / 2,
             0,
@@ -81,9 +81,9 @@ export class XPBar {
      * @returns {number} XP required for next level
      */
     calculateLevelThreshold(level) {
-        // Simple formula: level * 10
-        // Can be adjusted for game balance
-        return level * 10;
+        // Balanced formula: increases progressively
+        // Level 1->2: 50 XP, Level 2->3: 75 XP, Level 3->4: 100 XP, etc.
+        return 25 + level * 25;
     }
 
     /**
@@ -129,21 +129,40 @@ export class XPBar {
      * Animate level up
      */
     animateLevelUp() {
-        // Flash the bar
+        // Flash the bar with purple glow
         this.scene.tweens.add({
             targets: this.fillBar,
             alpha: 0.3,
             duration: 150,
             yoyo: true,
-            repeat: 2,
+            repeat: 3,
         });
 
-        // Scale up level text
+        // Scale up level text with bounce
         this.scene.tweens.add({
             targets: this.levelText,
-            scaleX: 1.5,
-            scaleY: 1.5,
+            scaleX: 1.8,
+            scaleY: 1.8,
+            duration: 250,
+            ease: 'Back.easeOut',
+            yoyo: true,
+        });
+
+        // Add color flash to level text
+        this.scene.tweens.add({
+            targets: this.levelText,
+            tint: 0x790ecb,
+            duration: 250,
+            yoyo: true,
+        });
+
+        // Pulse the entire bar
+        this.scene.tweens.add({
+            targets: this.container,
+            scaleX: 1.1,
+            scaleY: 1.1,
             duration: 200,
+            ease: 'Back.easeOut',
             yoyo: true,
         });
     }

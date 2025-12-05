@@ -593,19 +593,19 @@
         - Test corrupted save handling
         - _Requirements: 3.4_
 
-- [ ]   23. Polish and optimization
-    - [ ] 23.1 Optimize collision detection
+- [x]   23. Polish and optimization
+    - [x] 23.1 Optimize collision detection
         - Implement spatial partitioning
         - Reduce unnecessary collision checks
         - _Requirements: 9.5_
 
-    - [ ] 23.2 Add visual polish
+    - [x] 23.2 Add visual polish
         - Refine animations
         - Adjust particle effects
         - Apply Kiro brand colors to UI (#790ECB purple, dark theme)
         - _Requirements: 10.1, 10.2_
 
-    - [ ] 23.3 Balance gameplay
+    - [x] 23.3 Balance gameplay
         - Adjust enemy difficulty
         - Balance weapon and armor costs
         - Tune XP and level thresholds

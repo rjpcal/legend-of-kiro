@@ -912,7 +912,7 @@
                     "type": "weapon",
                     "id": "wooden_sword",
                     "name": "Wooden Sword",
-                    "cost": 50,
+                    "cost": 40,
                     "damage": 10,
                     "description": "A basic wooden sword"
                 },
@@ -920,7 +920,7 @@
                     "type": "weapon",
                     "id": "iron_sword",
                     "name": "Iron Sword",
-                    "cost": 150,
+                    "cost": 120,
                     "damage": 20,
                     "description": "A sturdy iron blade"
                 },
@@ -928,7 +928,7 @@
                     "type": "weapon",
                     "id": "silver_sword",
                     "name": "Silver Sword",
-                    "cost": 300,
+                    "cost": 250,
                     "damage": 35,
                     "description": "Effective against spirits"
                 },
@@ -936,7 +936,7 @@
                     "type": "armor",
                     "id": "leather_armor",
                     "name": "Leather Armor",
-                    "cost": 75,
+                    "cost": 60,
                     "defense": 5,
                     "description": "Basic protection"
                 },
@@ -944,7 +944,7 @@
                     "type": "armor",
                     "id": "chain_armor",
                     "name": "Chain Armor",
-                    "cost": 200,
+                    "cost": 160,
                     "defense": 12,
                     "description": "Solid metal protection"
                 },
@@ -952,7 +952,7 @@
                     "type": "armor",
                     "id": "spirit_armor",
                     "name": "Spirit Armor",
-                    "cost": 400,
+                    "cost": 320,
                     "defense": 20,
                     "description": "Enchanted ghostly armor"
                 }
@@ -962,37 +962,37 @@
     "enemyTypes": {
         "zombie": {
             "name": "Zombie",
-            "health": 3,
-            "damage": 5,
+            "health": 4,
+            "damage": 6,
             "speed": 50,
-            "xp": 10,
+            "xp": 12,
             "sprite": "zombie",
             "description": "Slow but persistent undead"
         },
         "skeleton": {
             "name": "Skeleton",
-            "health": 4,
-            "damage": 8,
+            "health": 5,
+            "damage": 9,
             "speed": 70,
-            "xp": 15,
+            "xp": 18,
             "sprite": "skeleton",
             "description": "Fast-moving bone warrior"
         },
         "ghoul": {
             "name": "Ghoul",
-            "health": 5,
-            "damage": 12,
+            "health": 7,
+            "damage": 13,
             "speed": 60,
-            "xp": 20,
+            "xp": 25,
             "sprite": "ghoul",
             "description": "Tough flesh-eating creature"
         },
         "spirit": {
             "name": "Spirit",
-            "health": 6,
-            "damage": 15,
+            "health": 8,
+            "damage": 16,
             "speed": 90,
-            "xp": 25,
+            "xp": 30,
             "sprite": "spirit",
             "description": "Swift ethereal entity"
         }
@@ -1000,40 +1000,40 @@
     "bossTypes": {
         "manor_lord": {
             "name": "Manor Lord",
-            "health": 20,
-            "damage": 15,
+            "health": 25,
+            "damage": 18,
             "speed": 60,
-            "xp": 100,
+            "xp": 120,
             "sprite": "manor_lord",
             "attackPattern": "charge_and_swing",
             "description": "Master of the Haunted Manor, charges at enemies with devastating swings"
         },
         "bone_king": {
             "name": "Bone King",
-            "health": 25,
-            "damage": 18,
+            "health": 32,
+            "damage": 22,
             "speed": 50,
-            "xp": 120,
+            "xp": 150,
             "sprite": "bone_king",
             "attackPattern": "summon_minions",
             "description": "Ruler of the Cursed Catacombs, summons skeleton minions to aid in battle"
         },
         "phantom_general": {
             "name": "Phantom General",
-            "health": 30,
-            "damage": 20,
+            "health": 40,
+            "damage": 26,
             "speed": 80,
-            "xp": 140,
+            "xp": 180,
             "sprite": "phantom_general",
             "attackPattern": "teleport_strike",
             "description": "Commander of the Phantom Fortress, teleports around the battlefield for surprise attacks"
         },
         "shadow_overlord": {
             "name": "Shadow Overlord",
-            "health": 35,
-            "damage": 25,
+            "health": 50,
+            "damage": 30,
             "speed": 70,
-            "xp": 160,
+            "xp": 220,
             "sprite": "shadow_overlord",
             "attackPattern": "shadow_wave",
             "description": "Supreme ruler of the Shadow Sanctum, unleashes waves of dark energy"

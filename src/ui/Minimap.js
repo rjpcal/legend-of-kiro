@@ -46,15 +46,15 @@ export class Minimap {
                 const cellX = col * (this.cellSize + this.cellSpacing);
                 const cellY = row * (this.cellSize + this.cellSpacing);
 
-                // Create cell background
+                // Create cell background with dark theme
                 const cell = this.scene.add.rectangle(
                     cellX,
                     cellY,
                     this.cellSize,
                     this.cellSize,
-                    0x333333
+                    0x1a1a1a // Darker background
                 );
-                cell.setStrokeStyle(1, 0x666666);
+                cell.setStrokeStyle(1, 0x444444);
                 this.container.add(cell);
 
                 // Make cells interactive in debug mode
@@ -94,7 +94,7 @@ export class Minimap {
             }
         }
 
-        // Create highlight cell (current position)
+        // Create highlight cell (current position) with glow effect
         this.highlightCell = this.scene.add.rectangle(
             0,
             0,
@@ -102,8 +102,18 @@ export class Minimap {
             this.cellSize,
             0x790ecb // Kiro purple
         );
-        this.highlightCell.setStrokeStyle(2, 0x9a3ee0);
+        this.highlightCell.setStrokeStyle(3, 0xb84eff); // Brighter purple border
         this.container.add(this.highlightCell);
+
+        // Add pulsing animation to highlight
+        this.scene.tweens.add({
+            targets: this.highlightCell,
+            alpha: 0.6,
+            duration: 800,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.easeInOut',
+        });
 
         // Add debug mode indicator
         if (this.debugMode) {
@@ -157,7 +167,9 @@ export class Minimap {
     markVisited(x, y) {
         const cell = this.cells.find(c => c.gridX === x && c.gridY === y);
         if (cell) {
-            cell.rect.setFillStyle(0x555555);
+            // Use subtle purple tint for visited cells
+            cell.rect.setFillStyle(0x2a1a3a);
+            cell.rect.setStrokeStyle(1, 0x790ecb);
         }
     }
 

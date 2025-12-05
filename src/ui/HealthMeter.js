@@ -156,16 +156,29 @@ export class HealthMeter {
 
         this.isPulsing = true;
 
-        // Create pulse tween
+        // Create pulse tween with more dramatic effect
         this.scene.tweens.add({
             targets: this.container,
-            scaleX: 1.2,
-            scaleY: 1.2,
-            duration: 100,
+            scaleX: 1.3,
+            scaleY: 1.3,
+            duration: 120,
+            ease: 'Back.easeOut',
             yoyo: true,
             onComplete: () => {
                 this.isPulsing = false;
             },
+        });
+
+        // Add red flash effect
+        this.hearts.forEach(heart => {
+            if (heart.full.visible) {
+                this.scene.tweens.add({
+                    targets: heart.full,
+                    tint: 0xff0000,
+                    duration: 120,
+                    yoyo: true,
+                });
+            }
         });
     }
 
